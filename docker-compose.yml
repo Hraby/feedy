@@ -1,0 +1,44 @@
+
+services:
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    container_name: feedy-backend
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/backend:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - db
+    command: ts-node-dev --respawn --transpile-only src/main.ts
+
+  frontend-web:
+    build:
+      context: ./apps/frontend/web
+      dockerfile: Dockerfile
+    container_name: feedy-frontend-web
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/frontend/web:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - backend
+    command: npm run dev 
+
+  db:
+    image: postgres:14
+    container_name: feedy-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: feedy_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
