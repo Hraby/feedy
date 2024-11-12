@@ -52,7 +52,7 @@ Backend should now be accessible at [http://localhost:3001](http://localhost:300
 
 ### Full Setup (All Services)
 
-To start the entire stack (backend, web frontend, mobile frontend, database):
+To start the entire stack (backend, web frontend, database):
 
 ```bash
 docker-compose up -d
