@@ -25,7 +25,7 @@ export class RegisterDto {
 }
 
 @InputType()
-export class LogitDto{
+export class LoginDto{
     @Field()
     @IsNotEmpty({message: "Email is required."})
     @IsEmail({}, {message: "Email must be valid."})

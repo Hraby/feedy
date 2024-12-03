@@ -1,19 +1,28 @@
-import { ObjectType, Field, Directive } from "@nestjs/graphql";
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
-export class User{
-    @Field()
-    id: string;
+export class User {
+  @Field(() => ID)
+  id: number;
 
-    @Field()
-    fistName: string;
+  @Field()
+  firstName: string;
 
-    @Field()
-    lastName: string;
+  @Field()
+  lastName: string;
 
-    @Field()
-    password: string;
+  @Field()
+  email: string;
 
-    @Field()
-    email: string;
+  @Field({ nullable: true })
+  password?: string;
+
+  @Field()
+  role: string;
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }
