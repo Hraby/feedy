@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { RegisterDto, LoginDto } from './dto/user.dto';
-import { PrismaService } from 'prisma/Prisma.service';
+import { PrismaService } from '../../../prisma/Prisma.service';
 
 @Injectable()
 export class UsersService {
@@ -39,4 +39,11 @@ export class UsersService {
     return this.prisma.user.findMany({});
   }
 
+  async findById(id: number){
+    return this.prisma.user.findUnique({
+      where: {
+        id: id,
+      }
+    })
+  }
 }

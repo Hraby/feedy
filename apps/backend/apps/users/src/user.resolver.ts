@@ -26,8 +26,8 @@ export class UsersResolver {
     return this.userService.getUsers();
   }
 
-//   @ResolveReference()
-//   async resolveReference(reference: { id: string }): Promise<User> {
-//     return this.userService.findById(reference.id);
-//   }
+  @ResolveReference()
+  async resolveReference(reference: { id: number }): Promise<User> {
+    return this.userService.findById(reference.id);
+  }
 }
