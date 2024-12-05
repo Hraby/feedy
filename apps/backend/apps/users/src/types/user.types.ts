@@ -12,8 +12,29 @@ export class ErrorType {
 
 @ObjectType()
 export class RegisterRepose {
-    @Field(() => User, {nullable: true})
+    @Field(() => User, {nullable: true})
     user?: User | any;
+
+    @Field(() => String, {nullable: true})
+    id?: string;
+
+    @Field(() => String, {nullable: true})
+    firstName?: string;
+
+    @Field(() => String, {nullable: true})
+    lastName?: string;
+
+    @Field(() => String, {nullable: true})
+    email?: string;
+
+    @Field(() => String, {nullable: true})
+    role?: string;
+
+    @Field(() => Date, {nullable: true})
+    createdAt?: Date;
+
+    @Field(() => Date, {nullable: true})
+    updatedAt?: Date;
 
     @Field(() => ErrorType, {nullable: true})
     error?: ErrorType;
@@ -21,9 +42,12 @@ export class RegisterRepose {
 
 @ObjectType()
 export class LoginRepose {
-    @Field(() => User)
-    user: User;
+  @Field(() => User, { nullable: true })
+  user?: Partial<User>;
 
-    @Field(() => ErrorType, {nullable: true})
-    error?: ErrorType;
+  @Field(() => String, { nullable: true })
+  accessToken?: string;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
 }

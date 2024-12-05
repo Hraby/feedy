@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './user.controller';
-import { UsersService } from './users.service';
+import { UsersService } from './user.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
 import {ConfigService} from "@nestjs/config";

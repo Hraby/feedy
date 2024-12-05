@@ -8,11 +8,11 @@ export class AuthResolver {
     constructor(private readonly authService: AuthService) {}
 
     @Mutation(() => AuthResponse)
-    async login(@Args('authInput') authInput: AuthInput) {
-    const user = await this.authService.validateUser(authInput.username, authInput.password);
-    if (!user) {
-        throw new Error('Invalid credentials');
-    }
-    return this.authService.login(user);
+    async login(@Args("loginInput") loginInput: AuthInput) {
+        const user = await this.authService.validateUser(loginInput.email, loginInput.password);
+        if (!user) {
+            throw new Error('Invalid credentials');
+        }
+        return this.authService.login(user);
     }
 }

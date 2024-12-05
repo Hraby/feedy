@@ -1,5 +1,5 @@
 import { ObjectType, Field, ID, Resolver, Query, Directive } from '@nestjs/graphql';
-import { UsersService } from '../users.service';
+import { UsersService } from '../user.service';
 
 @ObjectType()
 @Directive('@key(fields: "id")')
