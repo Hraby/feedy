@@ -1,9 +1,10 @@
-import { BadRequestException, UseFilters } from "@nestjs/common";
+import { BadRequestException, UseFilters, UseGuards } from "@nestjs/common";
 import { Resolver, Args, Mutation, ResolveReference, Query } from "@nestjs/graphql";
 import { UsersService } from "./users.service";
 import { RegisterRepose } from "./types/user.types";
 import { RegisterDto } from "./dto/user.dto";
 import { User } from "./entities/user.entity";
+import { GqlAuthGuard } from "./auth/gql-auth.guard";
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -21,6 +22,7 @@ export class UsersResolver {
     return { user };
   }
 
+  @UseGuards(GqlAuthGuard)
   @Query(() => [User])
   async getUsers() {
     return this.userService.getUsers();
