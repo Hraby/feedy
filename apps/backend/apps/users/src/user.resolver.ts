@@ -45,8 +45,23 @@ export class UsersResolver {
     return this.userService.getUsers();
   }
 
+
   @ResolveReference()
   async resolveReference(reference: { id: number }): Promise<User> {
     return this.userService.findById(reference.id);
+  }
+
+  async getLoggedInUser(req: any) {
+    const user = req.user;
+    const refreshToken = req.refreshtoken;
+    const accessToken = req.accesstoken;
+    return { user, refreshToken, accessToken };
+  }
+
+  async Logout(req: any) {
+    req.user = null;
+    req.refreshtoken = null;
+    req.accesstoken = null;
+    return { message: 'Logged out successfully!' };
   }
 }
