@@ -62,6 +62,6 @@ export class UsersResolver {
     req.user = null;
     req.refreshtoken = null;
     req.accesstoken = null;
-    return { message: 'Logged out successfully!' };
+    return { message: "Logged out successfully!" };
   }
 }
