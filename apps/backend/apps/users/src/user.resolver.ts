@@ -1,35 +1,47 @@
-import { BadRequestException, UseFilters, UseGuards } from "@nestjs/common";
-import { Resolver, Args, Mutation, ResolveReference, Query } from "@nestjs/graphql";
+import { BadRequestException, UseGuards } from "@nestjs/common";
+import { Resolver, Args, Mutation, Query, ResolveReference, Context } from "@nestjs/graphql";
 import { UsersService } from "./user.service";
-import { LoginRepose, RegisterRepose } from "./types/user.types";
-import { LoginDto, RegisterDto } from "./dto/user.dto";
+import { LoginResponse, RegisterResponse } from "./types/user.types";
 import { User } from "./entities/user.entity";
-import { GqlAuthGuard } from "./auth/gql-auth.guard";
+import { LoginDto, RegisterDto } from "./dto/user.dto";
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly userService: UsersService) {}
 
-  @Mutation(() => RegisterRepose)
+  @Mutation(() => RegisterResponse)
   async register(
-    @Args('registerInput') registerDto: RegisterDto,
-  ): Promise<RegisterRepose> {
+    @Args("registerInput") registerDto: RegisterDto,
+    @Context() context: { res: Response },
+  ): Promise<RegisterResponse> {
     if (!registerDto.firstName || !registerDto.lastName || !registerDto.password || !registerDto.email) {
-      throw new BadRequestException('Please fill all the fields');
-    } 
+      throw new BadRequestException("Please fill all the fields");
+    }
 
-    const user = await this.userService.register(registerDto);
-    return { user };
+    const result = await this.userService.register(registerDto, context.res);
+
+    return {
+      user: result.user,
+      tokens: {
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      },
+    };
   }
 
-  @Mutation(() => LoginRepose)
-  async login(@Args('loginInput') loginDto: LoginDto): Promise<LoginRepose> {
-    return this.userService.login(loginDto);
+  @Mutation(() => LoginResponse)
+  async login(@Args("loginInput") loginDto: LoginDto): Promise<LoginResponse> {
+    const result = await this.userService.login(loginDto);
+
+    return {
+      user: result.user,
+      accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
+    };
   }
 
-  @UseGuards(GqlAuthGuard)
   @Query(() => [User])
-  async getUsers() {
+  async getUsers(): Promise<User[]> {
     return this.userService.getUsers();
   }
 
