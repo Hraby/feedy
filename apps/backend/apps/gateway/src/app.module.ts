@@ -3,6 +3,8 @@ import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloGatewayDriver, ApolloGatewayDriverConfig } from '@nestjs/apollo';
 import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from "../../users/src/guards/jwt-auth.guard";
 
 @Module({
   imports: [
@@ -20,18 +22,27 @@ import { IntrospectAndCompose, RemoteGraphQLDataSource } from '@apollo/gateway';
         buildService({ url }) {
           return new RemoteGraphQLDataSource({
             url,
-            willSendRequest({ request, context }){
-              request.http.headers.set(
-                "users",
-                context.user ? JSON.stringify(context.user) : null
-              );
+            willSendRequest({ request, context }) {
+              console.log("Authorization Token from Context:", context?.req?.headers?.authorization);
+              if (context?.req?.headers?.authorization) {
+                request.http.headers.set(
+                  "Authorization",
+                  context.req.headers.authorization,
+                );
+              }
             },
           });
-        }
+        },
       },
     }),
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule {}

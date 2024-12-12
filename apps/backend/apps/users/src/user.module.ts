@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { JwtModule, JwtService } from "@nestjs/jwt";
 import { PrismaService } from '../../../prisma/Prisma.service';
 import { UsersResolver } from './user.resolver';
+import { JwtStrategy } from './guards/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UsersResolver } from './user.resolver';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
+        secretOrKey: configService.get<string>("JWT_SECRET_KEY"),
         secret: configService.get<string>("JWT_SECRET_KEY"),
         signOptions: { expiresIn: "15m" },
       }),
@@ -26,6 +28,6 @@ import { UsersResolver } from './user.resolver';
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersResolver, ConfigService, PrismaService],
+  providers: [UsersService, UsersResolver, ConfigService, PrismaService, JwtStrategy],
 })
 export class UsersModule {}

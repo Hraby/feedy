@@ -12,6 +12,8 @@ export class TokenSender {
     const accessToken = this.jwt.sign(
       {
         id: user.id,
+        email: user.email,
+        role: user.role,
       },
       {
         secret: this.config.get<string>("JWT_SECRET_KEY"),

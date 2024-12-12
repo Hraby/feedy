@@ -4,6 +4,7 @@ import { UsersService } from "./user.service";
 import { LoginResponse, RegisterResponse } from "./types/user.types";
 import { User } from "./entities/user.entity";
 import { LoginDto, RegisterDto } from "./dto/user.dto";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -40,8 +41,10 @@ export class UsersResolver {
     };
   }
 
+  @UseGuards(JwtAuthGuard)
   @Query(() => [User])
-  async getUsers(): Promise<User[]> {
+  async getUsers(@Context() context): Promise<User[]> {
+    console.log("User from context:", context.user);
     return this.userService.getUsers();
   }
 
