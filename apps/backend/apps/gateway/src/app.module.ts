@@ -23,7 +23,6 @@ import { JwtAuthGuard } from "../../users/src/guards/jwt-auth.guard";
           return new RemoteGraphQLDataSource({
             url,
             willSendRequest({ request, context }) {
-              console.log("Authorization Token from Context:", context?.req?.headers?.authorization);
               if (context?.req?.headers?.authorization) {
                 request.http.headers.set(
                   "Authorization",

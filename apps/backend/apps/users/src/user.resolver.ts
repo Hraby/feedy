@@ -44,7 +44,6 @@ export class UsersResolver {
   @UseGuards(JwtAuthGuard)
   @Query(() => [User])
   async getUsers(@Context() context): Promise<User[]> {
-    console.log("User from context:", context.user);
     return this.userService.getUsers();
   }
 
