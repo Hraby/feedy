@@ -7,6 +7,8 @@ RUN npm install
 
 COPY . .
 
-RUN npm install -g ts-node-dev
+COPY .env ./
+
+RUN npm run build
 
 CMD ["ts-node-dev", "--respawn", "--transpile-only", "src/main.ts"]
