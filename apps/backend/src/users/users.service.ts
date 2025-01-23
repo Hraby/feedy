@@ -66,8 +66,6 @@ export class UsersService {
     } catch (error) {
       throw new InternalServerErrorException("Server error");
     }
-
-    return this.prisma.user.create({ data });
   }
   
   async getUsers(){

@@ -28,7 +28,7 @@ export class UsersController {
 
   @Post()
   @ApiOperation({
-    summary: "Create user (only admin)",
+    summary: "Create user (admin only)",
   })
   @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
   @ApiResponse({status: 400, description: "Bad request" })
@@ -67,7 +67,7 @@ export class UsersController {
 
   @Delete(":id")
   @ApiOperation({
-    summary: "Delete user by id",
+    summary: "Delete user by id (admin only)",
   })
   @ApiOkResponse({content: {"application/json": {example: {"message": "User deleted"}}}})
   @ApiResponse({status: 400, description: "Bad request" })
