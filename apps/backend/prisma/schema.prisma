@@ -13,18 +13,103 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  Admin
-  User
-}
-
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
+  password  String
   firstName String
   lastName  String
-  password  String
-  role      Role     @default(User)
+  role      Role     @default(Customer)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  address   Address?
+  orders    Order[]
+}
+
+enum Role {
+  Admin
+  Restaurant
+  Courier
+  Customer
+}
+
+model Restaurant {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  address     Address
+  phone       String
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  menuItems   MenuItem[]
+  orders      Order[]
+}
+
+model MenuItem {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  available   Boolean  @default(true)
+  imageUrl    String?
+
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+}
+
+model Order {
+  id            String     @id @default(uuid())
+  status        OrderStatus @default(Pending)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  customerId    String
+  customer      User       @relation(fields: [customerId], references: [id])
+
+  restaurantId  String
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+
+  courierId     String?
+  courier       User?      @relation(fields: [courierId], references: [id])
+
+  orderItems    OrderItem[]
+}
+
+enum OrderStatus {
+  Pending
+  Accepted
+  Preparing
+  OutForDelivery
+  Delivered
+  Cancelled
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  quantity  Int
+  price     Float   
+
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model Address {
+  id        String   @id @default(uuid())
+  street    String
+  city      String
+  zipCode   String
+  country   String
+
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+
+  restaurantId String?
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
 }
