@@ -1,9 +1,7 @@
-import { Body, Controller, Get, HttpCode, Param, Patch, Post, Put, UseGuards, Delete} from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Delete} from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { LoginDto, RegisterUserDto } from './dto/user.dto';
+import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { User } from "./entities/user.entity";
-import { LocalUserGuard } from './guard/local-user.guard';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { Role } from '@prisma/client';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -47,7 +45,7 @@ export class UsersController {
   @ApiResponse({status: 401, description: "Unauthorized"})
   @ApiResponse({status: 403, description: "Forbidden" })
   @ApiResponse({status: 500, description: "Server error"})
-  @Auth(Role.Admin, Role.User)
+  @Auth(Role.Admin, Role.Customer, Role.Courier, Role.Restaurant)
   getUser(@Param("id") id: string, @GetUser() user: User){
     return this.usersService.findById(id, user);
   }
@@ -60,7 +58,7 @@ export class UsersController {
   @ApiResponse({status: 400, description: "Bad request" })
   @ApiResponse({status: 401, description: "Unauthorized"})
   @ApiResponse({status: 500, description: "Server error"})
-  @Auth(Role.Admin, Role.User)
+  @Auth(Role.Admin, Role.Customer, Role.Courier, Role.Restaurant)
   updateUser(@Param("id") id:string, @Body() updateUserDto: UpdateUserDto, @GetUser() user: User){
     return this.usersService.updateUser(id, updateUserDto, user);
   }
@@ -73,7 +71,7 @@ export class UsersController {
   @ApiResponse({status: 400, description: "Bad request" })
   @ApiResponse({status: 401, description: "Unauthorized"})
   @ApiResponse({status: 500, description: "Server error"})
-  @Auth(Role.Admin, Role.User)
+  @Auth(Role.Admin, Role.Customer, Role.Courier, Role.Restaurant)
   deleteUser(@Param("id") id:string, @GetUser() user: User){
     return this.usersService.deleteUser(id, user);
   }
