@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,8 +20,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  address   Address?
-  orders    Order[]
+  address    Address?
+  orders     Order[]      @relation("CustomerOrders")
+  deliveries Order[]      @relation("CourierDeliveries")
+  Restaurant Restaurant[]
 }
 
 enum Role {
@@ -38,45 +37,46 @@ model Restaurant {
   id          String   @id @default(uuid())
   name        String
   description String?
-  address     Address
+  address     Address?
   phone       String
   ownerId     String
   owner       User     @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  menuItems   MenuItem[]
-  orders      Order[]
+  menuItems MenuItem[]
+  orders    Order[]
 }
 
 model MenuItem {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String?
   price       Float
-  available   Boolean  @default(true)
+  available   Boolean @default(true)
   imageUrl    String?
 
   restaurantId String
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  orderItems   OrderItem[]
 }
 
 model Order {
-  id            String     @id @default(uuid())
-  status        OrderStatus @default(Pending)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  id        String      @id @default(uuid())
+  status    OrderStatus @default(Pending)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
-  customerId    String
-  customer      User       @relation(fields: [customerId], references: [id])
+  customerId String
+  customer   User   @relation("CustomerOrders", fields: [customerId], references: [id])
 
-  restaurantId  String
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
 
-  courierId     String?
-  courier       User?      @relation(fields: [courierId], references: [id])
+  courierId String?
+  courier   User?   @relation("CourierDeliveries", fields: [courierId], references: [id])
 
-  orderItems    OrderItem[]
+  orderItems OrderItem[]
 }
 
 enum OrderStatus {
@@ -89,27 +89,27 @@ enum OrderStatus {
 }
 
 model OrderItem {
-  id        String   @id @default(uuid())
-  quantity  Int
-  price     Float   
+  id       String @id @default(uuid())
+  quantity Int
+  price    Float
 
-  orderId   String
-  order     Order    @relation(fields: [orderId], references: [id])
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id])
 
   menuItemId String
   menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
 }
 
 model Address {
-  id        String   @id @default(uuid())
-  street    String
-  city      String
-  zipCode   String
-  country   String
+  id      String @id @default(uuid())
+  street  String
+  city    String
+  zipCode String
+  country String
 
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id])
+  userId String? @unique
+  user   User?   @relation(fields: [userId], references: [id])
 
-  restaurantId String?
+  restaurantId String?     @unique
   restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
 }
