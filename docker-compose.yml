@@ -6,13 +6,17 @@ services:
       dockerfile: Dockerfile
     container_name: feedy-backend
     ports:
-      - "3001:3001"
+      - "4000:4000"
     volumes:
       - ./apps/backend:/usr/src/app
       - /usr/src/app/node_modules
     depends_on:
       - db
-    command: ts-node-dev --respawn --transpile-only src/main.ts
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+    command: npm run start:dev
 
   frontend-web:
     build:
