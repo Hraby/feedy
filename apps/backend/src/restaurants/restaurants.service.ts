@@ -10,7 +10,7 @@ export class RestaurantsService {
       ) {}
 
     async getRestaurants(){
-    
+      await this.prisma.restaurant.findMany();
     }
 
 

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Auth } from 'src/auth/decorators';
@@ -20,6 +20,19 @@ export class RestaurantsController {
     @Auth(Role.Admin)
     getRestaurants() {
         return this.restaurantsService.getRestaurants();
+    }
+
+    @Post()
+    @ApiOperation({
+        summary: "Create restaurant (admin only)",
+    })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 400, description: "Bad request" })
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 500, description: "Server error"})
+    @Auth(Role.Admin)
+    // ToDo: Create restaurant controller + service
+    createRestaurant(){
     }
 
 }

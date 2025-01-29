@@ -2,7 +2,6 @@
 
 Feedy is a food delivery platform that includes backend and frontend services (web and mobile). This guide outlines setup steps, dependency installation, and Docker usage for running services in a development environment.
 
----
 
 ## Prerequisites
 
@@ -10,7 +9,6 @@ Feedy is a food delivery platform that includes backend and frontend services (w
 - **Docker & Docker Compose**
 - **Package Manager**: `npm` (or `yarn`)
 
----
 
 ## Installation
 
@@ -28,9 +26,13 @@ If you only want to install specific parts:
 - **Frontend (Web):** `npm run install:frontend-web`
 - **Frontend (Mobile):** `npm run install:frontend-mobile`
 
----
 
 ## Docker
+
+### Build all services
+```bash
+docker compose up --build
+```
 
 ### Start Database Only
 
@@ -58,7 +60,6 @@ To start the entire stack (backend, web frontend, database):
 docker-compose up -d
 ```
 
----
 
 ## Running Services in Development Mode
 
@@ -106,7 +107,6 @@ Each service can be run individually in development mode.
     npx expo start
     ```
 
----
 
 ## Quick Reference Commands
 
@@ -117,5 +117,3 @@ Each service can be run individually in development mode.
 | Start Backend            | `npm run start:dev` (in `apps/backend`)   |
 | Start Web Frontend       | `npm run dev` (in `apps/frontend/web`)    |
 | Start Mobile Frontend    | `npx expo start` (in `apps/frontend/mobile`) |
-
---- 

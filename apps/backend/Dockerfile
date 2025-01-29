@@ -1,14 +1,18 @@
-FROM node:lts-alpine
+FROM node:18
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+
+RUN npm cache clean --force
 RUN npm install
 
 COPY . .
 
-COPY .env ./
+RUN npx prisma generate
 
 RUN npm run build
 
-CMD ["ts-node-dev", "--respawn", "--transpile-only", "src/main.ts"]
+EXPOSE 4000
+
+CMD [ "npm", "run", "start:dev" ]
