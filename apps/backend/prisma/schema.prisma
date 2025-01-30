@@ -40,12 +40,19 @@ model Restaurant {
   address     Address?
   phone       String
   ownerId     String
+  status      RestaurantStatus @default(Pending)
   owner       User     @relation(fields: [ownerId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   menuItems MenuItem[]
   orders    Order[]
+}
+
+enum RestaurantStatus {
+  Pending
+  Approved
+  Rejected
 }
 
 model MenuItem {

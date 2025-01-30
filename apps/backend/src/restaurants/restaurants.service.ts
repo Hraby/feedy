@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class RestaurantsService {
@@ -10,7 +12,21 @@ export class RestaurantsService {
       ) {}
 
     async getRestaurants(){
-      await this.prisma.restaurant.findMany();
+      return this.prisma.restaurant.findMany({
+        where: { status: "Approved" },
+      });
+    }
+
+    async requestRestaurant(dto: CreateRestaurantDto, user: User){
+      return this.prisma.restaurant.create({
+        data: {
+          name: dto.name,
+          description: dto.description,
+          phone: dto.phone,
+          ownerId: user.id,
+          status: "Pending",
+        },
+      });
     }
 
 

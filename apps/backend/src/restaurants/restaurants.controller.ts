@@ -1,9 +1,10 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Auth } from 'src/auth/decorators';
+import { Auth, GetUser } from 'src/auth/decorators';
 import { Role } from '@prisma/client';
 import { User } from 'src/users/entities/user.entity';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 
 @Controller('restaurant')
 export class RestaurantsController {
@@ -33,6 +34,28 @@ export class RestaurantsController {
     @Auth(Role.Admin)
     // ToDo: Create restaurant controller + service
     createRestaurant(){
+    }
+
+    @Get(":id")
+    @ApiOperation({
+        summary: "Get restaurant by id",
+    })
+    async getRestaurant(@Param("id") id: string) {
+    //   return this.restaurantsService.getRestaurantById(id);
+    }
+
+    @Post()
+    @ApiOperation({
+        summary: "Request for restaurant",
+    })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 400, description: "Bad request" })
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 500, description: "Server error"})
+    @Post("request")
+    @Auth(Role.Customer)
+    async requestRestaurant(@Body() dto: CreateRestaurantDto, @GetUser() user: User) {
+      return this.restaurantsService.requestRestaurant(dto, user);
     }
 
 }
