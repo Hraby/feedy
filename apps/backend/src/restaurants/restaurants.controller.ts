@@ -46,7 +46,7 @@ export class RestaurantsController {
 
     @Post()
     @ApiOperation({
-        summary: "Request for restaurant",
+        summary: "Request for a new restaurant",
     })
     @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
     @ApiResponse({status: 400, description: "Bad request" })
