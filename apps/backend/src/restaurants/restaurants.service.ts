@@ -29,5 +29,21 @@ export class RestaurantsService {
       });
     }
 
+    async getRestaurantById(id: string) {
+      return this.prisma.restaurant.findUnique({
+        where: { id },
+        include: { menuItems: true },
+      });
+    }
+
+    async approveRestaurant(id: string, approve: boolean) {
+      return this.prisma.restaurant.update({
+        where: { id },
+        data: {
+          status: approve ? "Approved" : "Rejected",
+        },
+      });
+    }
+    
 
 }

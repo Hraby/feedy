@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Auth, GetUser } from 'src/auth/decorators';
@@ -18,7 +18,6 @@ export class RestaurantsController {
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 403, description: "Forbidden" })
     @ApiResponse({status: 500, description: "Server error"})         
-    @Auth(Role.Admin)
     getRestaurants() {
         return this.restaurantsService.getRestaurants();
     }
@@ -41,10 +40,10 @@ export class RestaurantsController {
         summary: "Get restaurant by id",
     })
     async getRestaurant(@Param("id") id: string) {
-    //   return this.restaurantsService.getRestaurantById(id);
+       return this.restaurantsService.getRestaurantById(id);
     }
 
-    @Post()
+    @Post("request")
     @ApiOperation({
         summary: "Request for a new restaurant",
     })
@@ -57,5 +56,12 @@ export class RestaurantsController {
     async requestRestaurant(@Body() dto: CreateRestaurantDto, @GetUser() user: User) {
       return this.restaurantsService.requestRestaurant(dto, user);
     }
+
+    @Patch(":id/approve")
+    @Auth(Role.Admin)
+    async approveRestaurant(@Param("id") id: string, @Body() body: { approve: boolean }) {
+        return this.restaurantsService.approveRestaurant(id, body.approve);
+    }
+
 
 }
