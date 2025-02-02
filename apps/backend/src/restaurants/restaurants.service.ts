@@ -17,22 +17,30 @@ export class RestaurantsService {
       });
     }
 
-    async requestRestaurant(dto: CreateRestaurantDto, user: User){
+    async requestRestaurant(dto: CreateRestaurantDto, user: User) {
       return this.prisma.restaurant.create({
-        data: {
-          name: dto.name,
-          description: dto.description,
-          phone: dto.phone,
-          ownerId: user.id,
-          status: "Pending",
-        },
+          data: {
+              name: dto.name,
+              description: dto.description,
+              phone: dto.phone,
+              ownerId: user.id,
+              status: "Pending",
+              address: {
+                  create: {
+                      street: dto.address.street,
+                      city: dto.address.city,
+                      zipCode: dto.address.zipCode,
+                      country: dto.address.country,
+                  },
+              },
+          },
       });
     }
 
     async getRestaurantById(id: string) {
       return this.prisma.restaurant.findUnique({
         where: { id },
-        include: { menuItems: true },
+        include: { menuItems: true, address: true },
       });
     }
 
