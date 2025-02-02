@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsPhoneNumber, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsPhoneNumber, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 import { AddressDto } from "./address.dto";
 
 export class CreateRestaurantDto {
@@ -10,7 +10,7 @@ export class CreateRestaurantDto {
   @IsString()
   description?: string;
 
-  @IsPhoneNumber()
+  @IsPhoneNumber("CZ")
   phone: string;
 
   @ValidateNested()

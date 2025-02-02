@@ -1,12 +1,15 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { RestaurantsService } from './restaurants.service';
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Auth, GetUser } from 'src/auth/decorators';
-import { Role } from '@prisma/client';
-import { User } from 'src/users/entities/user.entity';
-import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { RestaurantsService } from "./restaurants.service";
+import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { Auth, GetUser } from "src/auth/decorators";
+import { Role } from "@prisma/client";
+import { User } from "src/users/entities/user.entity";
+import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
+import { UpdateRestaurantDto } from "./dto/update-restaurant.dto";
+import { CreateMenuItemDto } from "./dto/create-menu-item.dto";
+import { UpdateMenuItemDto } from "./dto/update-menu-item.dto";
 
-@Controller('restaurant')
+@Controller("restaurant")
 export class RestaurantsController {
     constructor(private readonly restaurantsService: RestaurantsService) {}
 
@@ -18,21 +21,8 @@ export class RestaurantsController {
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 403, description: "Forbidden" })
     @ApiResponse({status: 500, description: "Server error"})         
-    getRestaurants() {
+    async getRestaurants() {
         return this.restaurantsService.getRestaurants();
-    }
-
-    @Post()
-    @ApiOperation({
-        summary: "Create restaurant (admin only)",
-    })
-    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
-    @ApiResponse({status: 400, description: "Bad request" })
-    @ApiResponse({status: 401, description: "Unauthorized"})
-    @ApiResponse({status: 500, description: "Server error"})
-    @Auth(Role.Admin)
-    // ToDo: Create restaurant controller + service
-    createRestaurant(){
     }
 
     @Get(":id")
@@ -52,7 +42,7 @@ export class RestaurantsController {
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 500, description: "Server error"})
     @Post("request")
-    @Auth(Role.Customer)
+    @Auth(Role.Customer, Role.Admin, Role.Courier, Role.Restaurant)
     async requestRestaurant(@Body() dto: CreateRestaurantDto, @GetUser() user: User) {
       return this.restaurantsService.requestRestaurant(dto, user);
     }
@@ -63,5 +53,49 @@ export class RestaurantsController {
         return this.restaurantsService.approveRestaurant(id, body.approve);
     }
 
+    @Patch(":id")
+    @ApiOperation({ summary: "Update restaurant (owner only)" })
+    @ApiResponse({ status: 200, description: "Updated successfully" })
+    @ApiResponse({ status: 403, description: "Forbidden" })
+    @ApiResponse({ status: 404, description: "Restaurant not found" })
+    @Auth(Role.Restaurant)
+    async updateRestaurant(@Param("id") id: string, @Body() dto: UpdateRestaurantDto, @GetUser() user: User) {
+        return this.restaurantsService.updateRestaurant(id, dto, user);
+    }
+
+    @Delete(":id")
+    @ApiOperation({ summary: "Delete restaurant (admin only)" })
+    @ApiResponse({ status: 200, description: "Deleted successfully" })
+    @ApiResponse({ status: 404, description: "Restaurant not found" })
+    @Auth(Role.Admin)
+    async deleteRestaurant(@Param("id") id: string) {
+        return this.restaurantsService.deleteRestaurant(id);
+    }
+
+    @Get(":id/menu")
+    @ApiOperation({ summary: "Delete restaurant (admin only)" })
+    @ApiResponse({ status: 200, description: "Deleted successfully" })
+    @ApiResponse({ status: 404, description: "Restaurant not found" })
+    async getRestaurantMenu(@Param("id") id: string){
+        return this.restaurantsService.getRestaurantMenu(id);
+    }
+
+    @Post(":id/menu")
+    @Auth(Role.Restaurant)
+    async createMenuItem(@Param("id") id: string, @Body() dto: CreateMenuItemDto, @GetUser() user: User){
+        return this.restaurantsService.createMenuItem(id, dto, user);
+    }
+
+    @Patch(":id/menu/:menuItemId")
+    @Auth(Role.Restaurant)
+    async updateMenuItem(@Param("id") id: string, @Param("menuItemId") menuItemId: string, @Body() dto: UpdateMenuItemDto, @GetUser() user: User){
+        return this.restaurantsService.updateMenuItem(id, menuItemId, dto, user);
+    }
+
+    @Delete(":id/menu/:menuItemId")
+    @Auth(Role.Restaurant)
+    async deleteMenuItem(@Param("id") id: string, @Param("menuItemId") menuItemId: string, @GetUser() user: User){
+        return this.restaurantsService.deleteMenuItem(id, menuItemId, user);
+    }
 
 }

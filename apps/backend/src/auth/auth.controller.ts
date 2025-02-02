@@ -1,13 +1,13 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
-import { RegisterDto } from './dto/register.dto';
-import { AuthService } from './auth.service';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
-import { LoginResponse } from './responses/login';
-import { LoginDto } from 'src/users/dto/user.dto';
-import { Auth, GetUser } from './decorators';
-import { User } from 'src/users/entities/user.entity';
+import { Body, Controller, Get, HttpStatus, Post, Res } from "@nestjs/common";
+import { RegisterDto } from "./dto/register.dto";
+import { AuthService } from "./auth.service";
+import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
+import { LoginResponse } from "./responses/login";
+import { LoginDto } from "src/users/dto/user.dto";
+import { Auth, GetUser } from "./decorators";
+import { User } from "src/users/entities/user.entity";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
