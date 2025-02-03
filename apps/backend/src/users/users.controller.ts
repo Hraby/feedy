@@ -1,11 +1,11 @@
-import { Body, Controller, Get, Param, Patch, Post, Delete} from '@nestjs/common';
-import { UsersService } from './users.service';
-import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Patch, Post, Delete} from "@nestjs/common";
+import { UsersService } from "./users.service";
+import { ApiOkResponse, ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { User } from "./entities/user.entity";
-import { Auth, GetUser } from 'src/auth/decorators';
-import { Role } from '@prisma/client';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Auth, GetUser } from "src/auth/decorators";
+import { Role } from "@prisma/client";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { CreateUserDto } from "./dto/create-user.dto";
 
 @Controller("user")
 export class UsersController {

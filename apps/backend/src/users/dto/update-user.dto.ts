@@ -1,5 +1,5 @@
-import { Role } from '@prisma/client';
-import { IsEmail, IsOptional, IsString, Matches, MinLength } from 'class-validator';
+import { Role } from "@prisma/client";
+import { IsEmail, IsOptional, IsString, Matches, MinLength } from "class-validator";
 
 export class UpdateUserDto {
     @IsOptional()
