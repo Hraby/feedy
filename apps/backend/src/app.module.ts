@@ -6,6 +6,7 @@ import { AuthService } from "./auth/auth.service";
 import { AuthModule } from "./auth/auth.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RestaurantsModule } from "./restaurants/restaurants.module";
     AuthModule,
     PrismaModule,
     RestaurantsModule,
+    OrdersModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],

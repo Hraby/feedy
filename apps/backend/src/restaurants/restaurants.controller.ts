@@ -48,6 +48,13 @@ export class RestaurantsController {
     }
 
     @Patch(":id/approve")
+    @ApiOperation({
+        summary: "Approve restaurant (admin only)",
+    })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 400, description: "Bad request" })
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 500, description: "Server error"})
     @Auth(Role.Admin)
     async approveRestaurant(@Param("id") id: string, @Body() body: { approve: boolean }) {
         return this.restaurantsService.approveRestaurant(id, body.approve);
@@ -81,18 +88,39 @@ export class RestaurantsController {
     }
 
     @Post(":id/menu")
+    @ApiOperation({
+        summary: "Create restaurant menu item",
+    })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 400, description: "Bad request" })
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 500, description: "Server error"})
     @Auth(Role.Restaurant)
     async createMenuItem(@Param("id") id: string, @Body() dto: CreateMenuItemDto, @GetUser() user: User){
         return this.restaurantsService.createMenuItem(id, dto, user);
     }
 
     @Patch(":id/menu/:menuItemId")
+    @ApiOperation({
+        summary: "Update restaurant menu item",
+    })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 400, description: "Bad request" })
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 500, description: "Server error"})
     @Auth(Role.Restaurant)
     async updateMenuItem(@Param("id") id: string, @Param("menuItemId") menuItemId: string, @Body() dto: UpdateMenuItemDto, @GetUser() user: User){
         return this.restaurantsService.updateMenuItem(id, menuItemId, dto, user);
     }
 
     @Delete(":id/menu/:menuItemId")
+    @ApiOperation({
+        summary: "Delete restaurant menu item",
+    })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 400, description: "Bad request" })
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 500, description: "Server error"})
     @Auth(Role.Restaurant)
     async deleteMenuItem(@Param("id") id: string, @Param("menuItemId") menuItemId: string, @GetUser() user: User){
         return this.restaurantsService.deleteMenuItem(id, menuItemId, user);
