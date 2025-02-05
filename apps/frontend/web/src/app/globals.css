@@ -17,3 +17,24 @@ body {
   color: var(--font);
   background: var(--white);
 }
+
+.custom-shape-divider-bottom {
+  position: relative;
+  top: 1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 79px;
+}
+
+.custom-shape-divider-bottom .shape-fill {
+  fill: #EFEFEF;
+}

@@ -12,6 +12,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      borderRadius: {
+        'card': '2rem',
+      }
     },
   },
   plugins: [],

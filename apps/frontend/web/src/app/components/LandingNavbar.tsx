@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-const Navbar = () => {
+const LandingNavbar = () => {
   return (
     <nav className="py-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -20,4 +20,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default LandingNavbar;
