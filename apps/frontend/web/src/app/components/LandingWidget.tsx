@@ -16,16 +16,16 @@ export default function AppWidget() {
           </p>
         </div>
         <div className="absolute right-20">
-            <div className="relative xl:block hidden">
+          <div className="relative xl:block hidden">
             <Image
-            src="/img/landing-widget-mobile.png"
-            alt="Mobilní aplikace"
-            width={250}
-            height={500}
-            className="z-20 -top-24 md:-top-32 md:right-10"
-          />
-            </div>
-          
+              src="/img/landing-widget-mobile.png"
+              alt="Mobilní aplikace"
+              width={250}
+              height={500}
+              className="z-20 -top-24 md:-top-32 md:right-10"
+            />
+          </div>
+
         </div>
       </div>
     </div>

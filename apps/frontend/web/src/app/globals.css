@@ -38,3 +38,8 @@ body {
 .custom-shape-divider-bottom .shape-fill {
   fill: #EFEFEF;
 }
+
+*::selection {
+  color: white;
+  background-color: #FF5500;
+}
