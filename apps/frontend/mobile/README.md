@@ -8,6 +8,8 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
    ```bash
    npm install
+   npm install @react-navigation/native @react-navigation/native-stack
+   npm install react-native-screens react-native-safe-area-context
    ```
 
 2. Start the app

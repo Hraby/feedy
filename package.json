@@ -2,10 +2,15 @@
     "name": "feedy",
     "version": "1.0.0",
     "scripts": {
-      "install:all": "npm run install:backend && npm run install:frontend-web && npm run install:frontend-mobile",
-      "install:backend": "cd apps/backend && npm install",
-      "install:frontend-web": "cd apps/frontend/web && npm install",
-      "install:frontend-mobile": "cd apps/frontend/mobile && npm install"
+        "install:all": "npm run install:backend && npm run install:frontend-web && npm run install:frontend-mobile",
+        "install:backend": "cd apps/backend && npm install",
+        "install:frontend-web": "cd apps/frontend/web && npm install",
+        "install:frontend-mobile": "cd apps/frontend/mobile && npm install"
+    },
+    "dependencies": {
+        "@react-navigation/native": "^7.0.14",
+        "@react-navigation/native-stack": "^7.2.0",
+        "react-native-safe-area-context": "^5.2.0",
+        "react-native-screens": "^4.6.0"
     }
-  }
-  
+}
