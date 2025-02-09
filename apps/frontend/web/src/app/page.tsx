@@ -1,33 +1,35 @@
 import Image from "next/image";
 import LandingNavbar from "@/app/components/LandingNavbar";
 import AppWidget from "./components/LandingWidget";
+import Footer from "./components/Footer";
+import { FiMapPin } from 'react-icons/fi';
 
 export default function Home() {
   return (
     <>
       <div className="bg-white">
-        <div className="container mx-auto px-4">
-          <LandingNavbar />
-          <section className="min-h-[70vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
-                Objevte nové restaurace ve vašem okolí!
-              </h1>
-              <div className="mt-4">
-                <input
-                  type="text"
-                  placeholder="Vložte doručovací adresu"
-                  className="bg-[var(--gray)] px-5 py-2 rounded-full w-full max-w-md text-center lg:text-left"
-                />
-              </div>
-            </div>
-
-            <div className="mt-8 lg:mt-0">
-              <Image src="/img/burger.png" alt="Burger a hranolky" width={550} height={450} className="mx-auto" />
-            </div>
-          </section>
+  <div className="container mx-auto px-4">
+    <LandingNavbar />
+    <section className="min-h-[95vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left">
+      <div className="max-w-3xl">
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
+          Objevte nové restaurace ve vašem okolí!
+        </h1>
+        <div className="mt-4 relative"> {/* Přidána relativní pozice pro umístění ikony */}
+          <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} /> {/* Ikona vlevo */}
+          <input
+            type="text"
+            placeholder="Vložte doručovací adresu"
+            className="bg-[var(--gray)] px-10 py-2 rounded-full w-full max-w-md text-left pl-10" // Přidáno padding pro ikonu a text-left
+          />
         </div>
       </div>
+      <div className="mt-8 lg:mt-0">
+        <Image src="/img/burger.png" alt="Burger a hranolky" width={550} height={450} className="mx-auto" />
+      </div>
+    </section>
+  </div>
+</div>
 
       <div className="custom-shape-divider-bottom mt-16 lg:mt-28">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -44,9 +46,8 @@ export default function Home() {
             Jídlo k vám dorazí čerstvé, včas a bez stresu.
           </p>
         </div>
-
         <div className="container mx-auto px-6 md:px-12">
-          <div className="mt-9 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mt-9 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {[
               { title: "Podporujeme místní podniky", text: "S každou objednávkou podpoříte podniky ve vašem okolí." },
               { title: "Objednávka rychlostí blesku", text: "Zapomeňte na nekonečné čekání a objednejte si rychlostí blesku." },
@@ -70,7 +71,9 @@ export default function Home() {
       </section>
 
       <section className="bg-[#EFEFEF] pb-12 lg:pb-16 pt-24">
-        <AppWidget />
+        <div className="container mx-auto px-4">
+          <AppWidget />
+        </div>
       </section>
 
       <section className="bg-[#EFEFEF] pb-12 lg:pb-16 pt-28">
@@ -97,6 +100,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+      
+      <Footer />
     </>
   );
 }

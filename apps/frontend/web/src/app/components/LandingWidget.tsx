@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function AppWidget() {
   return (
-    <div className="container mx-auto px-6 md:px-16 lg:px-33 mt-10 relative">
+    <div className="container mx-auto px-6 md:px-16 lg:px-16 mt-10 relative">
       <div
         className="relative rounded-3xl p-20 flex flex-col md:flex-row items-center justify-between text-white overflow-visible"
         style={{
@@ -25,7 +25,6 @@ export default function AppWidget() {
               className="z-20 -top-24 md:-top-32 md:right-10"
             />
           </div>
-
         </div>
       </div>
     </div>
