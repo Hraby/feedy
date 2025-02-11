@@ -48,14 +48,14 @@ export default function RestaurantForm() {
                 <input
                     type="text"
                     name="restaurantDescription"
-                    placeholder="Krátký popis restaurace"
+                    placeholder="Krátký popis podniku"
                     className="input-field"
                     onChange={handleChange}
                     required
                 />
 
                 <select name="restaurantType" className="input-field" onChange={handleChange} required value={formData.restaurantType}>
-                    <option value="" disabled hidden>Vyberte město</option>
+                    <option value="" disabled hidden>Vyberte typ činnosti</option>
                     <option value="typeRestaurant">Restaurace</option>
                     <option value="typeKavarna">Kavárna</option>
                     <option value="typePotraviny">Potraviny</option>
@@ -66,7 +66,7 @@ export default function RestaurantForm() {
                 <input
                     type="text"
                     name="restaurantAdress"
-                    placeholder="Adresa restaurace"
+                    placeholder="Adresa podniku"
                     className="input-field"
                     onChange={handleChange}
                     required

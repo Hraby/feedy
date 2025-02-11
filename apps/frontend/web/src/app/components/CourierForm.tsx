@@ -3,16 +3,16 @@ import { useState } from "react";
 
 export default function CourierForm() {
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        language: "",
-        birthYear: "",
-        birthMonth: "",
-        birthDay: "",
-        phone: "",
-        city: "",
-        vehicle: "",
+        courierFirstName: "",
+        courierLastName: "",
+        courierEmail: "",
+        courierLanguage: "",
+        courierBirthYear: "",
+        courierBirthMonth: "",
+        courierBirthDay: "",
+        courierPhone: "",
+        courierCity: "",
+        courierVehicle: "",
     });
 
     const [agreement, setAgreement] = useState(false);
@@ -40,7 +40,7 @@ export default function CourierForm() {
             <div className="space-y-4">
                 <input
                     type="text"
-                    name="firstName"
+                    name="courierFirstName"
                     placeholder="Křestní jméno"
                     className="input-field"
                     onChange={handleChange}
@@ -48,7 +48,7 @@ export default function CourierForm() {
                 />
                 <input
                     type="text"
-                    name="lastName"
+                    name="courierLastName"
                     placeholder="Příjmení"
                     className="input-field"
                     onChange={handleChange}
@@ -56,14 +56,14 @@ export default function CourierForm() {
                 />
                 <input
                     type="email"
-                    name="email"
+                    name="courierEmail"
                     placeholder="Emailová adresa"
                     className="input-field"
                     onChange={handleChange}
                     required
                 />
 
-                <select name="language" className="input-field" onChange={handleChange} required value={formData.language}>
+                <select name="courierLanguage" className="input-field" onChange={handleChange} required value={formData.courierLanguage}>
                     <option value="" disabled hidden>Vyberte jazyk</option>
                     <option value="čeština">Čeština</option>
                     <option value="slovenština">Slovenština</option>
@@ -72,21 +72,21 @@ export default function CourierForm() {
                 </select>
 
                 <div className="flex space-x-4">
-                    <input type="text" name="birthYear" placeholder="RRRR" className="input-field w-1/3" onChange={handleChange} />
-                    <input type="text" name="birthMonth" placeholder="MM" className="input-field w-1/3" onChange={handleChange} />
-                    <input type="text" name="birthDay" placeholder="DD" className="input-field w-1/3" onChange={handleChange} />
+                    <input type="text" name="courierBirthYear" placeholder="RRRR" className="input-field w-1/3" onChange={handleChange} />
+                    <input type="text" name="courierBirthMonth" placeholder="MM" className="input-field w-1/3" onChange={handleChange} />
+                    <input type="text" name="courierBirthDay" placeholder="DD" className="input-field w-1/3" onChange={handleChange} />
                 </div>
 
-                <input type="text" name="phone" placeholder="Telefonní číslo (vč. předvolby)" className="input-field" required onChange={handleChange} />
+                <input type="text" name="courierPhone" placeholder="Telefonní číslo (vč. předvolby)" className="input-field" required onChange={handleChange} />
 
-                <select name="city" className="input-field" onChange={handleChange} required value={formData.city}>
+                <select name="courierCity" className="input-field" onChange={handleChange} required value={formData.courierCity}>
                     <option value="" disabled hidden>Vyberte město</option>
                     <option value="Praha">Praha</option>
                     <option value="Brno">Brno</option>
                     <option value="Zlín">Zlín</option>
                 </select>
 
-                <select name="vehicle" className="input-field" onChange={handleChange} required value={formData.vehicle}>
+                <select name="courierVehicle" className="input-field" onChange={handleChange} required value={formData.courierVehicle}>
                     <option value="" disabled hidden>Vyberte dopravní prostředek</option>
                     <option value="kolo">Kolo</option>
                     <option value="elektrokolo">Elektrokolo</option>
@@ -98,7 +98,7 @@ export default function CourierForm() {
             <div className="flex items-center space-x-2 mt-4 px-2">
                 <input
                     type="checkbox"
-                    id="agreement"
+                    id="courierAgreement"
                     className="w-5 h-5 text-[var(--primary)] border-gray-300 rounded cursor-pointer"
                     onChange={handleAgreementChange}
                     required
