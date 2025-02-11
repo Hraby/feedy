@@ -3,33 +3,35 @@ import LandingNavbar from "@/app/components/LandingNavbar";
 import AppWidget from "./components/LandingWidget";
 import Footer from "./components/Footer";
 import { FiMapPin } from 'react-icons/fi';
+import JoinFeedy from "./components/JoinFeedy";
 
 export default function Home() {
   return (
     <>
       <div className="bg-white">
-  <div className="container mx-auto px-4">
-    <LandingNavbar />
-    <section className="min-h-[95vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left">
-      <div className="max-w-3xl">
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
-          Objevte nové restaurace ve vašem okolí!
-        </h1>
-        <div className="mt-4 relative"> {/* Přidána relativní pozice pro umístění ikony */}
-          <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} /> {/* Ikona vlevo */}
-          <input
-            type="text"
-            placeholder="Vložte doručovací adresu"
-            className="bg-[var(--gray)] px-10 py-2 rounded-full w-full max-w-md text-left pl-10" // Přidáno padding pro ikonu a text-left
-          />
+        <div className="container mx-auto px-4">
+          <LandingNavbar />
+          <section className="min-h-[95vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left pt-20">
+            <div className="max-w-3xl">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
+                Objevte nové restaurace ve vašem okolí!
+              </h1>
+              <div className="mt-4 relative w-full max-w-md mx-auto lg:mx-0 lg:text-left flex justify-center lg:justify-start">
+                <FiMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                <input
+                  type="text"
+                  placeholder="Vložte doručovací adresu"
+                  className="bg-[var(--gray)] px-10 py-2 rounded-full w-full pl-10 text-left lg:text-left"
+                />
+              </div>
+
+            </div>
+            <div className="mt-8 lg:mt-0">
+              <Image src="/img/burger.png" alt="Burger a hranolky" width={550} height={450} className="mx-auto" />
+            </div>
+          </section>
         </div>
       </div>
-      <div className="mt-8 lg:mt-0">
-        <Image src="/img/burger.png" alt="Burger a hranolky" width={550} height={450} className="mx-auto" />
-      </div>
-    </section>
-  </div>
-</div>
 
       <div className="custom-shape-divider-bottom mt-16 lg:mt-28">
         <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -76,31 +78,8 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#EFEFEF] pb-12 lg:pb-16 pt-28">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl lg:text-4xl font-bold">Chcete se stát součástí feedy?</h2>
-          <p className="mt-2 text-base lg:text-lg text-[var(--font)]">
-            Ať už hledáte flexibilní brigádu nebo chcete rozšířit dosah své restaurace, u nás jste správně!
-          </p>
-        </div>
+      <JoinFeedy></JoinFeedy>
 
-        <div className="container mx-auto px-6 md:px-16 mt-9 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="relative rounded-card overflow-hidden cursor-pointer group h-[250px] md:h-[300px]">
-            <Image src="/img/courier.jpg" alt="Staňte se feedy kurýrem" width={600} height={300} className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">
-              <span className="text-white text-2xl md:text-3xl font-bold ml-6 mb-6 w-3/4">Staňte se partnerským feedy kurýrem</span>
-            </div>
-          </div>
-
-          <div className="relative rounded-card overflow-hidden cursor-pointer group h-[250px] md:h-[300px]">
-            <Image src="/img/restaurant.jpg" alt="Přidejte vlastní restauraci nebo obchod" width={600} height={300} className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" />
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">
-              <span className="text-white text-2xl md:text-3xl font-bold ml-6 mb-6 w-3/4">Přidejte vlastní restauraci nebo obchod</span>
-            </div>
-          </div>
-        </div>
-      </section>
-      
       <Footer />
     </>
   );
