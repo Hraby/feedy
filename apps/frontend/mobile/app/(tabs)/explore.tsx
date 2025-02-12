@@ -248,19 +248,24 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   restaurantCard: {
-    width: 160, // ZMENŠENÁ ŠÍŘKA
+    width: 160,
     backgroundColor: '#fff',
     borderRadius: 12,
     overflow: 'hidden',
     marginRight: 10,
     shadowColor: '#000',
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 5,
+    borderWidth: 1,
+    borderColor: '#ddd', 
   },
+  
+  
   restaurantImage: {
     width: '100%',
-    height: 95, // MENŠÍ OBRÁZEK
+    height: 95,
   },
   restaurantInfo: {
     padding: 8,
