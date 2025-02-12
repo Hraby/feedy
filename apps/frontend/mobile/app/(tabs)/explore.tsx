@@ -1,5 +1,7 @@
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons'; 
+import { ScrollView } from 'react-native';
+
 
 import {
   StyleSheet,
@@ -18,6 +20,15 @@ interface Category {
 
 const categories: Category[] = [
   { id: '1', title: 'Kategorie 1', image: require('@/assets/images/card1.jpeg') },
+];
+
+
+const menuCategories = [
+  { id: '1', title: 'Burger', icon: require('@/assets/images/burger.png') },
+  { id: '2', title: 'Kuřecí', icon: require('@/assets/images/chicken.png') },
+  { id: '3', title: 'Pizza', icon: require('@/assets/images/pizza.png') },
+  { id: '4', title: 'Ramen', icon: require('@/assets/images/ramen.png') },
+  { id: '5', title: 'Sushi', icon: require('@/assets/images/sushi.png') },
 ];
 
 export default function TabTwoScreen() {
@@ -56,6 +67,17 @@ export default function TabTwoScreen() {
   </TouchableOpacity>
 
   <Image source={require('@/assets/images/burgerAndChips.png')} style={styles.secondRectangleImage} />
+</View>
+
+<View style={styles.menuScrollContainer}>
+  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    {menuCategories.map((item, index) => (
+      <TouchableOpacity key={item.id} style={[styles.menuItem, index === 0 && styles.menuItemActive]}>
+        <Image source={item.icon} style={styles.menuIcon} />
+        <Text style={[styles.menuText, index === 0 && styles.menuTextActive]}>{item.title}</Text>
+      </TouchableOpacity>
+    ))}
+  </ScrollView>
 </View>
 
     <FlatList
@@ -158,18 +180,18 @@ const styles = StyleSheet.create({
   },  
   secondRectangleImage: {
     width: 200, 
-    height: 260,
+    height: 220,
     position: 'absolute',
     right: -15,  
-    top: '-50%', 
+    top: 0, 
   },  
   menuButton: {
-    backgroundColor: '#D9D9D9', 
+    backgroundColor: '#EBEBEB', 
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 25, 
     alignSelf: 'flex-start', 
-    marginTop: 120, 
+    marginTop: 125, 
     marginLeft: 20,
     position: 'absolute', 
   },
@@ -179,6 +201,41 @@ const styles = StyleSheet.create({
     fontWeight: 'light',
     textAlign: 'center',
   },  
+  menuScrollContainer: {
+    marginTop: 25,
+    marginLeft: 15,
+    paddingVertical: 10,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EAEAEA',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 25,
+    marginRight: 10,
+  },
+  
+  menuItemActive: {
+    backgroundColor: '#FF5500',
+  },
+  
+  menuIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  
+  menuText: {
+    fontSize: 14,
+    color: '#252B33',
+    fontWeight: 'bold',
+  },
+  
+  menuTextActive: {
+    color: '#fff',
+  },
+  
   listContent: {
     paddingHorizontal: 10,
     paddingVertical: 15,
