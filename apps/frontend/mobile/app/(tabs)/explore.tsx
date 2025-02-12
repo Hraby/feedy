@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   menuText: {
     fontSize: 14,
     color: '#252B33',
-    fontWeight: 'bold',
+    fontWeight: 'light',
   },
   menuTextActive: {
     color: '#fff',
