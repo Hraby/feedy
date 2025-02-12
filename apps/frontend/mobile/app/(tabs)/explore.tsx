@@ -7,7 +7,6 @@ import {
   StyleSheet,
   View,
   Text,
-  FlatList,
   TouchableOpacity,
   Image,
 } from 'react-native';
@@ -32,15 +31,6 @@ const menuCategories = [
 ];
 
 export default function TabTwoScreen() {
-  const renderItem = ({ item }: { item: Category }) => (
-    <TouchableOpacity style={styles.card}>
-      <Image source={item.image} style={styles.cardImage} resizeMode="cover" />
-      <View style={styles.cardOverlay}>
-        <Text style={styles.cardTitle}>{item.title}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
   return (
     <View style={styles.container}>
     <View style={styles.header}>
@@ -80,15 +70,36 @@ export default function TabTwoScreen() {
   </ScrollView>
 </View>
 
-    <FlatList
-      data={categories}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
-      numColumns={2}
-      columnWrapperStyle={styles.columnWrapper}
-      contentContainerStyle={styles.listContent}
-      showsVerticalScrollIndicator={false}
-    />
+<View style={styles.cardsScrollContainer}>
+  <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+    {categories.map((item) => (
+      <TouchableOpacity key={item.id} style={styles.restaurantCard}>
+        <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
+        <View style={styles.restaurantInfo}>
+          <Text style={styles.restaurantTitle}>Mr Grill</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>4/5</Text>
+            <Ionicons name="star" size={16} color="#FF5500" />
+          </View>
+          <Text style={styles.restaurantDescription}>
+            Hovězí burgery, kuřecí kebaby, vegetariánská kuchyně.
+          </Text>
+          <View style={styles.restaurantTags}>
+            <View style={styles.tag}>
+              <Ionicons name="fast-food-outline" size={16} color="#252B33" />
+              <Text style={styles.tagText}>Burger</Text>
+            </View>
+            <View style={styles.tag}>
+              <Ionicons name="car-outline" size={16} color="#252B33" />
+              <Text style={styles.tagText}>35 min</Text>
+            </View>
+          </View>
+        </View>
+      </TouchableOpacity>
+    ))};
+  </ScrollView>
+</View>
+
   </View>
 );
 }
@@ -235,41 +246,74 @@ const styles = StyleSheet.create({
   menuTextActive: {
     color: '#fff',
   },
+  cardsScrollContainer: {
+    marginTop: 20,
+    paddingLeft: 15,
+  },
   
-  listContent: {
-    paddingHorizontal: 10,
-    paddingVertical: 15,
-  },
-  columnWrapper: {
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
-  card: {
-    width: '48%',
-    aspectRatio: 1, 
-    borderRadius: 12,
+  restaurantCard: {
+    width: 260,
+    backgroundColor: '#fff',
+    borderRadius: 15,
     overflow: 'hidden',
-    backgroundColor: '#eee',
+    marginRight: 15,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 6,
     elevation: 3,
   },
-  cardImage: {
+  
+  restaurantImage: {
     width: '100%',
-    height: '100%',
+    height: 140,
   },
-  cardOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
+  
+  restaurantInfo: {
+    padding: 10,
+  },
+  
+  restaurantTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#252B33',
+  },
+  
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  
+  ratingText: {
+    fontSize: 14,
+    color: '#252B33',
+    marginRight: 5,
+  },
+  
+  restaurantDescription: {
+    fontSize: 13,
+    color: '#6C757D',
+    marginTop: 5,
+  },
+  
+  restaurantTags: {
+    flexDirection: 'row',
+    marginTop: 10,
+  },
+  
+  tag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EAEAEA',
     paddingVertical: 5,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    marginRight: 10,
   },
-  cardTitle: {
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
+  
+  tagText: {
+    fontSize: 12,
+    color: '#252B33',
+    marginLeft: 5,
   },
 });
