@@ -41,7 +41,7 @@ export default function CourierForm() {
                 <input
                     type="text"
                     name="courierFirstName"
-                    placeholder="Křestní jméno"
+                    placeholder="Jméno"
                     className="input-field"
                     onChange={handleChange}
                     required

@@ -82,7 +82,7 @@ export default function RestaurantForm() {
                 <input
                     type="text"
                     name="RestaurantOwnerName"
-                    placeholder="Křestní jméno"
+                    placeholder="Jméno"
                     className="input-field"
                     onChange={handleChange}
                     required
