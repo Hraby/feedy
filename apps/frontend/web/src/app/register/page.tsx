@@ -2,18 +2,19 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
+import registerAction from "./registerAction";
+import { useFormState } from "react-dom";
 
 export default function Register() {
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
         password: "",
         passwordAgain: "",
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordAgain, setShowPasswordAgain] = useState(false);
-    const [error, setError] = useState("");
+    const [errorText, setError] = useState("");
+    const [error, formAction] = useFormState(registerAction, undefined);
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,22 +28,13 @@ export default function Register() {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (formData.password !== formData.passwordAgain) {
-            setError("Hesla se neshodují!");
-            return;
-        }
-        console.log("Register data:", formData);
-    };
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] p-4">
             <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
                 <h2 className="text-4xl font-bold text-center text-gray-800">Registrace</h2>
                 <p className="text-center text-gray-600 mt-2">Zaregistrujte se na platformě Feedy</p>
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <form action={formAction} className="mt-6 space-y-4">
                     <input
                         type="text"
                         name="firstName"
@@ -108,7 +100,7 @@ export default function Register() {
                         </button>
                     </div>
 
-                    {error && <p className="text-red-500 text-md text-center">{error}</p>}
+                    {errorText || error && <p className="text-red-500 text-md text-center">{errorText || "Heslo neobsahuje číslo nebo je menší než 6 znaků"}</p>}
 
                     <div className="flex items-center space-x-2 mt-4 px-2">
                         <input
