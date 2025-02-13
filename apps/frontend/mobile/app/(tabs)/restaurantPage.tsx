@@ -3,6 +3,12 @@ import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 
 export default function RestaurantScreen() {
+  const foodItems = [...Array(6)].map((_, index) => ({
+    id: index.toString(),
+    title: "Döner klasický",
+    description: "Šťavnaté maso s čerstvou zeleninou",
+    price: "135,00 Kč",
+  }));
   return (
     <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
@@ -25,7 +31,7 @@ export default function RestaurantScreen() {
 
       <Section title="Döner kebab – chleba">
         {[...Array(3)].map((_, index) => (
-          <FoodCard key={index} title="Döner klasický" price="135,00 Kč" />
+          <FoodCard key={index} title="Döner klasický" description="Šťavnaté maso s čerstvou zeleninou" price="135,00 Kč" />
         ))}
       </Section>
     </ScrollView>
@@ -52,20 +58,22 @@ const Rating: React.FC<{ rating: string }> = ({ rating }) => (
 );
 
 interface FoodCardProps {
-  title: string;
-  price: string;
-}
+    title: string;
+    description: string;
+    price: string;
+  }
 
-const FoodCard = ({ title, price }: FoodCardProps) => (
-  <View style={styles.foodCard}>
-    <Image source={require('@/assets/images/kebab.png')} style={styles.foodImage} />
-    <Text style={styles.foodTitle}>{title}</Text>
-    <Text style={styles.foodPrice}>{price}</Text>
-    <TouchableOpacity style={styles.addButton}>
-      <Ionicons name="add" size={20} color="#fff" />
-    </TouchableOpacity>
-  </View>
-);
+const FoodCard = ({ title, description, price }: FoodCardProps) => (
+    <View style={styles.foodCard}>
+      <Image source={require('@/assets/images/kebab.png')} style={styles.foodImage} />
+      <Text style={styles.foodTitle}>{title}</Text>
+      <Text style={styles.foodDescription}>{description}</Text>
+      <Text style={styles.foodPrice}>{price}</Text>
+      <TouchableOpacity style={styles.addButton}>
+        <Ionicons name="add" size={20} color="#fff" />
+      </TouchableOpacity>
+    </View>
+  );
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <View>
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
     height: 300 
   },
   infoBlock: { 
-    padding: 20 
+    padding: 20
   },
 
   topImage: { 
@@ -106,13 +114,13 @@ const styles = StyleSheet.create({
     borderRadius: 5 
   },
   addButton: { 
-    marginTop: 8, 
     backgroundColor: '#FF5500', 
     padding: 6, 
     borderRadius: 20, 
-    marginLeft: 80
+    marginLeft: 80,
+    marginTop: -10,
+    flexDirection: 'row'
   },
-
   locationBadge: { 
     backgroundColor: '#FFE4D4', 
     paddingVertical: 5, 
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
   },
   ratingText: { 
     fontSize: 16, 
-    marginRight: 4 
+    marginRight:  2
   },
   sectionTitle: { 
     fontSize: 20, 
@@ -146,17 +154,24 @@ const styles = StyleSheet.create({
     marginTop: 0
   },
   foodTitle: { 
-    fontSize: 14, 
+    fontSize: 16, 
     fontWeight: '600', 
-    marginTop: 5 
+    marginTop: 5 ,
+    textAlign: 'left'
+  },
+  foodDescription: {
+    fontSize: 12,
+    color: '#666',
+    marginTop: 3,
+    marginLeft: -5
   },
   foodPrice: { 
     fontSize: 12, 
+    flexDirection: 'row',
     fontWeight: 'bold', 
     color: '#FF5500', 
-    position: 'absolute',
-    top: 128,
-    left: 20
+    marginRight: 50, 
+    marginTop: 5
   },
   detailsRow: { 
     flexDirection: 'row', 
@@ -166,7 +181,7 @@ const styles = StyleSheet.create({
   badge: { 
     flexDirection: 'row', 
     alignItems: 'center', 
-    marginRight: 95 
+    marginRight: 35 
   },
   ratingContainer: { 
     flexDirection: 'row', 
