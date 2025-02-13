@@ -29,6 +29,6 @@ export default async function registerAction(currentState: any, formData: FormDa
         });
         redirect("/")
     } else {
-      return json.error;
+      return json.message;
     }
 }

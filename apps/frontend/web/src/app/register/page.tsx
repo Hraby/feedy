@@ -100,7 +100,7 @@ export default function Register() {
                         </button>
                     </div>
 
-                    {errorText || error && <p className="text-red-500 text-md text-center">{errorText || "Heslo neobsahuje číslo nebo je menší než 6 znaků"}</p>}
+                    {errorText || error && <p className="text-red-500 text-md text-center">{errorText || error}</p>}
 
                     <div className="flex items-center space-x-2 mt-4 px-2">
                         <input
