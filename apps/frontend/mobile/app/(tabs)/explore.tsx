@@ -32,6 +32,7 @@ const menuCategories = [
 
 export default function TabTwoScreen() {
   return (
+    <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.leftContainer}>
@@ -101,12 +102,52 @@ export default function TabTwoScreen() {
           ))}
         </ScrollView>
       </View>
+
+       <Text style={styles.sectionTitle}>Vyzkoušejte něco nového</Text>
+
+       <View style={styles.cardsScrollContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {categories.map((item) => (
+            <TouchableOpacity key={item.id} style={styles.restaurantCard}>
+              <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
+              <View style={styles.restaurantInfo}>
+                <View style={styles.restaurantTitleContainer}>
+                  <Text style={styles.restaurantTitle}>{item.title}</Text>
+                  <View style={styles.ratingContainer}>
+                    <Text style={styles.ratingText}>4/5</Text>
+                    <Ionicons name="star" size={16} color="#FF5500" />
+                  </View>
+                </View>
+                <Text style={styles.restaurantDescription}>
+                  Popis kategorie {item.title}.
+                </Text>
+                <View style={styles.restaurantTags}>
+                  <View style={styles.tag}>
+                    <Ionicons name="fast-food-outline" size={16} color="#252B33" />
+                    <Text style={styles.tagText}>Kategorie</Text>
+                  </View>
+                  <View style={styles.tag}>
+                    <Ionicons name="car-outline" size={16} color="#252B33" />
+                    <Text style={styles.tagText}>30 min</Text>
+                  </View>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
     </View>
+    </ScrollView>
+
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  scrollContainer: {
     flex: 1,
     backgroundColor: '#fff',
   },
@@ -245,7 +286,7 @@ const styles = StyleSheet.create({
   },
   cardsScrollContainer: {
     marginTop: 20,
-    paddingLeft: 10,
+    paddingLeft: 15,
   },
   restaurantCard: {
     width: 160,
@@ -261,7 +302,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd', 
   },
-  
   
   restaurantImage: {
     width: '100%',
@@ -309,4 +349,12 @@ const styles = StyleSheet.create({
     color: '#252B33',
     marginLeft: 5,
   },
+
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: '#252B33',
+    marginLeft: 15,
+    marginTop: 20,
+    },
 });
