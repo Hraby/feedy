@@ -2,19 +2,12 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
+import { useFormState } from "react-dom";
+import loginAction from "./loginAction";
 
 export default function Login() {
-    const [formData, setFormData] = useState({ email: "", password: "" });
+    const [error, formAction] = useFormState(loginAction, undefined);
     const [showPassword, setShowPassword] = useState(false);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Login data:", formData);
-    };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[var(--gradient-start)] to-[var(--gradient-end)] p-4">
@@ -22,13 +15,12 @@ export default function Login() {
                 <h2 className="text-4xl font-bold text-center text-gray-800">Přihlášení</h2>
                 <p className="text-center text-gray-600 mt-2">Přihlaste se ke svému účtu</p>
 
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                <form action={formAction} className="mt-6 space-y-4">
                     <input
                         type="email"
                         name="email"
                         placeholder="Emailová adresa"
                         className="input-field"
-                        onChange={handleChange}
                         required
                     />
 
@@ -38,7 +30,6 @@ export default function Login() {
                             name="password"
                             placeholder="Heslo"
                             className="input-field pr-12"
-                            onChange={handleChange}
                             required
                         />
                         <button
@@ -56,6 +47,7 @@ export default function Login() {
                         Přihlásit se
                     </button>
                 </form>
+                {error && <p>{error}</p>}
 
                 <p className="text-center text-gray-600 text-sm mt-4">
                     Nemáte účet? {" "}

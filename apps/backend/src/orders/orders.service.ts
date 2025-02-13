@@ -1,15 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { User } from 'src/users/entities/user.entity';
 import { OrderStatus } from '@prisma/client';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class OrdersService {
     constructor(
         private readonly prisma: PrismaService,
         private readonly configService: ConfigService,
+        private readonly eventEmitter: EventEmitter2,
       ) {}
 
       async getOrders() {
@@ -44,11 +46,15 @@ export class OrdersService {
         });
     }
 
-    async updateOrderStatus(id: string, status: OrderStatus) {
-        return this.prisma.order.update({
-            where: { id },
+    async updateOrderStatus(orderId: string, status: OrderStatus) {
+        const updatedOrder = await this.prisma.order.update({
+            where: { id: orderId },
             data: { status },
         });
+
+        this.eventEmitter.emit('order.updated', { orderId, status });
+
+        return updatedOrder;
     }
 
     async assignCourier(id: string) {

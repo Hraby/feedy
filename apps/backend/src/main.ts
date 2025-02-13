@@ -14,8 +14,8 @@ async function bootstrap() {
   );
 
   const cors = {
-    origin: ["http://localhost:4000"],
-    methods: "GET, HEAD,PUT,PATCH,POST,DELETE,OPTIONS"
+    origin: 'http://localhost:3000',
+    credentials: true,
   };
 
   const config = new DocumentBuilder()
