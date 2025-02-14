@@ -3,7 +3,7 @@ import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import registerAction from "./registerAction";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -13,7 +13,7 @@ export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordAgain, setShowPasswordAgain] = useState(false);
     const [errorText, setError] = useState("");
-    const [error, formAction] = useFormState(registerAction, undefined);
+    const [error, formAction] = useActionState(registerAction, undefined);
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

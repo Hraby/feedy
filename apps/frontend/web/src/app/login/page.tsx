@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import loginAction from "./loginAction";
 
 export default function Login() {
-    const [error, formAction] = useFormState(loginAction, undefined);
+    const [error, formAction] = useActionState(loginAction, undefined);
     const [showPassword, setShowPassword] = useState(false);
 
     return (
