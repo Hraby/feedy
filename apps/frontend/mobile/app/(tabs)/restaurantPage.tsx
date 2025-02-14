@@ -12,7 +12,6 @@ export default function RestaurantScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Horní sekce – obrázek restaurace a tlačítko zpět */}
       <View style={styles.imageContainer}>
         <Image source={require('@/assets/images/mrgrill.jpg')} style={styles.topImage} />
         <TouchableOpacity style={styles.backButton}>
@@ -20,7 +19,6 @@ export default function RestaurantScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Informační blok restaurace */}
       <View style={styles.infoBlock}>
         <Text style={styles.locationBadge}>Zlín</Text>
         <Text style={styles.restaurantName}>Mr Grill</Text>
@@ -34,7 +32,6 @@ export default function RestaurantScreen() {
         </Text>
       </View>
 
-      {/* Sekce s jídly */}
       <View style={styles.sectionBlock}>
         <Text style={styles.sectionTitle}>Döner kebab – chleba</Text>
         <FlatList
@@ -56,7 +53,6 @@ export default function RestaurantScreen() {
   );
 }
 
-// Komponenta pro zobrazení odznaku
 const Badge = ({ icon, label }) => (
   <View style={styles.badge}>
     <Ionicons name={icon} size={14} color="#000" />
@@ -64,7 +60,6 @@ const Badge = ({ icon, label }) => (
   </View>
 );
 
-// Komponenta pro zobrazení hodnocení
 const Rating = ({ rating }) => (
   <View style={styles.ratingContainer}>
     <Text style={styles.ratingText}>{rating}</Text>
@@ -72,7 +67,6 @@ const Rating = ({ rating }) => (
   </View>
 );
 
-// Komponenta pro zobrazení karty jídla
 const FoodCard = ({ title, description, price }) => (
   <View style={styles.foodCard}>
     <Image source={require('@/assets/images/kebab.png')} style={styles.foodImage} />
@@ -80,7 +74,6 @@ const FoodCard = ({ title, description, price }) => (
       <Text style={styles.foodTitle}>{title}</Text>
       <Text style={styles.foodDescription}>{description}</Text>
     </View>
-    {/* Nový kontejner pro dolní část karty */}
     <View style={styles.bottomContainer}>
       <Text style={styles.foodPrice}>{price}</Text>
       <TouchableOpacity style={styles.addButton}>
@@ -91,21 +84,17 @@ const FoodCard = ({ title, description, price }) => (
 );
 
 const styles = StyleSheet.create({
-  // Kontejner pro celou obrazovku
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  // Kontejner pro horní obrázek restaurace
   imageContainer: {
     height: 300,
   },
-  // Styl pro horní obrázek (vyplní celý container)
   topImage: {
     width: '100%',
     height: '100%',
   },
-  // Tlačítko pro návrat, umístěné nad obrázkem
   backButton: {
     position: 'absolute',
     top: 50,
@@ -114,14 +103,12 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
   },
-  // Informační blok restaurace
   infoBlock: {
     paddingTop: 20,
     paddingRight: 20,
     paddingBottom: 20,
     paddingLeft: 20,
   },
-  // Styl pro odznak s umístěním
   locationBadge: {
     backgroundColor: '#FFE4D4',
     paddingTop: 5,
@@ -136,64 +123,53 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 5,
   },
-  // Název restaurace
   restaurantName: {
     fontSize: 28,
     fontWeight: 'bold',
     marginTop: 8,
   },
-  // Řádek s detaily (odznaky a hodnocení)
   detailsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
-  // Styl pro jednotlivý odznak
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 35,
   },
-  // Text v odznaku
   badgeText: {
     fontSize: 14,
     marginLeft: 5,
   },
-  // Kontejner pro hodnocení
   ratingContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  // Text hodnocení
   ratingText: {
     fontSize: 16,
     marginRight: 2,
   },
-  // Popis restaurace
   description: {
     fontSize: 16,
     marginTop: 15,
     color: '#252B33',
   },
-  // Sekce s jídly
   sectionBlock: {
     paddingRight: 20,
     paddingLeft: 20,
     marginBottom: 20,
   },
-  // Název sekce s jídly
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 20,
     marginTop: 0,
   },
-  // Řádek karet – dvě karty vedle sebe
   cardRow: {
     justifyContent: 'space-between',
     marginBottom: 20,
   },
-  // Styl karty jídla
   foodCard: {
     width: '48%',
     backgroundColor: '#ffffff',
@@ -208,45 +184,38 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'column',
   },
-  // Kontejner pro text uvnitř karty (zarovnaný vlevo)
   textContainer: {
     alignSelf: 'stretch',
     alignItems: 'flex-start',
     marginTop: 5,
   },
-  // Název jídla
   foodTitle: {
     fontSize: 16,
     fontWeight: '600',
     textAlign: 'left',
   },
-  // Popis jídla
   foodDescription: {
     fontSize: 12,
     color: '#666666',
     textAlign: 'left',
     marginTop: 5,
   },
-  // Nový kontejner pro dolní část karty (cena a tlačítko)
   bottomContainer: {
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  // Cena jídla – umístěná v levém dolním rohu karty
   foodPrice: {
     fontSize: 14,
     fontWeight: 'bold',
     color: '#FF5500',
   },
-  // Obrázek jídla
   foodImage: {
     width: 100,
     height: 80,
     borderRadius: 5,
   },
-  // Tlačítko pro přidání jídla – umístěné v pravém dolním rohu karty
   addButton: {
     backgroundColor: '#FF5500',
     padding: 6,
