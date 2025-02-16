@@ -4,19 +4,18 @@ import { View, Text, TextInput, TouchableOpacity, ImageBackground, Image, StyleS
 
 export default function RegistrationScreen() {
   return (
-    <ImageBackground source={require('@/assets/images/bg-register.png')} style={styles.container}>
+    <ImageBackground source={require('@/assets/images/bg-login.png')} style={styles.container}>
       <View style={styles.headerBackground}>
-        <Image source={require('@/assets/images//Logos/feedyLogoWhite.png')} style={styles.logo} />
+        <Image source={require('@/assets/images//Logos/feedyLogoGradient.png')} style={styles.logo} />
       </View>
       <View style={styles.tabs}>
-        <Text style={styles.activeTab}>Registrace</Text>
-        <Text style={styles.inactiveTab}>Přihlásit se</Text>
+        <Text style={styles.inactiveTab}>Registrace</Text>
+        <Text style={styles.activeTab}>Přihlásit se</Text>
       </View>
-      <TextInput placeholder="Uživatelské jméno" style={styles.input} />
-      <TextInput placeholder="E-mail" style={styles.input} keyboardType="email-address" />
+      <TextInput placeholder="Uživatelské jméno nebo E-mail" style={styles.input} />
       <TextInput placeholder="Heslo" style={styles.input} secureTextEntry />
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Zaregistrovat se</Text>
+        <Text style={styles.buttonText}>Přihlásit se</Text>
       </TouchableOpacity>
     </ImageBackground>
   );
@@ -30,7 +29,7 @@ const styles = StyleSheet.create({
     padding: 0,
     width: '100%',
     height: 400,
-    backgroundColor: '#fff',
+    backgroundColor: '#FF5500',
   },
   headerBackground: {
     width: '100%',
@@ -44,44 +43,45 @@ const styles = StyleSheet.create({
     width: 150,
     height: 50,
     resizeMode: 'contain',
+    marginBottom: 100,
   },
   tabs: {
     flexDirection: 'row',
-    marginTop: 40,
+    marginTop: 10,
     marginBottom: 40,
   },
   activeTab: {
-    color: '#FF5500',
+    color: 'white',
     fontWeight: 'bold',
     fontSize: 24,
     borderBottomWidth: 2,
-    borderBottomColor: '#FF5500',
-    marginRight: 100,
+    borderBottomColor: 'white',
   },
   inactiveTab: {
-    color: '#000',
+    color: 'white',
     fontSize: 24,
+    marginRight: 100,
   },
   input: {
     width: '80%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#FF5500',
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 25,
-    backgroundColor: '#fff',
+    backgroundColor: '#FD7C3C',
   },
   button: {
     marginTop: 20,
-    backgroundColor: '#FF5500',
+    backgroundColor: '#fff',
     paddingVertical: 15,
     borderRadius: 30,
     width: '80%',
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: '#252B33',
     fontWeight: 'light',
     fontSize: 18,
   },
