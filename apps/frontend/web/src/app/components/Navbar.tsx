@@ -41,7 +41,7 @@ const Navbar = () => {
             </button>
 
             <div
-              className="relative flex items-center gap-2 cursor-pointer hover:bg-[#ffff] p-2 rounded-3xl transition-all duration-300"
+              className="relative flex items-center gap-2 cursor-pointer hover:bg-[#ffff] p-2 rounded-2xl transition-all duration-300"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <Image
@@ -52,12 +52,12 @@ const Navbar = () => {
                 className="rounded-full"
               />
               <div>
-                <p className="text-base text-[var(--font)] font-bold">Adam Novák</p>
-                <p className="text-sm text-[var(--primary)]">Admin</p>
+                <p className="text-sm text-[var(--font)] font-bold">Adam Novák</p>
+                <p className="text-xs text-[var(--primary)]">Admin</p>
               </div>
             </div>
             {isDropdownOpen && (
-              <div className="absolute right-0 mt-48 w-48 bg-[var(--secondary)] shadow-lg rounded-2xl p-2 transition-all duration-300">
+              <div className="absolute right-0 mt-48 w-48 bg-white shadow-lg rounded-2xl p-2 transition-all duration-300 z-40">
                 <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">Profil</p>
                 <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">Odhlásit se</p>
               </div>
