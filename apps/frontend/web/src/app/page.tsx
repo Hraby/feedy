@@ -1,11 +1,11 @@
 import Image from "next/image";
-import LandingNavbar from "@/app/components/LandingNavbar";
-import AppWidget from "./components/LandingWidget";
-import Footer from "./components/Footer";
+import LandingNavbar from "@/components/LandingNavbar";
+import AppWidget from "../components/LandingWidget";
+import Footer from "../components/Footer";
 import { FiMapPin } from 'react-icons/fi';
-import JoinFeedy from "./components/JoinFeedy";
+import JoinFeedy from "../components/JoinFeedy";
 
-export default function Home() {
+export default async function Home() {
   return (
     <>
       <div className="bg-white">

@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import Modal from "@/app/components/Modal";
-import CourierForm from "@/app/components/CourierForm";
-import RestaurantForm from "@/app/components/RestaurantForm";
+import Modal from "@/components/Modal";
+import CourierForm from "@/components/CourierForm";
+import RestaurantForm from "@/components/RestaurantForm";
 
 const JoinFeedy = () => {
   const [openModal, setOpenModal] = useState<"courier" | "restaurant" | null>(null);

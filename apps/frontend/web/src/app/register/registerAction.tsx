@@ -20,7 +20,7 @@ export default async function registerAction(currentState: any, formData: FormDa
     const json = await response.json();
 
     if (response.ok) {
-        (await cookies()).set("Authorization", json.token, {
+        (await cookies()).set("access_token", json.token, {
           secure: true,
           httpOnly: true,
           expires: Date.now() + 24 * 60 * 60 * 1000,
