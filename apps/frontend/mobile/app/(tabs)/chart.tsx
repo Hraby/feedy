@@ -8,6 +8,10 @@ const { width } = Dimensions.get("window");
 const initialCart = [
   { id: "1", name: "Kebab klasický", price: 305, quantity: 1, image: require("@/assets/images/kebab.png") },
   { id: "2", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
+  { id: "3", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
+  { id: "4", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
+  { id: "5", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
+  { id: "6", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
 ];
 
 export default function CartScreen() {
@@ -156,13 +160,13 @@ const styles = StyleSheet.create({
   orderButton: {
     backgroundColor: "#FF5500",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 14,
     alignItems: "center",
     margin: 20,
   },
   orderText: {
     color: "#FFF",
-    fontWeight: "bold",
+    fontWeight: "light",
     fontSize: 16,
   },
   backButton: {
