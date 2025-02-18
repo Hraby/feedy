@@ -13,22 +13,24 @@ const initialCart = [
 export default function CartScreen() {
   const [cart, setCart] = useState(initialCart);
 
-  const handleIncrease = (id: any) => {
+  const handleIncrease = (id) => {
     setCart(cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item)));
   };
-
-  const handleDecrease = (id: any) => {
-    setCart(cart.map((item) => (item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item)));
+  const handleDecrease = (id) => {
+    setCart(cart.map((item) =>
+      item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+    ));
   };
+  
 
-  const handleRemove = (id: any) => {
+  const handleRemove = (id) => {
     setCart(cart.filter((item) => item.id !== id));
   };
 
-  const renderRightActions = (id: any) => (
-    <TouchableOpacity style={styles.backButton}>
-    <Ionicons name="arrow-back" size={24} color="#000" />
-  </TouchableOpacity>
+  const renderRightActions = (id) => (
+    <TouchableOpacity style={styles.deleteButton} onPress={() => handleRemove(id)}>
+      <Ionicons name="trash" size={24} color="#FFF" />
+    </TouchableOpacity>
   );
 
   const renderItem = ({ item }) => (
@@ -54,19 +56,19 @@ export default function CartScreen() {
 
   return (
     <View style={styles.container}>
-          <TouchableOpacity style={styles.backButton}>
-            <Ionicons name="arrow-back" size={24} color="#000" />
-          </TouchableOpacity>
-          <View style={styles.deleteInfo}>
-          <Image source={require("@/assets/images/swipe-remove.png")} style={styles.deleteImage} />
+      <TouchableOpacity style={styles.backButton}>
+        <Ionicons name="arrow-back" size={24} color="#000" />
+      </TouchableOpacity>
+      <View style={styles.deleteInfo}>
+        <Image source={require("@/assets/images/swipe-remove.png")} style={styles.deleteImage} />
         <Text style={styles.deleteText}>Pro smazání produktu přejeďte vlevo</Text>
       </View>
-          <FlatList 
-  data={cart} 
-  keyExtractor={(item) => item.id} 
-  renderItem={renderItem} 
-  contentContainerStyle={{ paddingTop: 30 }}
-/>
+      <FlatList 
+        data={cart} 
+        keyExtractor={(item) => item.id} 
+        renderItem={renderItem} 
+        contentContainerStyle={{ paddingTop: 30 }}
+      />
       <TouchableOpacity style={styles.orderButton}>
         <Text style={styles.orderText}>ZÁVAZNĚ OBJEDNAT</Text>
       </TouchableOpacity>
