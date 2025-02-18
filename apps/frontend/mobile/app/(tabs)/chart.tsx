@@ -57,11 +57,15 @@ export default function CartScreen() {
           <TouchableOpacity style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="#000" />
           </TouchableOpacity>
+          <View style={styles.deleteInfo}>
+          <Image source={require("@/assets/images/swipe-remove.png")} style={styles.deleteImage} />
+        <Text style={styles.deleteText}>Pro smazání produktu přejeďte vlevo</Text>
+      </View>
           <FlatList 
   data={cart} 
   keyExtractor={(item) => item.id} 
   renderItem={renderItem} 
-  contentContainerStyle={{ paddingTop: 160 }}
+  contentContainerStyle={{ paddingTop: 30 }}
 />
       <TouchableOpacity style={styles.orderButton}>
         <Text style={styles.orderText}>ZÁVAZNĚ OBJEDNAT</Text>
@@ -75,13 +79,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
   },
+  deleteInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 100,
+  },
+  deleteText: {
+    fontSize: 12,
+    fontWeight: "light",
+    marginRight: 10,
+  },
+  deleteImage: {
+    width: 15,
+    height: 15,
+    marginRight: 5,
+  },
   cartItem: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F8F8F8",
     padding: 15,
     borderRadius: 15,
-    marginVertical: 8,
+    marginBottom: 8,
     marginHorizontal: 20,
   },
   itemImage: {
