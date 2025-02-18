@@ -18,14 +18,17 @@ export default function CartScreen() {
   };
   const handleDecrease = (id) => {
     setCart(cart.map((item) =>
-      item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+      item.id === id && item.quantity > 1
+        ? { ...item, quantity: item.quantity - 1 }
+        : item
     ));
   };
   
-
   const handleRemove = (id) => {
     setCart(cart.filter((item) => item.id !== id));
   };
+
+  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const renderRightActions = (id) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => handleRemove(id)}>
@@ -59,6 +62,10 @@ export default function CartScreen() {
       <TouchableOpacity style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
+      <View style={styles.cartIconContainer}>
+        <Ionicons name="cart" size={24} color="#000" />
+        <Text style={styles.cartTotal}>{totalPrice.toFixed(2)} Kč</Text>
+      </View>
       <View style={styles.deleteInfo}>
         <Image source={require("@/assets/images/swipe-remove.png")} style={styles.deleteImage} />
         <Text style={styles.deleteText}>Pro smazání produktu přejeďte vlevo</Text>
@@ -85,7 +92,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 100,
+    marginTop: 120,
   },
   deleteText: {
     fontSize: 12,
@@ -168,5 +175,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBEBEB',
     padding: 8,
     borderRadius: 20,
+    zIndex: 2,
+  },
+  cartIconContainer: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EBEBEB',
+    padding: 8,
+    borderRadius: 20,
+    zIndex: 2,
+  },
+  cartTotal: {
+    marginLeft: 5,
+    fontSize: 16,
+    fontWeight: 'light',
   },
 });
