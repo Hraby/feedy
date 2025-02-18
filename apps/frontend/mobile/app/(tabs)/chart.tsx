@@ -16,6 +16,7 @@ export default function CartScreen() {
   const handleIncrease = (id) => {
     setCart(cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item)));
   };
+
   const handleDecrease = (id) => {
     setCart(cart.map((item) =>
       item.id === id && item.quantity > 1
@@ -23,12 +24,10 @@ export default function CartScreen() {
         : item
     ));
   };
-  
+
   const handleRemove = (id) => {
     setCart(cart.filter((item) => item.id !== id));
   };
-
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const renderRightActions = (id) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => handleRemove(id)}>
@@ -57,15 +56,13 @@ export default function CartScreen() {
     </Swipeable>
   );
 
+  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
-      <View style={styles.cartIconContainer}>
-        <Ionicons name="cart" size={24} color="#000" />
-        <Text style={styles.cartTotal}>{totalPrice.toFixed(2)} Kč</Text>
-      </View>
       <View style={styles.deleteInfo}>
         <Image source={require("@/assets/images/swipe-remove.png")} style={styles.deleteImage} />
         <Text style={styles.deleteText}>Pro smazání produktu přejeďte vlevo</Text>
@@ -77,7 +74,7 @@ export default function CartScreen() {
         contentContainerStyle={{ paddingTop: 30 }}
       />
       <TouchableOpacity style={styles.orderButton}>
-        <Text style={styles.orderText}>ZÁVAZNĚ OBJEDNAT</Text>
+        <Text style={styles.orderText}>ZÁVAZNĚ OBJEDNAT - {totalPrice.toFixed(2)} Kč</Text>
       </TouchableOpacity>
     </View>
   );
@@ -92,7 +89,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 120,
+    marginTop: 100,
   },
   deleteText: {
     fontSize: 12,
@@ -175,22 +172,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBEBEB',
     padding: 8,
     borderRadius: 20,
-    zIndex: 2,
-  },
-  cartIconContainer: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EBEBEB',
-    padding: 8,
-    borderRadius: 20,
-    zIndex: 2,
-  },
-  cartTotal: {
-    marginLeft: 5,
-    fontSize: 16,
-    fontWeight: 'light',
   },
 });
