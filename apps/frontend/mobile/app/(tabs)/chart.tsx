@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   orderButton: {
-    backgroundColor: "#F56A00",
+    backgroundColor: "#FF5500",
     padding: 15,
     borderRadius: 10,
     alignItems: "center",
