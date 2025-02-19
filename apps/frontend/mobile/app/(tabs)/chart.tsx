@@ -67,16 +67,24 @@ export default function CartScreen() {
       <TouchableOpacity style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
+
+      <View style={styles.restaurantHeader}>
+        <Text style={styles.restaurantName}>Kebab House Zlín</Text>
+        <View style={styles.separator} />
+      </View>
+
       <View style={styles.deleteInfo}>
         <Image source={require("@/assets/images/swipe-remove.png")} style={styles.deleteImage} />
         <Text style={styles.deleteText}>Pro smazání produktu přejeďte vlevo</Text>
       </View>
+
       <FlatList 
         data={cart} 
         keyExtractor={(item) => item.id} 
         renderItem={renderItem} 
-        contentContainerStyle={{ paddingTop: 30 }}
+        contentContainerStyle={{ paddingTop: 20 }}
       />
+
       <TouchableOpacity style={styles.orderButton}>
         <Text style={styles.orderText}>ZÁVAZNĚ OBJEDNAT - {totalPrice.toFixed(2)} Kč</Text>
       </TouchableOpacity>
@@ -89,11 +97,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFF",
   },
+  restaurantHeader: {
+    alignItems: "center",
+    marginTop: 100,
+  },
+  restaurantName: {
+    fontSize: 18,
+    fontWeight: "light",
+  },
+  separator: {
+    width: "90%",
+    height: 1,
+    backgroundColor: "black",
+    marginTop: 5,
+  },
   deleteInfo: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 100,
+    marginTop: 20,
   },
   deleteText: {
     fontSize: 12,
@@ -163,6 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
     margin: 20,
+    justifyContent: "space-between",
   },
   orderText: {
     color: "#FFF",
@@ -178,3 +201,4 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
+
