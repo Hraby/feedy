@@ -32,7 +32,7 @@ export class AuthService {
 
             return {
                 user: user,
-                token: this.getToken({id: user.id})
+                token: this.getToken({id: user.id, firstName: user.firstName, lastName: user.lastName})
             };
         } catch(error){
             throw new InternalServerErrorException("Server error");
@@ -74,6 +74,8 @@ export class AuthService {
             user,
             token: this.getToken({
                 id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName
             })
         };
     }
@@ -81,12 +83,15 @@ export class AuthService {
     async refreshToken(user: User){
         return {
             user: user,
-            token: this.getToken({id: user.id})
+            token: this.getToken({id: user.id, firstName: user.firstName, lastName: user.lastName})
         };
     }
 
-    private getToken(payload: { id: string }): string {
-        const token = this.jwtService.sign(payload);
+    private getToken(payload: { id: string, firstName: string, lastName: string }): string {
+        const token = this.jwtService.sign({
+            id: payload.id,
+            name: payload.firstName+" "+payload.lastName
+        });
         return token;
     }
 }

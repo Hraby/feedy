@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 
-const Navbar = () => {
+export default function Navbar({ name }: {name: string}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -52,7 +52,7 @@ const Navbar = () => {
                 className="rounded-full"
               />
               <div>
-                <p className="text-sm text-[var(--font)] font-bold">Adam Novák</p>
+                <p className="text-sm text-[var(--font)] font-bold">{name}</p>
                 <p className="text-xs text-[var(--primary)]">Admin</p>
               </div>
             </div>
@@ -68,5 +68,3 @@ const Navbar = () => {
     </div>
   );
 };
-
-export default Navbar;
