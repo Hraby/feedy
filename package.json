@@ -6,5 +6,10 @@
         "install:backend": "cd apps/backend && npm install",
         "install:frontend-web": "cd apps/frontend/web && npm install",
         "install:frontend-mobile": "cd apps/frontend/mobile && npm install"
+    },
+    "dependencies": {
+        "react-native-gesture-handler": "^2.23.1",
+        "react-native-paper": "^5.13.1",
+        "react-native-reanimated": "^3.16.7"
     }
 }
