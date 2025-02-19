@@ -4,10 +4,15 @@ import { useState } from "react";
 import { FaSearch, FaBell, FaMapMarkerAlt, FaShoppingCart } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { Session } from "@/lib/session";
 
 
 export default function Navbar({ name }: {name: string}) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const handleSignOut = async () => {
+    'use server'
+
+  }
 
   return (
     <div className="p-4">
@@ -59,7 +64,7 @@ export default function Navbar({ name }: {name: string}) {
             {isDropdownOpen && (
               <div className="absolute right-0 mt-48 w-48 bg-white shadow-lg rounded-2xl p-2 transition-all duration-300 z-40">
                 <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">Profil</p>
-                <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">Odhlásit se</p>
+                <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105" onClick={handleSignOut}>Odhlásit se</p>
               </div>
             )}
           </div>
