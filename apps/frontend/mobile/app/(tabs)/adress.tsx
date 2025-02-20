@@ -1,0 +1,112 @@
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+
+const addresses = [
+  {
+    id: "1",
+    type: "DOMOV",
+    address: "Dřevnická 1788, Zlín\nČeská republika",
+    icon: "home-outline",
+  },
+  {
+    id: "2",
+    type: "PRÁCE",
+    address: "Dukelská 1977, Zlín\nČeská republika",
+    icon: "briefcase-outline",
+  },
+];
+
+export default function AddressScreen() {
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton}>
+        <Ionicons name="arrow-back" size={24} color="#000" />
+      </TouchableOpacity>
+      <Text style={styles.header}>Moje adresa</Text>
+      <FlatList
+        data={addresses}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.addressItem}>
+            <View style={styles.iconContainer}>
+              <Ionicons name={item.icon} size={24} color="#F56A00" />
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.addressType}>{item.type}</Text>
+              <Text style={styles.addressText}>{item.address}</Text>
+            </View>
+            <TouchableOpacity>
+              <Ionicons name="create-outline" size={20} color="#F56A00" />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Ionicons name="trash-outline" size={20} color="#F56A00" />
+            </TouchableOpacity>
+          </View>
+        )}
+      />
+      <TouchableOpacity style={styles.addButton}>
+        <Text style={styles.addButtonText}>PŘIDAT NOVOU ADRESU</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    padding: 20,
+  },
+  backButton: {
+    position: "absolute",
+    top: 50,
+    left: 20,
+    backgroundColor: "#EBEBEB",
+    padding: 8,
+    borderRadius: 20,
+  },
+  header: {
+    fontSize: 22,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 50,
+  },
+  addressItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#EDEDED",
+    padding: 15,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  iconContainer: {
+    width: 40,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FFF",
+    borderRadius: 20,
+    marginRight: 15,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  addressType: {
+    fontWeight: "bold",
+  },
+  addressText: {
+    color: "#777",
+  },
+  addButton: {
+    backgroundColor: "#F56A00",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  addButtonText: {
+    color: "#FFF",
+    fontSize: 16,
+  },
+});
