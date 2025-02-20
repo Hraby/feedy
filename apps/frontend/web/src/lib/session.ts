@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 export type Session = {
     id: string;
     name: string;
+    role: string;
 }
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
@@ -40,4 +41,11 @@ export async function getSession(){
 
 export async function deleteSession() {
     await (await cookies()).delete("session");
+}
+
+export async function getUser() {
+    const session = await getSession();
+    if (!session) return null;
+
+    return session; 
 }

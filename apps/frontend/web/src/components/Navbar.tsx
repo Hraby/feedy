@@ -4,15 +4,17 @@ import { useState } from "react";
 import { FaSearch, FaBell, FaMapMarkerAlt, FaShoppingCart } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import { Session } from "@/lib/session";
+import { signOut } from "@/app/actions/auth";
+import { useAuth } from "@/contexts/AuthProvider";
 
 
-export default function Navbar({ name }: {name: string}) {
+export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const handleSignOut = async () => {
-    'use server'
-
+    await signOut();
   }
+  const user = useAuth()
+  if (!user) return null
 
   return (
     <div className="p-4">
@@ -57,7 +59,7 @@ export default function Navbar({ name }: {name: string}) {
                 className="rounded-full"
               />
               <div>
-                <p className="text-sm text-[var(--font)] font-bold">{name}</p>
+                <p className="text-sm text-[var(--font)] font-bold">{user.name}</p>
                 <p className="text-xs text-[var(--primary)]">Admin</p>
               </div>
             </div>
