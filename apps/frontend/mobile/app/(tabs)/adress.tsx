@@ -30,17 +30,17 @@ export default function AddressScreen() {
         renderItem={({ item }) => (
           <View style={styles.addressItem}>
             <View style={styles.iconContainer}>
-              <Ionicons name={item.icon} size={24} color="#F56A00" />
+              <Ionicons name={item.icon} size={24} color="#FF5500" />
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.addressType}>{item.type}</Text>
               <Text style={styles.addressText}>{item.address}</Text>
             </View>
             <TouchableOpacity>
-              <Ionicons name="create-outline" size={20} color="#F56A00" />
+              <Ionicons name="create-outline" size={20} color="#FF5500" />
             </TouchableOpacity>
             <TouchableOpacity>
-              <Ionicons name="trash-outline" size={20} color="#F56A00" />
+              <Ionicons name="trash-outline" size={20} color="#FF5500" />
             </TouchableOpacity>
           </View>
         )}
@@ -67,15 +67,17 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   header: {
-    fontSize: 22,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: 50,
+    fontSize: 16,
+    marginTop: 40,
+    color: "#000000",
+    marginLeft: 290,
+    fontWeight: "400",
+    marginBottom: 30,
   },
   addressItem: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#EDEDED",
+    backgroundColor: "#EBEBEB",
     padding: 15,
     borderRadius: 10,
     marginVertical: 10,
@@ -93,20 +95,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   addressType: {
-    fontWeight: "bold",
+    fontWeight: "500",
+    fontSize: 14,
+    marginBottom: 5,
   },
   addressText: {
     color: "#777",
+    fontSize: 14,
   },
   addButton: {
-    backgroundColor: "#F56A00",
+    backgroundColor: "#FF5500",
     padding: 15,
-    borderRadius: 10,
+    borderRadius: 14,
     alignItems: "center",
     marginTop: 20,
   },
   addButtonText: {
     color: "#FFF",
-    fontSize: 16,
+    fontSize: 18,
+    fontWeight: "light",
   },
 });
