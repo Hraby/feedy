@@ -144,13 +144,13 @@ const styles = StyleSheet.create({
     marginVertical: 15,
   },
   totalText: {
-    fontSize: 16,
-    fontWeight: "500",
+    fontSize: 20,
+    fontWeight: "400",
     marginTop: 10,
   },
   totalPrice: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: "700",
     marginTop: 10,
     marginRight: 15,
   },
@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
   },
   payButtonText: {
     color: "#FFF",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
+    fontWeight: "light",
   },
   separator: {
     width: "100%",
