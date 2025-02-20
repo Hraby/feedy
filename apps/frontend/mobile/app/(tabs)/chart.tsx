@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: "black",
     marginTop: 5,
+    opacity: 0.3,
   },
   deleteInfo: {
     flexDirection: "row",
