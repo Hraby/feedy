@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   addressBox: {
     backgroundColor: "white",
-    padding: 15,
+    padding: 10,
     borderRadius: 20,
     marginRight: 10,
   },
