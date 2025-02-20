@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: "500",
     marginBottom: 10,
     marginTop: 10,
@@ -111,20 +111,20 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
     letterSpacing: 0.4,
   },
   address: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 16,
+    color: "#OOO",
     marginVertical: 5,
     paddingTop: 5,
     letterSpacing: 0.3,
   },
   phone: {
-    fontSize: 14,
-    color: "#666",
+    fontSize: 16,
+    color: "#OOO",
     paddingTop: 5,
   },
   option: {
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   optionText: {
-    fontSize: 16,
+    fontSize: 18,
     marginLeft: 10,
   },
   rowBetween: {
