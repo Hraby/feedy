@@ -1,8 +1,8 @@
 "use client";
 
 import { FaClock, FaStar, FaMoneyBillWave, FaCheckCircle } from "react-icons/fa";
-import Navbar from "../components/Navbar";
 import Link from "next/link";
+import NavbarSwitcher from "@/components/NavbarSwitch";
 
 export default function RestaurantDetail() {
 
@@ -45,8 +45,7 @@ export default function RestaurantDetail() {
 
     return (
         <div>
-            <Navbar />
-
+            <NavbarSwitcher/>
             <div className="container mx-auto px-4">
                 <div className="relative">
                     <img
