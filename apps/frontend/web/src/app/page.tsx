@@ -13,7 +13,7 @@ export default async function Home() {
         <div className="container mx-auto px-4">
         <NavbarSwitcher />
       
-          <section className="min-h-[95vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left pt-20">
+          <section className="min-h-[85vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left pt-20">
             <div className="max-w-3xl">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
                 Objevte nové restaurace ve vašem okolí!
