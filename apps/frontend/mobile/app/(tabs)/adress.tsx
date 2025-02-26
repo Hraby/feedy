@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   addButtonText: {
     color: "#FFF",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "light",
   },
 });

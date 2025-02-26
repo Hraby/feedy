@@ -103,6 +103,15 @@ export default function TabLayout() {
           ),
         }}
       /> 
+      <Tabs.Screen
+        name="payment"
+        options={{
+          title: 'PaymentSuccess',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      /> 
     </Tabs>
   );
 }

@@ -55,7 +55,7 @@ export default function DeliveryScreen() {
       </View>
       
       <TouchableOpacity style={styles.payButton}>
-        <Text style={styles.payButtonText}>Zaplatit</Text>
+        <Text style={styles.payButtonText}>ZAPLATIT</Text>
       </TouchableOpacity>
     </View>
   );
