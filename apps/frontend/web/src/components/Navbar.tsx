@@ -4,10 +4,17 @@ import { useState } from "react";
 import { FaSearch, FaBell, FaMapMarkerAlt, FaShoppingCart } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "@/app/actions/auth";
+import { useAuth } from "@/contexts/AuthProvider";
 
 
-const Navbar = () => {
+export default function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const handleSignOut = async () => {
+    await signOut();
+  }
+  const user = useAuth()
+  if (!user) return null
 
   return (
     <div className="p-4">
@@ -52,14 +59,14 @@ const Navbar = () => {
                 className="rounded-full"
               />
               <div>
-                <p className="text-sm text-[var(--font)] font-bold">Adam Novák</p>
+                <p className="text-sm text-[var(--font)] font-bold">{user.name}</p>
                 <p className="text-xs text-[var(--primary)]">Admin</p>
               </div>
             </div>
             {isDropdownOpen && (
               <div className="absolute right-0 mt-48 w-48 bg-white shadow-lg rounded-2xl p-2 transition-all duration-300 z-40">
                 <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">Profil</p>
-                <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105">Odhlásit se</p>
+                <p className="p-2 text-gray-800 hover:bg-gray-50 rounded-xl cursor-pointer transition-all duration-300 hover:scale-105" onClick={handleSignOut}>Odhlásit se</p>
               </div>
             )}
           </div>
@@ -68,5 +75,3 @@ const Navbar = () => {
     </div>
   );
 };
-
-export default Navbar;

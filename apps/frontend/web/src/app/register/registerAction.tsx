@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { createSession } from "@/lib/session";
 
 export default async function registerAction(currentState: any, formData: FormData): Promise<string> {
 
@@ -18,15 +19,10 @@ export default async function registerAction(currentState: any, formData: FormDa
     });
 
     const json = await response.json();
+    console.log(json)
 
     if (response.ok) {
-        (await cookies()).set("access_token", json.token, {
-          secure: true,
-          httpOnly: true,
-          expires: Date.now() + 24 * 60 * 60 * 1000,
-          path: "/",
-          sameSite: "strict",
-        });
+        await createSession(json.token)
         redirect("/")
     } else {
       return json.message;

@@ -44,6 +44,7 @@
     "class-validator": "^0.14.1",
     "express": "^4.21.1",
     "graphql": "^16.9.0",
+    "jose": "^5.10.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

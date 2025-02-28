@@ -1,17 +1,19 @@
 import Image from "next/image";
-import LandingNavbar from "@/components/LandingNavbar";
 import AppWidget from "../components/LandingWidget";
 import Footer from "../components/Footer";
 import { FiMapPin } from 'react-icons/fi';
 import JoinFeedy from "../components/JoinFeedy";
+import NavbarSwitcher from "@/components/NavbarSwitch";
 
 export default async function Home() {
+
   return (
     <>
       <div className="bg-white">
         <div className="container mx-auto px-4">
-          <LandingNavbar />
-          <section className="min-h-[95vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left pt-20">
+        <NavbarSwitcher />
+      
+          <section className="min-h-[85vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left pt-20">
             <div className="max-w-3xl">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
                 Objevte nové restaurace ve vašem okolí!
