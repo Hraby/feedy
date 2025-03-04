@@ -4,7 +4,6 @@ import { useState } from "react";
 import { FaClock, FaStar, FaMoneyBillWave, FaCheckCircle } from "react-icons/fa";
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import ItemModal from "@/components/MenuItemModal";
-import Navbar from "@/components/Navbar";
 
 interface MenuItem {
   name: string;
@@ -41,7 +40,7 @@ export default function RestaurantDetail() {
 
   return (
     <div>
-      <Navbar></Navbar>
+      <NavbarSwitcher></NavbarSwitcher>
       <div className="container mx-auto px-4">
         <div className="relative">
           <img
