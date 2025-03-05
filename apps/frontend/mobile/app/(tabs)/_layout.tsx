@@ -130,6 +130,15 @@ export default function TabLayout() {
           ),
         }}
       /> 
+      <Tabs.Screen
+        name="takeorders"
+        options={{
+          title: 'Take',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      /> 
     </Tabs>
   );
 }
