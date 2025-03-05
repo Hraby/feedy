@@ -23,6 +23,16 @@ const Checkout = () => {
     return (
         <div>
             <NavbarSwitcher />
+
+            <div className="w-full h-64 rounded-xl overflow-hidden mb-8">
+                <iframe
+                    className="w-full h-full"
+                    src="https://frame.mapy.cz/s/kuhopelogo"
+                    title="Mapy.cz"
+                    loading="lazy"
+                ></iframe>
+            </div>
+
             <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense">
                 <div>
                     <h1 className="text-3xl font-bold mb-6">Dokončení objednávky</h1>
@@ -98,7 +108,7 @@ const Checkout = () => {
                     </div>
                 </div>
 
-                <div className="bg-white shadow-2xl rounded-3xl h-4/5 p-8 flex flex-col flex-grow">
+                <div className="bg-white shadow-2xl rounded-3xl h-fit p-8 flex flex-col flex-grow">
                     <div>
                         <h2 className="text-2xl font-bold mb-6">Shrnutí objednávky</h2>
 
@@ -125,7 +135,7 @@ const Checkout = () => {
                         </div>
                     </div>
 
-                    <button className="mt-5 w-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-2xl">
+                    <button className="mt-5 w-full font-bold text-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-2xl">
                         Pokračovat k platbě
                     </button>
                 </div>
