@@ -24,8 +24,10 @@ const OrderScreen = () => {
             <View style={styles.imagePlaceholder} />
             <View style={styles.orderDetails}>
               <Text style={styles.orderName}>{order.name}</Text>
-              <Text style={styles.price}>{order.price}</Text>
-              <Text style={styles.items}>{order.items}</Text>
+              <View style={styles.priceItemsContainer}>
+                <Text style={styles.price}>{order.price}</Text>
+                <Text style={styles.items}> | {order.items}</Text>
+              </View>
             </View>
             <Text style={styles.orderId}>#162432</Text>
           </View>
@@ -53,10 +55,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   header: {
-    fontSize: 24,
-    fontWeight: "bold",
     textAlign: "right",
     flex: 1,
+    fontSize: 16,
+    color: "#000000",
+    fontWeight: "400",
   },
   backButton: {
     backgroundColor: "#EBEBEB",
@@ -69,7 +72,7 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "light",
     marginLeft: 30,
     marginBottom: 5,
     marginTop: 15,
@@ -97,6 +100,10 @@ const styles = StyleSheet.create({
   orderName: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  priceItemsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   price: {
     fontSize: 16,
@@ -144,6 +151,7 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
     color: "#555",
+    textDecorationLine: "underline",
   },
 });
 

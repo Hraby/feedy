@@ -63,11 +63,13 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   header: {
+    textAlign: "right",
+    flex: 1,
     fontSize: 16,
-    marginTop: 65,
     color: "#000000",
-    marginLeft: 240,
     fontWeight: "400",
+    marginTop: 65,
+    marginRight: 20,
   },
   mapWrapper: {
     marginTop: 20,
