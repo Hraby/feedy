@@ -29,15 +29,15 @@ const OrderScreen = () => {
       <Text style={styles.sectionHeader}>Objednávka</Text>
       <View style={styles.orderItem}>
         <Text style={styles.itemName}>Caramel Macchiato</Text>
-        <Text style={styles.itemInfo}>1 x 90 Kč</Text>
+        <Text style={styles.itemInfo}><Text style={styles.itemQuantity}>1 x</Text> <Text style={styles.itemPrice}>90 Kč</Text></Text>
       </View>
       <View style={styles.orderItem}>
         <Text style={styles.itemName}>Greentea Latte</Text>
-        <Text style={styles.itemInfo}>1 x 100 Kč</Text>
+        <Text style={styles.itemInfo}><Text style={styles.itemQuantity}>1 x</Text> <Text style={styles.itemPrice}>100 Kč</Text></Text>
       </View>
       <View style={styles.orderItem}>
         <Text style={styles.itemName}>Egg Mayo Breakfast Sandwich</Text>
-        <Text style={styles.itemInfo}>2 x 220 Kč</Text>
+        <Text style={styles.itemInfo}><Text style={styles.itemQuantity}>2 x</Text> <Text style={styles.itemPrice}>220 Kč</Text></Text>
       </View>
       <View style={styles.divider} />
       <View style={styles.totalContainer}>
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   mapContainer: {
-    height: 250,
+    height: 400,
     overflow: "hidden"
   },
   fullWidthMap: {
@@ -127,8 +127,13 @@ const styles = StyleSheet.create({
   },
   itemInfo: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#333"
+  },
+  itemQuantity: {
+    fontWeight: "300"
+  },
+  itemPrice: {
+    fontWeight: "bold"
   },
   totalContainer: {
     flexDirection: "row",
@@ -151,7 +156,8 @@ const styles = StyleSheet.create({
     padding: 15,
     marginHorizontal: 20,
     borderRadius: 10,
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 50
   },
   deliveryButtonText: {
     color: "#FFF",
