@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FaChartBar, FaUser, FaUtensils, FaClipboardList, FaCog, FaCompass, FaSignOutAlt } from 'react-icons/fa';
+import { FaChartBar, FaUser, FaShoppingCart, FaUtensils, FaClipboardList, FaCog, FaHome, FaSignOutAlt } from 'react-icons/fa';
 
 interface AdminSidebarProps {
     activePath: string;
@@ -9,7 +9,7 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
     const isActive = (path: string) => activePath === path ? 'text-[var(--primary)] font-semibold' : 'text-gray-600';
 
     return (
-        <aside className="w-64 bg-white p-6 shadow-md rounded-xl">
+        <aside className="w-64 bg-white p-6 shadow-md rounded-xl h-full">
             <h1 className="text-2xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] p-4 rounded-xl mb-8">feedy admin</h1>
             <nav>
                 <h2 className="text-gray-400 uppercase text-sm mb-4">Menu</h2>
@@ -27,6 +27,9 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
                             <FaUser className="mr-3" /> Správa uživatelů
                         </Link>
                     </li>
+                    <li className={`flex items-center ${isActive('/admin/orders')}`}>
+                            <FaShoppingCart className="mr-3" /> Správa objednávek
+                    </li>
                     <li className={`flex items-center ${isActive('/admin/restaurants')}`}>
                         <FaUtensils className="mr-3" /> Správa restaurací
                     </li>
@@ -42,7 +45,7 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
                     </li>
                     <li className="flex items-center text-gray-600">
                         <Link href="/menu" className="flex items-center">
-                            <FaCompass className="mr-3" /> Menu
+                            <FaHome className="mr-3" /> Hlavní stránka
                         </Link>
                     </li>
                     <li className="flex items-center text-gray-600">
