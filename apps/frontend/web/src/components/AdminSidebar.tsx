@@ -28,7 +28,9 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
                         </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/admin/orders')}`}>
+                        <Link href="/admin/orders" className="flex items-center">
                             <FaShoppingCart className="mr-3" /> Správa objednávek
+                        </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/admin/restaurants')}`}>
                         <FaUtensils className="mr-3" /> Správa restaurací

@@ -113,7 +113,7 @@ const AdminUsers = () => {
 
                 <div className="bg-white p-6 rounded-3xl shadow-sm">
                     <table className="w-full text-left">
-                        <thead className="sticky top-0 bg-white">
+                        <thead className="sticky top-0 bg-white z-20">
                             <tr className="border-b">
                                 <th className="p-4">ID</th>
                                 <th className="p-4">Jméno</th>
