@@ -11,10 +11,9 @@ export default async function Home() {
   return (
     <>
       <div className="bg-white">
+      <NavbarSwitcher />
         <div className="container mx-auto px-4">
-        <NavbarSwitcher />
-      
-          <section className="min-h-[85vh] flex flex-col lg:flex-row items-center justify-between py-12 lg:py-16 text-center lg:text-left pt-20">
+          <section className="min-h-[85vh] flex flex-col lg:flex-row items-center justify-between py-30 lg:py-16 text-center lg:text-left pt-20">
             <div className="max-w-3xl">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-snug bg-[var(--primary)] bg-clip-text text-transparent">
                 Objevte nové restaurace ve vašem okolí!
@@ -30,7 +29,7 @@ export default async function Home() {
 
             </div>
             <div className="mt-8 lg:mt-0">
-              <Image src="/img/burger.png" alt="Burger a hranolky" width={550} height={450} className="mx-auto" />
+              <Image src="/img/burger.png" alt="Burger a hranolky" width={450} height={350} className="mx-auto" />
             </div>
           </section>
         </div>
