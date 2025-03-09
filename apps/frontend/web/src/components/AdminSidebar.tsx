@@ -14,8 +14,8 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
             <nav>
                 <h2 className="text-gray-400 uppercase text-sm mb-4">Menu</h2>
                 <ul className="space-y-4">
-                    <li className={`flex items-center ${isActive('/admin/dashboard')}`}>
-                        <Link href="/admin/dashboard" className="flex items-center">
+                    <li className={`flex items-center ${isActive('/admin')}`}>
+                        <Link href="/admin" className="flex items-center">
                             <FaChartBar className="mr-3" /> Dashboard
                         </Link>
                     </li>
