@@ -5,7 +5,6 @@ import { FiMapPin } from 'react-icons/fi';
 import { FaShoppingBasket, FaBolt, FaStar } from 'react-icons/fa';
 import JoinFeedy from "../components/JoinFeedy";
 import NavbarSwitcher from "@/components/NavbarSwitch";
-import AutoComplete from "@/components/AutoComplete";
 
 export default async function Home() {
 

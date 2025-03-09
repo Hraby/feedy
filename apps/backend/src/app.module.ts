@@ -7,6 +7,8 @@ import { AuthModule } from "./auth/auth.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { RestaurantsModule } from "./restaurants/restaurants.module";
 import { OrdersModule } from './orders/orders.module';
+import { CourierModule } from './courier/courier.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -19,8 +21,9 @@ import { OrdersModule } from './orders/orders.module';
     PrismaModule,
     RestaurantsModule,
     OrdersModule,
+    CourierModule,
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AppController],
   providers: [AuthService],
 })
 export class AppModule {}

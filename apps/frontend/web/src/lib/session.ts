@@ -1,51 +1,80 @@
+"use server";
+
+import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
-import { redirect } from "next/navigation";
 
 export type Session = {
-    id: string;
-    name: string;
-    role: string;
-}
+    user: {
+        id: string;
+        name: string;
+        role: string;
+    };
+    accessToken: string;
+    refreshToken: string;
+};
 
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
 
-export async function createSession(session: string){
-    const expiredAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+export async function createSession(payload: Session) {
+    const expire = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 d
 
-    (await cookies()).set("session", session, {
-        secure: true,
+    const cookieStore = await cookies();
+
+    const session = await new SignJWT(payload)
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setExpirationTime("7d")
+    .sign(SECRET_KEY);
+
+    cookieStore.set("session", session, {
         httpOnly: true,
-        expires: expiredAt,
+        secure: true,
+        expires: expire,
+        sameSite: "lax",
         path: "/",
-        sameSite: "strict",
     });
 }
 
-export async function getSession(){
-    const cookie = (await cookies()).get("session")?.value;
+export async function deleteSession() {
+    const cookieStore = await cookies();
+    cookieStore.delete("session");
+}
 
-    if(!cookie) return null;
+export async function getSession() {
+    const cookieStore = await cookies();
+    let cookie = cookieStore.get("session")?.value;
+    if (!cookie) return null;
 
     try {
-        const session = cookie;
-        
-        const { payload } = await jwtVerify(session, SECRET_KEY, {algorithms: ["HS256"]});
-        
+        const { payload } = await jwtVerify(cookie, SECRET_KEY, { algorithms: ["HS256"] });
         return payload as Session;
     } catch (error) {
-        console.error("Invalid session:", error);
-        redirect("/login")
+        console.log("Invalid session", error);
+        return null;
     }
 }
 
-export async function deleteSession() {
-    await (await cookies()).delete("session");
+export async function updateTokens({accessToken, refreshToken}:{accessToken: string, refreshToken: string}){
+    const cookieStore = await cookies();
+    const session = cookieStore.get("session")?.value;
+    if(!session) return null;
+
+    const { payload } = await jwtVerify<Session>(session, SECRET_KEY, { algorithms: ["HS256"] });
+    if(!payload) console.log("Invalid session");
+
+    const newPayload: Session ={
+        user: {
+            ...payload.user,
+        },
+        accessToken,
+        refreshToken,
+    };
+
+    await createSession(newPayload)
+
 }
 
 export async function getUser() {
     const session = await getSession();
-    if (!session) return null;
-
-    return session; 
+    return session?.user;
 }

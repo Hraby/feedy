@@ -11,29 +11,88 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String @id @default(uuid())
+  email     String @unique
   password  String
   firstName String
   lastName  String
-  role      Role     @default(Customer)
-  isCourier Boolean  @default(false)
-  courierStatus CourierStatus?
+
+  role Role @default(Customer)
+
+  customerProfile   CustomerProfile?
+  courierProfile    CourierProfile?
+  restaurantProfile RestaurantProfile?
+
+  hashedRefreshToken String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   address    Address?
-  orders     Order[]      @relation("CustomerOrders")
-  deliveries Order[]      @relation("CourierDeliveries")
   Restaurant Restaurant[]
 }
 
 enum Role {
   Admin
+  Customer
   Restaurant
   Courier
-  Customer
+}
+
+enum ApprovalStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+model CourierProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  city           String
+  vehicle        VehicleType
+  language       Language       @default(Czech)
+  status         CourierStatus  @default(Offline)
+  approvalStatus ApprovalStatus @default(Pending)
+
+  deliveries Order[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum VehicleType {
+  Bicycle
+  ElectricBicycle
+  Car
+  ElectricScooter
+}
+
+enum Language {
+  Czech
+  Slovak
+  English
+  German
+}
+
+model RestaurantProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  city           String
+  approvalStatus ApprovalStatus @default(Pending)
+
+  restaurants Restaurant[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model CustomerProfile {
+  id     String  @id @default(uuid())
+  userId String  @unique
+  user   User    @relation(fields: [userId], references: [id])
+  orders Order[]
 }
 
 enum CourierStatus {
@@ -43,19 +102,21 @@ enum CourierStatus {
 }
 
 model Restaurant {
-  id          String   @id @default(uuid())
+  id          String           @id @default(uuid())
   name        String
   description String?
   address     Address?
   phone       String
   ownerId     String
   status      RestaurantStatus @default(Pending)
-  owner       User     @relation(fields: [ownerId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  owner       User             @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 
-  menuItems MenuItem[]
-  orders    Order[]
+  menuItems           MenuItem[]
+  orders              Order[]
+  RestaurantProfile   RestaurantProfile? @relation(fields: [restaurantProfileId], references: [id])
+  restaurantProfileId String?
 }
 
 enum RestaurantStatus {
@@ -83,16 +144,14 @@ model Order {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
-  customerId String
-  customer   User   @relation("CustomerOrders", fields: [customerId], references: [id])
-
   restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
 
-  courierId String?
-  courier   User?   @relation("CourierDeliveries", fields: [courierId], references: [id])
-
-  orderItems OrderItem[]
+  orderItems        OrderItem[]
+  CourierProfile    CourierProfile?  @relation(fields: [courierProfileId], references: [id])
+  courierProfileId  String?
+  CustomerProfile   CustomerProfile? @relation(fields: [customerProfileId], references: [id])
+  customerProfileId String?
 }
 
 enum OrderStatus {

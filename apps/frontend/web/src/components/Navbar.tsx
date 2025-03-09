@@ -186,7 +186,7 @@ export default function Navbar() {
               <Image src="/img/avatar.png" alt="User Avatar" width={40} height={40} className="rounded-full" />
               <div>
                 <p className="text-sm text-[var(--font)] font-bold">{user.name}</p>
-                <p className="text-xs text-[var(--primary)]">Admin</p>
+                <p className="text-xs text-[var(--primary)]">{user.role}</p>
               </div>
               {activeDropdown === "user" && (
                 <div className="absolute right-0 top-[calc(100%)] w-48 bg-white shadow-2xl rounded-2xl p-2 z-40">
