@@ -202,8 +202,13 @@ export default function Navbar() {
               </div>
               {activeDropdown === "user" && (
                 <div className="absolute right-0 top-[calc(100%)] w-48 bg-white shadow-2xl rounded-2xl p-2 z-40">
-                  <Link href="/" className="block p-2 hover:bg-gray-100 rounded-xl">Dashboard</Link>
-                  <Link href="/" className="block p-2 hover:bg-gray-100 rounded-xl">Účet</Link>
+                  <Link href={`/profile/${user.id}`} className="block p-2 hover:bg-gray-100 rounded-xl">Účet</Link>
+                  {user.role === 'Admin' && (
+                    <Link href="/admin" className="block p-2 hover:bg-gray-100 rounded-xl">Admin Panel</Link>
+                  )}
+                  {user.role === 'Restaurant' && (
+                    <Link href="/management" className="block p-2 hover:bg-gray-100 rounded-xl">Restaurant Panel</Link>
+                  )}
                   <p className="block p-2 hover:bg-red-200 rounded-xl" onClick={handleSignOut}>Odhlásit se</p>
                 </div>
               )}
