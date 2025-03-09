@@ -16,14 +16,14 @@ export class OrdersService {
 
       async getOrders() {
         return this.prisma.order.findMany({
-            include: { customer: true, restaurant: true, courier: true }
+            include: { CustomerProfile: true, restaurant: true, CourierProfile: true }
         });
     }
 
     async getOrderById(id: string) {
         const order = await this.prisma.order.findUnique({
             where: { id },
-            include: { customer: true, restaurant: true, courier: true }
+            include: { CustomerProfile: true, restaurant: true, CourierProfile: true }
         });
         if (!order) throw new NotFoundException("Order not found");
         return order;
@@ -32,7 +32,7 @@ export class OrdersService {
     async createOrder(dto: CreateOrderDto, customer) {
         return this.prisma.order.create({
             data: {
-                customerId: customer.id,
+                customerProfileId: customer.id,
                 restaurantId: dto.restaurantId,
                 status: OrderStatus.Pending,
                 orderItems: {
@@ -66,14 +66,14 @@ export class OrdersService {
 
         return this.prisma.order.update({
             where: { id },
-            data: { courierId: availableCourier.id, status: OrderStatus.OutForDelivery },
+            data: { courierProfileId: availableCourier.id, status: OrderStatus.OutForDelivery },
         });
     }
 
     async claimOrder(id: string, courierId: string) {
         return this.prisma.order.update({
             where: { id },
-            data: { courierId, status: OrderStatus.OutForDelivery },
+            data: { courierProfileId: courierId, status: OrderStatus.OutForDelivery },
         });
     }
 

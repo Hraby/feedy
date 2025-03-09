@@ -2,16 +2,16 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { createSession } from "@/lib/session";
+import { createSession, updateTokens } from "@/lib/session";
+import { BACKEND_URL } from "@/lib/constants";
 
 export default async function registerAction(currentState: any, formData: FormData): Promise<string> {
-
     const email = formData.get("email");
     const password = formData.get("password");
     const firstName = formData.get("firstName");
     const lastName = formData.get("lastName");
 
-    const response = await fetch("http://localhost:4000/auth/register", {
+    const response = await fetch(`${BACKEND_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -22,7 +22,7 @@ export default async function registerAction(currentState: any, formData: FormDa
     console.log(json)
 
     if (response.ok) {
-        await createSession(json.token)
+        await updateTokens({accessToken: json.accessToken,refreshToken: json.refreshToken})
         redirect("/")
     } else {
       return json.message;
