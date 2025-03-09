@@ -1,1 +1,1 @@
-export const BACKEND_URL = process.env.BACKEND_URL;
+export const BACKEND_URL = "https://feedy-backend.vercel.app/";
