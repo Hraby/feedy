@@ -13,6 +13,18 @@ export default function Navbar() {
   const [quantity, setQuantity] = useState<{ [key: string]: number }>({ pizza: 1, burger: 1 });
   const [activeAddress, setActiveAddress] = useState('');
 
+  type Notification = {
+    id: number;
+    title: string;
+    description: string;
+    isNew: boolean;
+  };
+
+  const notifications: Notification[] = [];
+  const unreadNotifications = notifications.filter((notification) => notification.isNew).length;
+
+
+
   const handleSignOut = async () => {
     await signOut();
   }
@@ -43,8 +55,8 @@ export default function Navbar() {
   };
 
   return (
-    <div className="p-4">
-      <div className="container mx-auto px-4 flex items-center w-full">
+    <div className="py-3">
+      <div className="container mx-auto flex items-center w-full">
         <Link href="/">
           <div className="flex-shrink-0 text-white font-bold text-2xl bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] px-9 py- rounded-3xl mr-4 flex items-center h-[calc(48px+1rem)]">
             feedy.
@@ -62,32 +74,34 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-4 ml-auto">
-            {/* Notifications */}
-            <div className="relative">
+             <div className="relative">
               <button
                 className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 w-10 h-10 flex items-center justify-center transition-all duration-300 hover:scale-105"
                 onClick={() => toggleDropdown("notifications")}
               >
                 <FaBell className="text-gray-600 text-lg" />
-                <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">1</span>
+                {unreadNotifications > 0 && (
+                  <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{unreadNotifications}</span>
+                )}
               </button>
               {activeDropdown === "notifications" && (
                 <div className="absolute right-0 mt-2 w-96 bg-white shadow-2xl rounded-2xl p-2 z-40">
-                  <h3 className="text-lg font-bold p-2">Oznámení (1)</h3>
+                  <h3 className="text-lg font-bold p-2">Oznámení ({notifications.length})</h3>
                   <div>
-                    <div className="flex flex-col gap-2 p-2 hover:bg-gray-100 cursor-pointer rounded-2xl">
-                      <div className="flex items-center gap-2">
-                        <FaCircle className="text-red-500 text-xs" />
-                        <p className="text-[var(--font)] font-bold">Informace o vaší objednávce</p>
+                    {notifications.map((notification) => (
+                      <div key={notification.id} className="flex flex-col gap-2 p-2 hover:bg-gray-100 cursor-pointer rounded-2xl">
+                        <div className="flex items-center gap-2">
+                          {notification.isNew && <FaCircle className="text-red-500 text-xs" />}
+                          <p className="text-[var(--font)] font-bold">{notification.title}</p>
+                        </div>
+                        <p className="text-gray-600 text-sm">{notification.description}</p>
                       </div>
-                      <p className="text-gray-600 text-sm">Kurýr převzal vaši objednávku a objednávka je tímto právě na cestě!</p>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Locations */}
             <div className="relative">
               <button
                 className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 w-10 h-10 flex items-center justify-center transition-all duration-300 hover:scale-105"
@@ -131,7 +145,6 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Cart */}
             <div className="relative">
               <button
                 className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 w-10 h-10 flex items-center justify-center transition-all duration-300 hover:scale-105"
@@ -181,7 +194,6 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Avatar */}
             <div className="relative flex items-center gap-2 cursor-pointer hover:bg-[#ffff] p-2 rounded-2xl transition-all duration-300" onClick={() => toggleDropdown("user")}>
               <Image src="/img/avatar.png" alt="User Avatar" width={40} height={40} className="rounded-full" />
               <div>
