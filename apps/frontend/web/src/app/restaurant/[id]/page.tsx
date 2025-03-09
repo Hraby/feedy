@@ -40,7 +40,7 @@ export default function RestaurantDetail() {
 
   return (
     <div>
-      <NavbarSwitcher></NavbarSwitcher>
+      <NavbarSwitcher/>
       <div className="container mx-auto px-4">
         <div className="relative">
           <img
