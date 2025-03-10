@@ -127,7 +127,7 @@ const AdminUsers = () => {
                         <tbody>
                             {filteredUsers.map((user) => (
                                 <tr key={user.id} className="border-b">
-                                    <td className="p-4">{user.id}</td>
+                                    <td className="p-4">#{user.id}</td>
                                     <td className="p-4">{user.firstName}</td>
                                     <td className="p-4">{user.lastName}</td>
                                     <td className="p-4 w-72">
