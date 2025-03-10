@@ -3,8 +3,8 @@ import { View, Text, TextInput, StyleSheet, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const products = [
-  { id: 1, name: "Pálivé kuře", description: "Pikantní a chutné kuře s rýží" },
-  { id: 2, name: "Smažené tofu", description: "Křupavé tofu se zeleninou" }
+  { id: 1, name: "Makalu", description: "Zlín 123" },
+  { id: 2, name: "McDonalds", description: "Zlín 123" }
 ];
 
 const SearchScreen = () => {
@@ -31,7 +31,7 @@ const SearchScreen = () => {
       {searchQuery === "" || !foundProduct ? (
         <View style={styles.notFoundContainer}>
           <Ionicons name="search" size={80} color="#ccc" />
-          <Text style={styles.notFoundText}>Položka nenalezena</Text>
+          <Text style={styles.notFoundText}>Restaurace nenalezena</Text>
           <Text style={styles.subText}>Zkuste něco jiného</Text>
         </View>
       ) : (
