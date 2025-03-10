@@ -29,11 +29,12 @@ export async function createSession(payload: Session) {
 
     cookieStore.set("session", session, {
         httpOnly: true,
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
         expires: expire,
         sameSite: "lax",
         path: "/",
     });
+        
 }
 
 export async function deleteSession() {
