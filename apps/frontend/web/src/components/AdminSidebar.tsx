@@ -38,7 +38,9 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
                         </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/admin/requests')}`}>
-                        <FaClipboardList className="mr-3" /> Žádosti
+                        <Link href="/admin/requests" className="flex items-center">
+                            <FaClipboardList className="mr-3" /> Žádosti
+                        </Link>
                     </li>
                 </ul>
 

@@ -86,7 +86,7 @@ const AdminOrders = () => {
                     <table className="w-full text-left">
                         <thead className="sticky top-0 bg-white z-20">
                             <tr className="border-b">
-                                <th className="p-4">ID objednávky</th>
+                                <th className="p-4">ID</th>
                                 <th className="p-4 w-1/6">Položky</th>
                                 <th className="p-4 w-1/6">Status</th>
                                 <th className="p-4">Datum a čas</th>

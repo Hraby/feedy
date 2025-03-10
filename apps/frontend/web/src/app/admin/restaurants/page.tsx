@@ -78,7 +78,7 @@ const AdminRestaurants = () => {
                     <table className="w-full text-left">
                         <thead className="sticky top-0 bg-white z-20">
                             <tr className="border-b">
-                                <th className="p-4">ID restaurace</th>
+                                <th className="p-4">ID</th>
                                 <th className="p-4">Název</th>
                                 <th className="p-4">Majitel</th>
                                 <th className="p-4">Status</th>
