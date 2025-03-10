@@ -41,7 +41,6 @@ export class RestaurantsController {
     @ApiResponse({status: 400, description: "Bad request" })
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 500, description: "Server error"})
-    @Post("request")
     @Auth(Role.Customer, Role.Admin, Role.Courier, Role.Restaurant)
     async requestRestaurant(@Body() dto: CreateRestaurantDto, @GetUser() user: User) {
       return this.restaurantsService.requestRestaurant(dto, user);

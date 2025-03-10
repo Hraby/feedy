@@ -55,6 +55,7 @@ model CourierProfile {
   language       Language       @default(Czech)
   status         CourierStatus  @default(Offline)
   approvalStatus ApprovalStatus @default(Pending)
+  dateBirth      DateTime
 
   deliveries Order[]
   createdAt  DateTime @default(now())
