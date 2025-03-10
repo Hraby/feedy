@@ -20,12 +20,12 @@ const AdminDashboard = () => {
 
                 <div className="grid grid-cols-4 gap-6">
                     <div className="bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] p-6 rounded-2xl text-white">
-                        <p>Počet aktivních uživatelů:</p>
+                        <p>Počet aktivních objednávek:</p>
                         <h3 className="text-4xl font-bold">0</h3>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
-                        <p>Počet aktivních objednávek:</p>
+                        <p>Počet aktivních kurýrů:</p>
                         <h3 className="text-4xl font-bold">0</h3>
                     </div>
 

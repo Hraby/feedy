@@ -13,6 +13,7 @@ export default function Navbar() {
   const [quantity, setQuantity] = useState<{ [key: string]: number }>({ pizza: 1, burger: 1 });
   const [activeAddress, setActiveAddress] = useState('');
 
+
   type Notification = {
     id: number;
     title: string;
@@ -65,7 +66,8 @@ export default function Navbar() {
   };
 
   return (
-    <div className="p-4">
+    <div className="pt-[96px]">
+    <div className="p-4 fixed top-0 left-0 w-full z-50">
       <div className="container mx-auto flex items-center px-4">
         <Link href="/">
           <div className="flex-shrink-0 text-white font-bold text-2xl bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] px-9 py- rounded-3xl mr-4 flex items-center h-[calc(48px+1rem)]">
@@ -73,7 +75,7 @@ export default function Navbar() {
           </div>
         </Link>
 
-        <nav className="flex flex-1 items-center bg-[#EBEBEB] p-3 rounded-3xl relative h-[calc(50px+1rem)]">
+        <nav className="flex flex-1 items-center backdrop-blur-[8px] backdrop-saturate-[100%] bg-[#EFEFEF] bg-opacity-80 p-3 rounded-3xl relative h-[calc(50px+1rem)]">
           <div className="flex items-center bg-white rounded-full px-4 py-2 w-1/3">
             <FaSearch className="text-gray-400" />
             <input
@@ -205,7 +207,7 @@ export default function Navbar() {
             </div>
 
             <div className="relative flex items-center gap-2 cursor-pointer hover:bg-[#ffff] p-2 rounded-2xl transition-all duration-300" onClick={() => toggleDropdown("user")}>
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-xl text-gray-600">
+              <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md text-xl text-[var(--font)]">
                 {user.name[0]}
               </div>
               <div>
@@ -228,6 +230,7 @@ export default function Navbar() {
           </div>
         </nav>
       </div>
+    </div>
     </div>
   );
 }
