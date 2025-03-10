@@ -38,7 +38,7 @@ export default function Navbar() {
   const handleSignOut = async () => {
     await signOut();
   }
-  const user = useAuth()
+  const { user, accessToken } = useAuth();
   if (!user) return null
 
 

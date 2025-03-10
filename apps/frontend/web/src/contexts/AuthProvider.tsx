@@ -1,23 +1,25 @@
 "use client";
-import { createContext, useContext, ReactNode } from 'react'
-import { User } from '@/types/auth'
+import { createContext, useContext, ReactNode } from "react";
+import { useAccessToken } from "@/hooks/useAuth";
 
-const AuthContext = createContext<User | null>(null)
+export interface User {
+    id: string;
+    name: string;
+    role: string;
+}
 
-export function AuthProvider({
-  children,
-  user,
-}: {
-  children: ReactNode
-  user: User | null
-}) {
-  return (
-    <AuthContext.Provider value={user}>
-      {children}
-    </AuthContext.Provider>
-  )
+const AuthContext = createContext<{ user: User | null; accessToken: string | null }>({ user: null, accessToken: null });
+
+export function AuthProvider({ children, user }: { children: ReactNode; user: User | null }) {
+    const accessToken = useAccessToken();
+
+    return (
+        <AuthContext.Provider value={{ user, accessToken }}>
+            {children}
+        </AuthContext.Provider>
+    );
 }
 
 export function useAuth() {
-  return useContext(AuthContext)
+    return useContext(AuthContext);
 }

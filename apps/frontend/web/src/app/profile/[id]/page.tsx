@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthProvider";
 import { useParams } from "next/navigation";
 
 const Profile = () => {
-    const user = useAuth();
+    const {user} = useAuth();
     const { id } = useParams();
 
     if (!user || user.id !== id) return <p>Uživatel nenalezen</p>;

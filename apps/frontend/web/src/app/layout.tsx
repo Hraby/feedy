@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { cookies } from "next/headers";
-import { jwtVerify } from "jose";
 import { AuthProvider } from "@/contexts/AuthProvider";
 import { getSession } from "@/lib/session";
 

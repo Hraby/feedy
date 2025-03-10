@@ -2,6 +2,7 @@
 
 import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
+import { BACKEND_URL } from "@/lib/constants";
 
 export type Session = {
     user: {
@@ -16,15 +17,15 @@ export type Session = {
 const SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET_KEY!);
 
 export async function createSession(payload: Session) {
-    const expire = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 d
+    const expire = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 dní
 
     const cookieStore = await cookies();
 
     const session = await new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("7d")
-    .sign(SECRET_KEY);
+        .setProtectedHeader({ alg: "HS256" })
+        .setIssuedAt()
+        .setExpirationTime("7d")
+        .sign(SECRET_KEY);
 
     cookieStore.set("session", session, {
         httpOnly: true,
@@ -40,7 +41,7 @@ export async function deleteSession() {
     cookieStore.delete("session");
 }
 
-export async function getSession() {
+export async function getSession(): Promise<Session | null> {
     const cookieStore = await cookies();
     let cookie = cookieStore.get("session")?.value;
     if (!cookie) return null;
@@ -54,24 +55,17 @@ export async function getSession() {
     }
 }
 
-export async function updateTokens({accessToken, refreshToken}:{accessToken: string, refreshToken: string}){
-    const cookieStore = await cookies();
-    const session = cookieStore.get("session")?.value;
-    if(!session) return null;
+export async function updateTokens(accessToken: string, refreshToken: string) {
+    const session = await getSession();
+    if (!session) return null;
 
-    const { payload } = await jwtVerify<Session>(session, SECRET_KEY, { algorithms: ["HS256"] });
-    if(!payload) console.log("Invalid session");
-
-    const newPayload: Session ={
-        user: {
-            ...payload.user,
-        },
+    const newSession: Session = {
+        user: session.user,
         accessToken,
         refreshToken,
     };
 
-    await createSession(newPayload)
-
+    await createSession(newSession);
 }
 
 export async function getUser() {
