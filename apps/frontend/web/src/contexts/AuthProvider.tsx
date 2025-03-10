@@ -6,6 +6,7 @@ export interface User {
     id: string;
     name: string;
     role: string;
+    email: string;
 }
 
 const AuthContext = createContext<{ user: User | null; accessToken: string | null }>({ user: null, accessToken: null });

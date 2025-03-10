@@ -18,20 +18,17 @@ export default async function loginAction(currentState: any, formData: FormData)
 
     const json = await response.json();
 
-    console.log(json)
-
-    const payload = {
-        user: {
-            id: json.user.id,
-            name: json.user.firstName+" "+json.user.lastName,
-            role: json.user.role,
-        },
-        accessToken: json.accessToken,
-        refreshToken: json.refreshToken,
-    }
-    console.log(payload)
-
     if (response.ok) {
+        const payload = {
+            user: {
+                id: json.user.id,
+                name: json.user.firstName+" "+json.user.lastName,
+                role: json.user.role,
+                email: email as string,
+            },
+            accessToken: json.accessToken,
+            refreshToken: json.refreshToken,
+        }
         await createSession(payload)
         redirect("/")
     } else {

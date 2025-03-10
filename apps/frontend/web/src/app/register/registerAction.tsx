@@ -21,17 +21,17 @@ export default async function registerAction(currentState: any, formData: FormDa
     const json = await response.json();
     console.log(json)
 
-    const payload = {
-        user: {
-            id: json.user.id,
-            name: json.user.firstName+" "+json.user.lastName,
-            role: json.user.role,
-        },
-        accessToken: json.accessToken,
-        refreshToken: json.refreshToken,
-    }
-
     if (response.ok) {
+        const payload = {
+            user: {
+                id: json.user.id,
+                name: json.user.firstName+" "+json.user.lastName,
+                role: json.user.role,
+                email: email as string,
+            },
+            accessToken: json.accessToken,
+            refreshToken: json.refreshToken,
+        }
         await createSession(payload)
         redirect("/")
     } else {
