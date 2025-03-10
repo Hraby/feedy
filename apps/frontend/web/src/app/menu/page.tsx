@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { FaClock, FaStar, FaUtensils } from "react-icons/fa";
 import NavbarSwitcher from "@/components/NavbarSwitch";
+import Footer from "@/components/Footer";
 
 // only placeholder
 const restaurants = [
@@ -165,6 +166,7 @@ export default function Menu() {
                     ))}
                 </div>
             </div>
+            <Footer/>
         </div>
     );
 }
