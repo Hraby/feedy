@@ -177,11 +177,11 @@ model OrderItem {
 }
 
 model Address {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   street  String
   city    String
-  zipCode String
-  country String
+  zipCode String?
+  country String  @default("Česko")
 
   userId String? @unique
   user   User?   @relation(fields: [userId], references: [id])
