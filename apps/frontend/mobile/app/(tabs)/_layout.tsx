@@ -122,15 +122,6 @@ export default function TabLayout() {
         }}
       /> 
       <Tabs.Screen
-        name="search"
-        options={{
-          title: 'Search',
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      /> 
-      <Tabs.Screen
         name="takeorders"
         options={{
           title: 'Take',
@@ -152,6 +143,15 @@ export default function TabLayout() {
         name="usermenu"
         options={{
           title: 'Menu',
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      /> 
+      <Tabs.Screen
+        name="personalinfo"
+        options={{
+          title: 'Personal',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),
