@@ -1,11 +1,12 @@
 "use client";
 import { useAuth } from "@/contexts/AuthProvider";
-import { useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import Link from "next/link";
+import courierFormAction from "@/app/actions/courierFormAction";
 
 export default function CourierForm() {
     const { user, accessToken } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [error, formAction] = useActionState(courierFormAction, undefined);
 
     const [formData, setFormData] = useState({
         courierFirstName: "",
@@ -21,20 +22,14 @@ export default function CourierForm() {
     });
 
     useEffect(() => {
-        if (user && user.name) {
-            setIsAuthenticated(true);
-            const nameParts = user.name.split(" ");
-            const firstName = nameParts[0] || "";
-            const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
-            
-            setFormData(prevData => ({
-                ...prevData,
+        if (user) {
+            const [firstName, ...lastName] = user.name.split(" ");
+            setFormData((prev) => ({
+                ...prev,
                 courierFirstName: firstName,
-                courierLastName: lastName,
+                courierLastName: lastName.join(" "),
                 courierEmail: user.email,
             }));
-        } else {
-            setIsAuthenticated(false);
         }
     }, [user]);
     
@@ -64,7 +59,29 @@ export default function CourierForm() {
         console.log("Form data:", formData);
     };
 
-    if (!isAuthenticated) {
+    const validateNumberInput = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        maxLength: number,
+        maxValue: number
+      ): void => {
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        const trimmedValue = value.slice(0, maxLength);
+        
+        if (trimmedValue && parseInt(trimmedValue) > maxValue) {
+          return;
+        }
+
+        setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
+    };
+
+    const validatePhoneInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = e.target.value.replace(/[^\d+() -]/g, '');
+        const trimmedValue = value.slice(0, 20);
+
+        setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
+      };
+
+    if (!user) {
         return (
             <div className="max-w-lg mx-auto bg-white py-8 px-6 rounded-2xl my-6 text-center">
                 <div className="flex flex-col items-center justify-center space-y-6">
@@ -91,7 +108,7 @@ export default function CourierForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white py-4 rounded-2xl space-y-2 my-6 max-h-[80vh] overflow-y-auto">
+        <form action={formAction} className="max-w-lg mx-auto bg-white py-4 rounded-2xl space-y-2 my-6 max-h-[80vh] overflow-y-auto">
             <h2 className="text-3xl font-bold text-center text-gray-800">Staňte se partnerským kurýrem feedy!</h2>
             <p className="text-center text-gray-600">
                 Předtím, než přijmete Vaši první objednávku, sdělte nám několik základních informací:
@@ -138,12 +155,48 @@ export default function CourierForm() {
                 </select>
 
                 <div className="flex space-x-4">
-                    <input type="text" name="courierBirthYear" placeholder="RRRR" className="input-field w-1/3" onChange={handleChange} />
-                    <input type="text" name="courierBirthMonth" placeholder="MM" className="input-field w-1/3" onChange={handleChange} />
-                    <input type="text" name="courierBirthDay" placeholder="DD" className="input-field w-1/3" onChange={handleChange} />
+                    <input 
+                        type="text" 
+                        name="courierBirthYear" 
+                        placeholder="RRRR" 
+                        className="input-field w-1/3" 
+                        value={formData.courierBirthYear || ''}
+                        onChange={(e) => validateNumberInput(e, 4, 9999)}
+                        inputMode="numeric"
+                        maxLength={4}
+                    />
+                    <input 
+                        type="text" 
+                        name="courierBirthMonth" 
+                        placeholder="MM" 
+                        className="input-field w-1/3" 
+                        value={formData.courierBirthMonth || ''}
+                        onChange={(e) => validateNumberInput(e, 2, 12)}
+                        inputMode="numeric"
+                        maxLength={2}
+                    />
+                    <input 
+                        type="text" 
+                        name="courierBirthDay" 
+                        placeholder="DD" 
+                        className="input-field w-1/3" 
+                        value={formData.courierBirthDay || ''}
+                        onChange={(e) => validateNumberInput(e, 2, 31)}
+                        inputMode="numeric"
+                        maxLength={2}
+                    />
                 </div>
 
-                <input type="text" name="courierPhone" placeholder="Telefonní číslo (vč. předvolby)" className="input-field" required onChange={handleChange} />
+                <input 
+                    type="tel" 
+                    name="courierPhone" 
+                    placeholder="Telefonní číslo (vč. předvolby)" 
+                    className="input-field" 
+                    required 
+                    value={formData.courierPhone || ''}
+                    onChange={validatePhoneInput}
+                    inputMode="tel"
+                />
 
                 <select name="courierCity" className="input-field" onChange={handleChange} required value={formData.courierCity}>
                     <option value="" disabled hidden>Vyberte město</option>
