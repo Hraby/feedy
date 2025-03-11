@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     margin: 20,
     justifyContent: "space-between",
+    marginBottom: 95,
   },
   orderText: {
     color: "#FFF",
