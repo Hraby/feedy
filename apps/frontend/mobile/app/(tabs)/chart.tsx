@@ -64,9 +64,6 @@ export default function CartScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="#000" />
-      </TouchableOpacity>
 
       <View style={styles.restaurantHeader}>
         <Text style={styles.restaurantName}>Kebab House Zlín</Text>
