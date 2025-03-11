@@ -1,17 +1,21 @@
 "use client";
+
+import { useState, useEffect } from "react";
+import { useActionState } from "react";
 import { useAuth } from "@/contexts/AuthProvider";
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import restaurantFormAction from "@/app/actions/restaurantFormAction";
 
 export default function RestaurantForm() {
-    const { user, accessToken } = useAuth();
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const { user } = useAuth();
+    const [error, formAction] = useActionState(restaurantFormAction, undefined);
+    const [agreement, setAgreement] = useState(false);
 
     const [formData, setFormData] = useState({
         restaurantName: "",
         restaurantType: "",
         restaurantDescription: "",
-        restaurantAdress: "",
+        restaurantAddress: "",
         restaurantCity: "",
         restaurantOwnerName: "",
         restaurantOwnerSurname: "",
@@ -20,50 +24,40 @@ export default function RestaurantForm() {
     });
 
     useEffect(() => {
-        if (user && user.name) {
-            setIsAuthenticated(true);
-            const nameParts = user.name.split(" ");
-            const firstName = nameParts[0] || "";
-            const lastName = nameParts.length > 1 ? nameParts.slice(1).join(" ") : "";
-            
-            setFormData(prevData => ({
-                ...prevData,
+        if (user) {
+            const [firstName, ...lastName] = user.name.split(" ");
+            setFormData((prev) => ({
+                ...prev,
                 restaurantOwnerName: firstName,
-                restaurantOwnerSurname: lastName,
+                restaurantOwnerSurname: lastName.join(" "),
                 restaurantOwnerEmail: user.email,
             }));
-        } else {
-            setIsAuthenticated(false);
         }
     }, [user]);
-    
-    const isFieldDisabled = (fieldName: string) => {
-        if (!user || !user.name || !user.email) return false;
-        
-        switch (fieldName) {
-            case "restaurantOwnerName": return true;
-            case "restaurantOwnerSurname": return true;
-            case "restaurantOwnerEmail": return true;
-            default: return false;
-        }
-    };
-
-    const [agreement, setAgreement] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleAgreementChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setAgreement(e.target.checked);
+    const isFieldDisabled = (fieldName: string) => {
+        if (!user || !user.name || !user.email) return false;
+        
+        switch (fieldName) {
+            case "courierFirstName": return true;
+            case "courierLastName": return true;
+            case "courierEmail": return true;
+            default: return false;
+        }
+    };
+    
+    const validatePhoneInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = e.target.value.replace(/[^\d+() -]/g, '');
+        const trimmedValue = value.slice(0, 20);
+
+        setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Form data:", formData);
-    };
-
-    if (!isAuthenticated) {
+    if (!user) {
         return (
             <div className="max-w-lg mx-auto bg-white py-8 px-6 rounded-2xl my-6 text-center">
                 <div className="flex flex-col items-center justify-center space-y-6">
@@ -74,7 +68,7 @@ export default function RestaurantForm() {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-800">Pouze pro přihlášené uživatele</h2>
                     <p className="text-gray-600 max-w-md">
-                        Pro přístup k formuláři pro restaurace se prosím nejprve přihlaste ke svému účtu.
+                        Pro přístup k formuláři pro kurýry se prosím nejprve přihlaste ke svému účtu.
                     </p>
                     <div className="flex gap-4 mt-4">
                         <Link href="/login" className="bg-[var(--primary)] hover:bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold transition">
@@ -90,111 +84,45 @@ export default function RestaurantForm() {
     }
 
     return (
-        <div className="py-8">
-            <form onSubmit={handleSubmit} className="max-w-lg mx-auto bg-white p-4 rounded-2xl space-y-2 max-h-[80vh] overflow-y-auto">
-                <h2 className="text-3xl font-bold text-center text-gray-800">Staňte se partnerským podnikem feedy!</h2>
-                <p className="text-center text-gray-600">
-                    Předtím, než přijmete Vaši první objednávku, sdělte nám několik základních informací:
+            <form action={formAction} className="max-w-lg mx-auto bg-white py-4 rounded-2xl space-y-2 my-6 max-h-[80vh] overflow-y-auto">
+                <h2 className="text-3xl font-bold text-center text-gray-800">Staňte se partnerským podnikem</h2>
+                <p className="text-center text-gray-600 max-w-md">
+                    Pro přístup k formuláři pro restaurace se prosím nejprve přihlaste ke svému účtu.
                 </p>
+                {error && <p className="text-red-500 text-sm">{error}</p>}
 
-                <div className="space-y-4">
-                    <input
-                        type="text"
-                        name="restaurantName"
-                        placeholder="Název podniku"
-                        className="input-field"
-                        onChange={handleChange}
-                        value={formData.restaurantName}
-                        required
-                    />
+                <div className="space-y-4 px-4">
 
-                    <input
-                        type="text"
-                        name="restaurantDescription"
-                        placeholder="Krátký popis podniku"
-                        className="input-field"
-                        onChange={handleChange}
-                        value={formData.restaurantDescription}
-                        required
-                    />
+                    <input type="text" name="restaurantName" placeholder="Název podniku" className="input-field" onChange={handleChange} defaultValue={formData.restaurantName} required />
+                    <input type="text" name="restaurantDescription" placeholder="Popis podniku" className="input-field" onChange={handleChange} defaultValue={formData.restaurantDescription} required />
 
-                    <select name="restaurantType" className="input-field" onChange={handleChange} required value={formData.restaurantType}>
-                        <option value="" disabled hidden>Vyberte typ činnosti</option>
-                        <option value="typeRestaurant">Restaurace</option>
-                        <option value="typeKavarna">Kavárna</option>
-                        <option value="typePotraviny">Potraviny</option>
-                        <option value="typeVseobecneZbozi">Všeobecné zboží</option>
-                        <option value="typeDalsi">Další</option>
+                    <select name="restaurantType" className="input-field" onChange={handleChange} defaultValue={formData.restaurantType} required>
+                        <option value="" disabled>Vyberte typ</option>
+                        <option value="restaurant">Restaurace</option>
+                        <option value="cafe">Kavárna</option>
+                        <option value="grocery">Potraviny</option>
                     </select>
 
-                    <input
-                        type="text"
-                        name="restaurantAdress"
-                        placeholder="Adresa podniku"
-                        className="input-field"
-                        onChange={handleChange}
-                        value={formData.restaurantAdress}
-                        required
-                    />
+                    <input type="text" name="restaurantAddress" placeholder="Adresa" className="input-field" onChange={handleChange} defaultValue={formData.restaurantAddress} required />
+                    <input type="text" name="restaurantCity" placeholder="Město" className="input-field" onChange={handleChange} defaultValue={formData.restaurantCity} required />
 
-                    <select name="restaurantCity" className="input-field" onChange={handleChange} required value={formData.restaurantCity}>
-                        <option value="" disabled hidden>Vyberte město</option>
-                        <option value="Praha">Praha</option>
-                        <option value="Brno">Brno</option>
-                        <option value="Zlín">Zlín</option>
-                    </select>
-
-                    <input
-                        type="text"
-                        name="restaurantOwnerName"
-                        placeholder="Jméno"
-                        className={`input-field ${isFieldDisabled("restaurantOwnerName") ? "bg-gray-100" : ""}`}
-                        onChange={handleChange}
-                        value={formData.restaurantOwnerName}
-                        disabled={isFieldDisabled("restaurantOwnerName")}
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="restaurantOwnerSurname"
-                        placeholder="Příjmení"
-                        className={`input-field ${isFieldDisabled("restaurantOwnerSurname") ? "bg-gray-100" : ""}`}
-                        onChange={handleChange}
-                        value={formData.restaurantOwnerSurname}
-                        disabled={isFieldDisabled("restaurantOwnerSurname")}
-                        required
-                    />
-                    <input
-                        type="email"
-                        name="restaurantOwnerEmail"
-                        placeholder="Emailová adresa"
-                        className={`input-field ${isFieldDisabled("restaurantOwnerEmail") ? "bg-gray-100" : ""}`}
-                        onChange={handleChange}
-                        value={formData.restaurantOwnerEmail}
-                        disabled={isFieldDisabled("restaurantOwnerEmail")}
-                        required
-                    />
-
+                    <input type="text" name="restaurantOwnerName" placeholder="Jméno" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerName")} defaultValue={formData.restaurantOwnerName} required />
+                    <input type="text" name="restaurantOwnerSurname" placeholder="Příjmení" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerSurname")} defaultValue={formData.restaurantOwnerSurname} required />
+                    <input type="email" name="restaurantOwnerEmail" placeholder="Email" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerEmail")} defaultValue={formData.restaurantOwnerEmail} required />
                     <input 
-                        type="text" 
+                        type="tel" 
                         name="restaurantOwnerPhone" 
                         placeholder="Telefonní číslo (vč. předvolby)" 
                         className="input-field" 
                         required 
-                        onChange={handleChange}
-                        value={formData.restaurantOwnerPhone} 
+                        value={formData.restaurantOwnerPhone || ''}
+                        onChange={validatePhoneInput}
+                        inputMode="tel"
                     />
                 </div>
 
-                <div className="flex items-center space-x-2 mt-4 px-2">
-                    <input
-                        type="checkbox"
-                        id="agreement"
-                        className="w-5 h-5 text-[var(--primary)] border-gray-300 rounded cursor-pointer"
-                        onChange={handleAgreementChange}
-                        checked={agreement}
-                        required
-                    />
+                <div className="flex items-center space-x-2 mt-4 px-4">
+                    <input type="checkbox" id="agreement" className="w-5 h-5 text-[var(--primary)] border-gray-300 rounded cursor-pointer" onChange={(e) => setAgreement(e.target.checked)} checked={agreement} required />
                     <label htmlFor="agreement" className="text-sm text-gray-600">
                         Souhlasím se{" "}
                         <a href="#" className="text-[var(--primary)] underline">
@@ -204,32 +132,33 @@ export default function RestaurantForm() {
                     </label>
                 </div>
 
-                <button
-                    type="submit"
-                    className={`w-full py-3 rounded-xl font-semibold transition ${agreement ? "bg-[var(--primary)] hover:bg-orange-600 text-white" : "bg-gray-600 text-white cursor-not-allowed"}`}
-                    disabled={!agreement}
-                >
-                    Odeslat
-                </button>
+                <div className="px-4 mt-4">
+                    <button
+                        type="submit"
+                        className={`w-full py-3 rounded-xl font-semibold transition 
+                        ${agreement ? "bg-[var(--primary)] hover:bg-orange-600 text-white" : "bg-gray-600 text-white cursor-not-allowed"}`}
+                        disabled={!agreement}
+                    >
+                        Odeslat
+                    </button>
+                </div>
 
-                <style jsx>
-                {`
+
+                <style jsx>{`
                     .input-field {
-                        width: 100%;
-                        padding: 12px;
-                        border: 2px solid #e5e7eb;
-                        border-radius: 10px;
-                        font-size: 16px;
-                        transition: border-color 0.2s, background-color 0.2s;
+                    width: 100%;
+                    padding: 12px;
+                    border: 2px solid #e5e7eb;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    transition: border-color 0.2s, background-color 0.2s;
                     }
                     .input-field:focus {
-                        border-color: #9ca3af;
-                        background-color: #f3f4f6;
-                        outline: none;
+                    border-color: #9ca3af;
+                    background-color: #f3f4f6;
+                    outline: none;
                     }
-                `}
-                </style>
+                `}</style>
             </form>
-        </div>
     );
 }
