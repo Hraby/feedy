@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Animated } from 'react-native';
+import { router } from 'expo-router';
 
 const UserMenu = () => {
   const [isCourier, setIsCourier] = useState(false);
@@ -10,6 +11,9 @@ const UserMenu = () => {
     <View style={styles.container}>
       <Text style={styles.header}>Uživatelský profil</Text>
 
+    <TouchableOpacity 
+                    onPress={() => router.push('/personalinfo')}
+                  >
       <View style={styles.profileSection}>
         <View style={styles.profileText}>
           <Text style={styles.subtitle}>Uživatelský profil</Text>
@@ -17,30 +21,49 @@ const UserMenu = () => {
         </View>
         <Image source={require('@/assets/images/avatar.png')} style={styles.icon} />
       </View>
+      </TouchableOpacity>
 
+    
       <View style={styles.grid}>
+
         <View style={styles.card}>
+        <TouchableOpacity 
+                    onPress={() => router.push('/adress')}
+                  >
           <Text style={styles.cardTitle}>Adresa</Text>
           <Text style={styles.cardText}>Upravte nebo změňte svou adresu</Text>
           <Image source={require('@/assets/images/Location.png')} style={styles.smallIcon} />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.card}>
+        <TouchableOpacity 
+                    onPress={() => router.push('/ordersummary')}
+                  >
           <Text style={styles.cardTitle}>Objednávky</Text>
           <Text style={styles.cardText}>Podívejte se na všechny Vaše objednávky</Text>
           <Image source={require('@/assets/images/Bill.png')} style={styles.smallIcon} />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.card}>
+        <TouchableOpacity 
+                    onPress={() => router.push('/balance')}
+                  >
           <Text style={styles.cardTitle}>Zůstatek</Text>
           <Text style={styles.cardText}>Dobijte si kredit pro objednávání</Text>
           <Image source={require('@/assets/images/Transaction.png')} style={styles.smallIcon} />
+          </TouchableOpacity>
         </View>
 
         <View style={styles.card}>
+        <TouchableOpacity 
+                    onPress={() => router.push('/info')}
+                  >
           <Text style={styles.cardTitle}>Informace</Text>
           <Text style={styles.cardText}>Zjistěte si něco o Nás a naší apce</Text>
           <Image source={require('@/assets/images/Info.png')} style={styles.smallIcon} />
+          </TouchableOpacity>
         </View>
       </View>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const BalanceScreen = () => {
   const [balance, setBalance] = useState(390);
@@ -32,7 +33,9 @@ const BalanceScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton}
+        onPress={() => router.push('/usermenu')}
+        >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
       <Text style={styles.header}>Zůstatek</Text>

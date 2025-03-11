@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const addresses = [
   {
@@ -20,7 +21,9 @@ const addresses = [
 export default function AddressScreen() {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton}
+      onPress={() => router.push('/usermenu')}
+      >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
       <Text style={styles.header}>Moje adresa</Text>

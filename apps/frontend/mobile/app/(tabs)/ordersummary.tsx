@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const orders = [
   { id: '1', place: 'Kebab House Zlín', details: '1x Kebab Durum, 2x Hranolky', price: '179,00 Kč' },
@@ -23,7 +24,9 @@ const OrdersScreen = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton}
+      onPress={() => router.push('/usermenu')}
+      >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
 
