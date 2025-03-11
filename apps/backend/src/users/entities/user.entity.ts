@@ -22,6 +22,9 @@ export class User {
   role: string;
 
   @Field()
+  refreshToken?: string;
+
+  @Field()
   createdAt: Date;
 
   @Field()

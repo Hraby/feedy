@@ -30,7 +30,7 @@ const JoinFeedy = () => {
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">
             <span className="text-white text-2xl md:text-3xl font-bold ml-6 mb-6 w-3/4">
-              Staňte se partnerským feedy kurýrem
+              Staňte se partnerským kurýrem feedy
             </span>
           </div>
         </div>
@@ -47,7 +47,7 @@ const JoinFeedy = () => {
           />
           <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">
             <span className="text-white text-2xl md:text-3xl font-bold ml-6 mb-6 w-3/4">
-              Přidejte vlastní restauraci nebo obchod
+              Přidejte vaši restauraci nebo obchod
             </span>
           </div>
         </div>
