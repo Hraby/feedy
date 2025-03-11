@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   acceptButton: {
-    backgroundColor: "#E85527",
+    backgroundColor: "#FF5500",
     paddingVertical: 8,
     paddingHorizontal: 45,
     borderRadius: 8,
@@ -136,14 +136,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   cancelButton: {
-    borderColor: "#E85527",
+    borderColor: "#FF5500",
     borderWidth: 1,
     paddingVertical: 8,
     paddingHorizontal: 45,
     borderRadius: 8,
   },
   cancelText: {
-    color: "#E85527",
+    color: "#FF5500",
     fontWeight: "bold",
   },
   orderId: {
