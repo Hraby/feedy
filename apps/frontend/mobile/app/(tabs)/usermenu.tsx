@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   toggleText: {
     marginLeft: 10,
     fontSize: 16,
-    fontWeight: 'light'
+    fontWeight: 'light',
   },
   supplierIcon: {
     width: 45,
