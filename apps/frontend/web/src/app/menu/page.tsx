@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FaClock, FaStar, FaUtensils } from "react-icons/fa";
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/contexts/AuthProvider";
 
 // only placeholder
 const restaurants = [
@@ -13,7 +15,6 @@ const restaurants = [
         description: "Ochutnejte jedinečný kebab v centru Zlína.",
         category: "Kebab",
         deliveryTime: "25 min",
-        rating: 4,
         image: "https://kebabstodulky.wordpress.com/wp-content/uploads/2024/08/img_2085-1.jpg"
     },
     {
@@ -21,7 +22,6 @@ const restaurants = [
         description: "Domov nejlepšího smaženého kuřete od roku 1952.",
         category: "Kuřecí",
         deliveryTime: "30 min",
-        rating: 4,
         image: "https://kebabstodulky.wordpress.com/wp-content/uploads/2024/08/img_2085-1.jpg"
     },
     {
@@ -29,19 +29,58 @@ const restaurants = [
         description: "Hovězí burgery, kuřecí kebaby, vegetariánská kuchyně.",
         category: "Burger",
         deliveryTime: "35 min",
-        rating: 4,
         image: "https://kebabstodulky.wordpress.com/wp-content/uploads/2024/08/img_2085-1.jpg"
-    }
+    },
+    {
+        name: "Kebab Haus Zlín",
+        description: "Ochutnejte jedinečný kebab v centru Zlína.",
+        category: "Kebab",
+        deliveryTime: "25 min",
+        image: "https://kebabstodulky.wordpress.com/wp-content/uploads/2024/08/img_2085-1.jpg"
+    },
+    {
+        name: "KFC Zlín Zlaté Jablko",
+        description: "Domov nejlepšího smaženého kuřete od roku 1952.",
+        category: "Kuřecí",
+        deliveryTime: "30 min",
+        image: "https://kebabstodulky.wordpress.com/wp-content/uploads/2024/08/img_2085-1.jpg"
+    },
+    {
+        name: "Mr Grill",
+        description: "Hovězí burgery, kuřecí kebaby, vegetariánská kuchyně.",
+        category: "Burger",
+        deliveryTime: "35 min",
+        image: "https://kebabstodulky.wordpress.com/wp-content/uploads/2024/08/img_2085-1.jpg"
+    },
 ];
 
 export default function Menu() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 
+    useEffect(() => {
+        const params = new URLSearchParams(searchParams);
+        const categories = params.get("category")?.split(",") || [];
+        setSelectedFilters(categories);
+    }, [searchParams]);
+
     const toggleFilter = (name: string) => {
-        setSelectedFilters((prev: string[]) =>
-            prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]
-        );
+        const newFilters = selectedFilters.includes(name)
+            ? selectedFilters.filter((item) => item !== name)
+            : [...selectedFilters, name];
+
+        setSelectedFilters(newFilters);
+
+        const query = newFilters.length > 0 ? `?category=${newFilters.join(",")}` : "";
+        router.push(`/menu${query}`);
     };
+
+    const filteredRestaurants = selectedFilters.length === 0 ? restaurants : restaurants.filter(restaurant => selectedFilters.includes(restaurant.category));
+
+    const { user, accessToken } = useAuth();
+    if (!user) return null;
 
     return (
         <div>
@@ -63,14 +102,12 @@ export default function Menu() {
                             <button
                                 key={category.name}
                                 onClick={() => toggleFilter(category.name)}
-                                className={`relative rounded-3xl p-4 text-lg bg-[var(--gray)] flex flex-col items-center transition-all duration-300 overflow-hidden group text-gray-700 min-w-[100px] ${
-                                    selectedFilters.includes(category.name) ? "text-white font-semibold" : "hover:bg-gray-200"
-                                }`}
+                                className={`relative rounded-3xl p-4 text-lg bg-[var(--gray)] flex flex-col items-center transition-all duration-300 overflow-hidden group text-gray-700 min-w-[100px] ${selectedFilters.includes(category.name) ? "text-white font-semibold" : "hover:bg-gray-200"
+                                    }`}
                             >
                                 <span
-                                    className={`absolute inset-0 transition-opacity duration-500 bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] ${
-                                        selectedFilters.includes(category.name) ? "opacity-100" : "opacity-0"
-                                    }`}
+                                    className={`absolute inset-0 transition-opacity duration-500 bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] ${selectedFilters.includes(category.name) ? "opacity-100" : "opacity-0"
+                                        }`}
                                 />
                                 <img
                                     src={category.icon}
@@ -82,6 +119,7 @@ export default function Menu() {
                         ))}
                     </div>
                 </div>
+
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
                     <div className="relative bg-gradient-to-r from-[#f5880b] to-[#fff45f] p-6 rounded-3xl flex flex-col justify-between shadow-xl text-white overflow-hidden md:flex-row">
@@ -110,63 +148,42 @@ export default function Menu() {
                     </div>
                 </div>
 
-                <h2 className="text-2xl font-bold mt-16">Doprava zdarma nad 500 Kč</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-10">
-                    {restaurants.map((restaurant, index) => (
-                        <Link key={index} href={`/restaurant/${index}`}>
-                            <div className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                                <img src={restaurant.image} alt={restaurant.name} className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <h3 className="text-lg font-semibold">{restaurant.name}</h3>
-                                    <p className="text-gray-600 text-sm">{restaurant.description}</p>
-                                    <div className="flex justify-between items-center mt-3 text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                                <FaUtensils /> {restaurant.category}
-                                            </span>
-                                            <span className="bg-yellow-200 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                                <FaClock /> {restaurant.deliveryTime}
-                                            </span>
-                                        </div>
-                                        <span className="flex items-center gap-1 text-yellow-500 text-sm font-semibold">
-                                            <FaStar /> {restaurant.rating}/5
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
 
-                <h2 className="text-2xl font-bold mt-16">Oblíbené</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-10">
-                    {restaurants.map((restaurant, index) => (
-                        <Link key={index} href={`/restaurant/${index}`}>
-                            <div className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
-                                <img src={restaurant.image} alt={restaurant.name} className="w-full h-48 object-cover" />
-                                <div className="p-4">
-                                    <h3 className="text-lg font-semibold">{restaurant.name}</h3>
-                                    <p className="text-gray-600 text-sm">{restaurant.description}</p>
-                                    <div className="flex justify-between items-center mt-3 text-sm">
-                                        <div className="flex items-center gap-2">
-                                            <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                                <FaUtensils /> {restaurant.category}
-                                            </span>
-                                            <span className="bg-yellow-200 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                                                <FaClock /> {restaurant.deliveryTime}
-                                            </span>
+                <h2 className="text-2xl font-bold mt-12">Co to bude dnes, {user.name}?</h2>
+
+                {filteredRestaurants.length === 0 ? (
+                    <div className="flex justify-center flex-col items-center h-96">
+                        <p className="text-gray-500 text-xl">Pod tímto filtrem není aktuálně dostupná žádná restaurace.</p>
+                        <p className="text-gray-500 text-xl">Pokud chcete zobrazit kompletní nabídku, deaktivujte veškeré filtry.</p>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-10">
+                        {filteredRestaurants.map((restaurant, index) => (
+                            <Link key={index} href={`/restaurant/${index}`}>
+                                <div className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+                                    <img src={restaurant.image} alt={restaurant.name} className="w-full h-48 object-cover" />
+                                    <div className="p-4">
+                                        <h3 className="text-lg font-semibold">{restaurant.name}</h3>
+                                        <p className="text-gray-600 text-sm">{restaurant.description}</p>
+                                        <div className="flex justify-between items-center mt-3 text-sm">
+                                            <div className="flex items-center gap-2">
+                                                <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                                                    <FaUtensils /> {restaurant.category}
+                                                </span>
+                                                <span className="bg-yellow-200 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                                                    <FaClock /> {restaurant.deliveryTime}
+                                                </span>
+                                            </div>
                                         </div>
-                                        <span className="flex items-center gap-1 text-yellow-500 text-sm font-semibold">
-                                            <FaStar /> {restaurant.rating}/5
-                                        </span>
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
-                </div>
+                            </Link>
+                        ))}
+                    </div>
+                )}
+
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

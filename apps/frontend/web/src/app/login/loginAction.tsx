@@ -30,7 +30,7 @@ export default async function loginAction(currentState: any, formData: FormData)
             refreshToken: json.refreshToken,
         }
         await createSession(payload)
-        redirect("/")
+        redirect("/menu")
     } else {
       return json.message;
     }
