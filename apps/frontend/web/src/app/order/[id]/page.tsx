@@ -50,7 +50,7 @@ const Order = () => {
                                     {orderStep > step.id && (
                                         <div
                                         className="absolute inset-0"
-                                        style={{background: isOrderComplete ? "bg-green-500" : "linear-gradient(to right, var(--gradient-end), var(--gradient-start))",
+                                        style={{background: isOrderComplete ? "#22c55e" : "linear-gradient(to right, var(--gradient-end), var(--gradient-start))",
                                           width: "100%",
                                         }}
                                       />                                      
@@ -60,7 +60,7 @@ const Order = () => {
                                             className="absolute inset-0"
                                             animate={{ x: ["-100%", "250%"] }}
                                             transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
-                                            style={{ backgroundColor: isOrderComplete ? "bg-green-500" : "var(--gradient-end)", width: "150px" }}
+                                            style={{ backgroundColor: isOrderComplete ? "#22c55e" : "var(--gradient-end)", width: "150px" }}
                                         />
                                     )}
                                 </div>
