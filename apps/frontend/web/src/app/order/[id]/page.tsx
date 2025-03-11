@@ -101,12 +101,12 @@ const Order = () => {
                             {isOrderComplete ? (
                                 <div>
                                     <FaCheckCircle className="text-green-500 text-6xl mx-auto" />
-                                    <p className="text-gray-500 mt-3 text-lg">OBJEDNÁVKA BYLA DORUČENA<br></br>NA VAŠÍ ADRESU</p>
+                                    <p className="text-gray-500 mt-3 text-md">OBJEDNÁVKA BYLA DORUČENA<br></br>NA VAŠÍ ADRESU</p>
                                 </div>
                             ) : (
                                 <div>
-                                    <h3 className="text-[var(--primary)] text-5xl font-bold">{deliveryTime}</h3>
-                                    <p className="text-gray-500 mt-3 text-lg">ODHADOVANÝ ČAS DORUČENÍ</p>
+                                    <h3 className="text-[var(--primary)] text-4xl font-bold">{deliveryTime}</h3>
+                                    <p className="text-gray-500 mt-3 text-md">ODHADOVANÝ ČAS DORUČENÍ</p>
                                 </div>
                             )}
 

@@ -58,7 +58,7 @@ const AdminRequests = () => {
             </thead>
             <tbody>
               {requests.map((request) => (
-                <tr key={request.id} className="border-b">
+                <tr key={request.id} className="border-b hover:bg-gray-100">
                   <td className="p-4">#{request.id}</td>
                   <td className="p-4">
                     <span className={`px-3 py-1 rounded-xl text-white ${request.type === 'restaurant' ? 'bg-purple-500' : 'bg-green-500'}`}>

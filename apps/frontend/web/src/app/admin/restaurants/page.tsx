@@ -87,7 +87,7 @@ const AdminRestaurants = () => {
                         </thead>
                         <tbody>
                             {restaurants.map((restaurant) => (
-                                <tr key={restaurant.id} className="border-b">
+                                <tr key={restaurant.id} className="border-b hover:bg-gray-100">
                                     <td className="p-4">#{restaurant.id}</td>
                                     <td className="p-4">{restaurant.name}</td>
                                     <td className="p-4">{restaurant.owner}</td>

@@ -1,16 +1,21 @@
 import Link from "next/link";
 import { FaChartBar, FaUser, FaShoppingCart, FaUtensils, FaClipboardList, FaCog, FaHome, FaSignOutAlt } from 'react-icons/fa';
+import { signOut } from "@/app/actions/auth";
 
 interface ManagementSidebarProps {
     activePath: string;
 }
 
 export default function ManagementSidebar({ activePath }: ManagementSidebarProps) {
-    const isActive = (path: string) => activePath === path ? 'text-[var(--gradient-purple-start)] font-semibold' : 'text-gray-600';
+    const isActive = (path: string) => activePath === path ? 'text-[var(--gradient-purple-end)] font-semibold' : 'text-gray-600';
+
+    const handleSignOut = async () => {
+        await signOut();
+    }
 
     return (
-        <aside className="w-64 bg-white p-6 shadow-md rounded-xl h-full">
-            <h1 className="text-2xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] p-4 rounded-xl mb-8">feedy manage</h1>
+        <aside className="w-60 bg-white p-6 shadow-md rounded-xl h-full">
+            <h1 className="text-xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] p-4 rounded-xl mb-8">feedy manage</h1>
             <nav>
                 <h2 className="text-gray-400 uppercase text-sm mb-4">Menu</h2>
                 <ul className="space-y-4">
@@ -24,12 +29,12 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
                     </li>
                     <li className={`flex items-center ${isActive('/management/orders')}`}>
                         <Link href="/management/orders" className="flex items-center">
-                            <FaShoppingCart className="mr-3" /> Správa objednávek
+                            <FaShoppingCart className="mr-3" /> Objednávky
                         </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/management/menu')}`}>
                         <Link href="/management/restaurants" className="flex items-center">
-                            <FaUtensils className="mr-3" /> Správa menu
+                            <FaUtensils className="mr-3" /> Menu
                         </Link>
                     </li>
                 </ul>
@@ -44,8 +49,10 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
                             <FaHome className="mr-3" /> Hlavní stránka
                         </Link>
                     </li>
-                    <li className="flex items-center text-gray-600">
-                        <FaSignOutAlt className="mr-3" /> Odhlásit se
+                    <li className="flex items-center text-red-600">
+                        <p onClick={handleSignOut} className="flex items-center cursor-pointer">
+                            <FaSignOutAlt className="mr-3" /> Odhlásit se
+                        </p>
                     </li>
                 </ul>
             </nav>
