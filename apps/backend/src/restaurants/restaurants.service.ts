@@ -6,6 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
+import { City, Country } from '@prisma/client';
 
 @Injectable()
 export class RestaurantsService {
@@ -51,9 +52,9 @@ export class RestaurantsService {
               address: {
                   create: {
                       street: dto.address.street,
-                      city: dto.address.city,
+                      city: dto.address.city as City,
                       zipCode: dto.address.zipCode,
-                      country: dto.address.country,
+                      country: dto.address.country as Country,
                   },
               },
           },

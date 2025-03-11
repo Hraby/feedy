@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
 import { OrdersService } from './orders.service';
 import { Auth, GetUser } from 'src/auth/decorators/';
@@ -13,8 +13,8 @@ export class OrdersController {
     @Get()
     @ApiOperation({ summary: "Get all orders" }) 
     @Auth(Role.Admin)
-    async getOrders() {
-        return this.ordersService.getOrders();
+    async getOrders(@Query("status") status?: string) {
+        return this.ordersService.getOrders(status);
     }
 
     @Get(":id")

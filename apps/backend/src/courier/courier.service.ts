@@ -8,18 +8,35 @@ export class CourierService {
     constructor(private readonly prisma: PrismaService) {}
 
     async requestCourier(dto: CreateCourierDto, user: User) {
-        return this.prisma.courierProfile.create({
-            data: {
-                user: {
-                    connect: { id: user.id }
-                },
-                city: dto.city,
-                vehicle: dto.vehicle,
-                status: "Offline",
-                approvalStatus: "Pending",
-                dateBirth: new Date(dto.dateBirth),
-            },
+        const existingProfile = await this.prisma.courierProfile.findUnique({
+            where: { userId: user.id }
         });
+    
+        if (existingProfile) {
+            return this.prisma.courierProfile.update({
+                where: { userId: user.id },
+                data: {
+                    language: dto.language,
+                    city: dto.city,
+                    vehicle: dto.vehicle,
+                    status: "Offline",
+                    approvalStatus: "Pending",
+                    dateBirth: new Date(dto.dateBirth),
+                },
+            });
+        } else {
+            return this.prisma.courierProfile.create({
+                data: {
+                    userId: user.id,
+                    language: dto.language,
+                    city: dto.city,
+                    vehicle: dto.vehicle,
+                    status: "Offline",
+                    approvalStatus: "Pending",
+                    dateBirth: new Date(dto.dateBirth),
+                },
+            });
+        }
     }
 
     async approveCourier(id: string, approve: boolean){
