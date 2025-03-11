@@ -1,28 +1,29 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableOpacity,
-  ImageBackground
-} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ImageBackground } from 'react-native';
+import { router } from 'expo-router';
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require('@/assets/images/startpage.png')}
-        style={styles.backgroundImage}
+      <ImageBackground 
+        source={require('@/assets/images/startpage.png')} 
+        style={styles.backgroundImage} 
         resizeMode="cover"
       >
         <View style={styles.content}>
           <Text style={styles.title}>feedy.</Text>
-          
-          <TouchableOpacity style={styles.loginButton}>
+
+          <TouchableOpacity 
+            style={styles.loginButton}
+            onPress={() => router.push('/login')}
+          >
             <Text style={styles.loginButtonText}>Přihlásit se</Text>
           </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.registerButton}>
+
+          <TouchableOpacity 
+            style={styles.registerButton}
+            onPress={() => router.push('/register')}
+          >
             <Text style={styles.registerButtonText}>Registrace</Text>
           </TouchableOpacity>
         </View>

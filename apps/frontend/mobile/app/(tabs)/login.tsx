@@ -1,6 +1,7 @@
 import { getBackgroundColorAsync } from 'expo-system-ui';
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ImageBackground, Image, StyleSheet } from 'react-native';
+import { router } from 'expo-router';
 
 export default function RegistrationScreen() {
   return (
@@ -9,7 +10,11 @@ export default function RegistrationScreen() {
         <Image source={require('@/assets/images//Logos/feedyLogoGradient.png')} style={styles.logo} />
       </View>
       <View style={styles.tabs}>
+        <TouchableOpacity 
+                            onPress={() => router.push('/register')}
+                          >
         <Text style={styles.inactiveTab}>Registrace</Text>
+        </TouchableOpacity>
         <Text style={styles.activeTab}>Přihlásit se</Text>
       </View>
       <TextInput placeholder="Uživatelské jméno nebo E-mail" style={styles.input} />
