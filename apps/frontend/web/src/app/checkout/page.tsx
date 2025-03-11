@@ -135,7 +135,7 @@ const Checkout = () => {
                         </div>
                     </div>
 
-                    <button className="mt-5 w-full font-bold text-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-2xl">
+                    <button className="mt-5 w-full font-bold text-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-full">
                         Pokračovat k platbě
                     </button>
                 </div>
