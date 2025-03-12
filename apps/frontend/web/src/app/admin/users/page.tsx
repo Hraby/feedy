@@ -77,20 +77,41 @@ const AdminUsers = () => {
         return () => clearTimeout(timer);
     }, [searchQuery, accessToken]);
 
-    const handleRoleChange = async (id: number, newRole: 'Admin' | 'User') => {
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+    
+        return `${day}-${month}-${year}`;
+    };    
+
+    const handleRoleChange = async (id: number, role: string) => {
         const user = users.find(u => u.id === id);
         if (!user || !accessToken) return;
-
-        setUsers(users.map(u => u.id === id ? { ...u, role: newRole } : u));
-            
+    
+        let updatedRoles: string[] = [...user.role];
+    
+        if (updatedRoles.includes(role)) {
+            updatedRoles = updatedRoles.filter(r => r !== role);
+        } else {
+            updatedRoles.push(role);
+    
+            if (updatedRoles.includes('Admin') && updatedRoles.includes('User')) {
+                alert('Uživatel nemůže mít roli Admin a User současně!');
+                return;
+            }
+        }
+        setUsers(users.map(u => u.id === id ? { ...u, role: updatedRoles } : u));
+    
         try {
-            await updateUserRole(id, newRole, accessToken);
+            await updateUserRole(id, updatedRoles, accessToken);
         } catch (err) {
             console.error('Role update failed:', err);
             setUsers(prevUsers => [...prevUsers]);
             alert('Nepodařilo se aktualizovat roli uživatele.');
         }
-    };
+    };    
 
     const handleDeleteUser = (id: number) => {
         setDeleteUserId(id);
@@ -164,7 +185,7 @@ const AdminUsers = () => {
                                     <th className="p-4">Role</th>
                                     <th className="p-4">Registrace</th>
                                     <th className="p-4">Poslední přihlášení</th>
-                                    <th className="p-4 w-1/6 text-right">Akce</th>
+                                    <th className="p-4 w-1/8 text-right">Akce</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -180,8 +201,8 @@ const AdminUsers = () => {
                                             </span>
                                         ))}
                                         </td>
-                                        <td className="p-4">{user.createdAt}</td>
-                                        <td className="p-4">{user.updatedAt}</td>
+                                        <td className="p-4">{formatDate(user.createdAt)}</td>
+                                        <td className="p-4">{formatDate(user.updatedAt)}</td>
                                         <td className="p-4 text-right space-x-4 relative">
                                             <button
                                                 type="button"
@@ -195,7 +216,7 @@ const AdminUsers = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => handleDeleteUser(user.id)}
-                                                className="text-gray-700 group"
+                                                className="text-gray-700 group pt-2"
                                             >
                                                 <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-red-600">
                                                     <FaTrash size={20} className="text-gray-700 group-hover:text-white" />
@@ -205,13 +226,13 @@ const AdminUsers = () => {
                                             {editingUserId === user.id && (
                                                 <div className="dropdown absolute right-0 mt-2 bg-white border p-4 rounded-xl shadow-lg z-10">
                                                     <h4 className="text-lg text-center font-semibold mb-4">Role</h4>
-                                                    {roles.map((role) => (
+                                                    {['Admin', 'User', 'Courier', 'Restaurant'].map((role) => (
                                                         <label key={role} className="flex items-center gap-3 mb-2 cursor-pointer">
                                                             <input
-                                                                type="radio"
-                                                                name={`role-${user.id}`}
+                                                                type="checkbox"
+                                                                name={`role-${user.id}-${role}`}
                                                                 value={role}
-                                                                checked={user.role === role}
+                                                                checked={user.role.includes(role)}
                                                                 onChange={() => handleRoleChange(user.id, role)}
                                                                 className="w-5 h-5 rounded-2xl accent-[var(--primary)]"
                                                             />
