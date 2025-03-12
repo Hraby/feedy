@@ -33,7 +33,7 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
                         </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/management/menu')}`}>
-                        <Link href="/management/restaurants" className="flex items-center">
+                        <Link href="/management/menu" className="flex items-center">
                             <FaUtensils className="mr-3" /> Menu
                         </Link>
                     </li>

@@ -182,24 +182,25 @@ const Checkout = () => {
                                 <hr className="my-4 border-t border-gray-200 shadow-sm" />
 
                                 <div className="p-2 text-gray-800 hover:bg-gray-100 rounded-2xl">
-                                    <div className="flex items-start justify-between">
-                                        <div>
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex-1 min-w-0">
                                             <p className="text-[var(--font)] font-bold">Poplatek za službu</p>
-                                            <p className="text-sm text-gray-500">Poplatek za službu pomáhá zlepšit služby feedy.</p>
+                                            <p className="text-sm text-gray-500 truncate">Poplatek za službu pomáhá zlepšit služby feedy.</p>
                                         </div>
-                                        <span className="text-[var(--primary)] text-lg">{serviceFee} Kč</span>
+                                        <span className="text-[var(--primary)] text-lg whitespace-nowrap">{serviceFee} Kč</span>
                                     </div>
                                 </div>
 
                                 <div className="p-2 text-gray-800 hover:bg-gray-100 rounded-2xl">
-                                    <div className="flex items-start justify-between">
-                                        <div>
+                                    <div className="flex items-start justify-between gap-4">
+                                        <div className="flex-1 min-w-0">
                                             <p className="text-[var(--font)] font-bold">Poplatek za dopravu</p>
-                                            <p className="text-sm text-gray-500">Poplatek za doručení na adresu: {activeAddress}.</p>
+                                            <p className="text-sm text-gray-500 truncate">Poplatek za doručení na adresu: {activeAddress}.</p>
                                         </div>
-                                        <span className="text-[var(--primary)] text-lg">{deliveryFee} Kč</span>
+                                        <span className="text-[var(--primary)] text-lg whitespace-nowrap">{deliveryFee} Kč</span>
                                     </div>
                                 </div>
+
 
                                 <div className="flex justify-between text-xl font-bold text-[var(--primary)] mt-5">
                                     <span>Celková cena</span>
