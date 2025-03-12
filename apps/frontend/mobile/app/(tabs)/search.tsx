@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const products = [
   { id: 1, name: "Makalu", description: "Zlín 123" },
@@ -17,9 +18,11 @@ const SearchScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton}
+              onPress={() => router.push('/explore')}
+              >
           <Ionicons name="arrow-back" size={24} color="#333" />
-        </View>
+        </TouchableOpacity>
         <TextInput
           style={styles.searchInput}
           placeholder="Hledat..."
