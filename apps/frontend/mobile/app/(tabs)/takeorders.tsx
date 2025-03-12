@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const orders = [
   { id: 1, name: "Pizza Hut", price: "350 Kč", items: "03 Items", distance: "Do 5 km" },
@@ -12,9 +13,6 @@ const OrderScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
-        </TouchableOpacity>
         <Text style={styles.header}>Příjem objednávek</Text>
       </View>
       {orders.map((order) => (
@@ -33,7 +31,8 @@ const OrderScreen = () => {
           </View>
           <View style={styles.buttonsBackground}>
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity style={styles.acceptButton}><Text style={styles.acceptText}>Přijmout</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.acceptButton}                     onPress={() => router.push('/driverdelivery')}
+              ><Text style={styles.acceptText}>Přijmout</Text></TouchableOpacity>
               <TouchableOpacity style={styles.cancelButton}><Text style={styles.cancelText}>Cancel</Text></TouchableOpacity>
             </View>
           </View>
@@ -60,12 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
     fontWeight: "400",
-  },
-  backButton: {
-    backgroundColor: "#EBEBEB",
-    padding: 8,
-    borderRadius: 20,
-    marginRight: 10,
+    marginTop: 10,
   },
   orderSection: {
     marginBottom: 20,

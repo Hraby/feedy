@@ -84,10 +84,10 @@ export default function CartScreen() {
       />
 
       <TouchableOpacity style={styles.orderButton}
-      onPress={() => router.push('/payment')}
+      onPress={() => router.push('/delivery')}
       >
         <Text style={styles.orderText}
-        >ZÁVAZNĚ OBJEDNAT - {totalPrice.toFixed(2)} Kč</Text>
+        >POKRAČOVAT NA PLATBU - {totalPrice.toFixed(2)} Kč</Text>
       </TouchableOpacity>
     </View>
   );
