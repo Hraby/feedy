@@ -21,9 +21,11 @@ const Profile = () => {
                         </div>
                         <h1 className="text-3xl font-bold text-gray-800">{user.name}</h1>
                         <div className="space-y-4">
-                            <span key={user.role} className={`px-3 py-1 rounded-xl text-white mr-1 ${user.role === 'Admin' ? 'bg-red-500' : user.role === 'Courier' ? 'bg-green-500' : user.role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}>
-                                {user.role}
-                            </span>
+                            {user.role.map((role) => (
+                                <span key={role} className={`px-3 py-1 rounded-xl text-white mr-1 ${role === 'Admin' ? 'bg-red-500' : role === 'Courier' ? 'bg-green-500' : role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}>
+                                    {role}
+                                </span>
+                            ))}
                         </div>
                     </div>
                 </div>

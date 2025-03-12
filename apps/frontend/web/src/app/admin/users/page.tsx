@@ -174,9 +174,11 @@ const AdminUsers = () => {
                                         <td className="p-4">{user.firstName}</td>
                                         <td className="p-4">{user.lastName}</td>
                                         <td className="p-4">
-                                            <span className={`px-3 py-1 rounded-xl text-white mr-1 ${user.role === 'Admin' ? 'bg-red-500' : 'bg-gray-500'}`}>
-                                                {user.role}
+                                        {user.role.map((role) => (
+                                            <span key={role} className={`px-3 py-1 rounded-xl text-white mr-1 ${role === 'Admin' ? 'bg-red-500' : role === 'Courier' ? 'bg-green-500' : role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}>
+                                                {role}
                                             </span>
+                                        ))}
                                         </td>
                                         <td className="p-4">{user.createdAt}</td>
                                         <td className="p-4">{user.updatedAt}</td>
