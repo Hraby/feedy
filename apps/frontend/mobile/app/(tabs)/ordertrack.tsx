@@ -10,9 +10,6 @@ const TrackOrder = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
-        <Ionicons name="arrow-back" size={24} color="#FFF" />
-      </TouchableOpacity>
 
       <Text style={styles.header}>Sledovat objednávku</Text>
 
@@ -53,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5F5F5",
   },
+  /*
   backButton: {
     position: 'absolute',
     top: 50,
@@ -62,6 +60,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     zIndex: 2,
   },
+  */
   header: {
     textAlign: "right",
     flex: 1,

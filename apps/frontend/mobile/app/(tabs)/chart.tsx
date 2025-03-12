@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { RectButton, Swipeable } from "react-native-gesture-handler";
+import { router } from 'expo-router';
 
 const { width } = Dimensions.get("window");
 
@@ -82,8 +83,11 @@ export default function CartScreen() {
         contentContainerStyle={{ paddingTop: 20 }}
       />
 
-      <TouchableOpacity style={styles.orderButton}>
-        <Text style={styles.orderText}>ZÁVAZNĚ OBJEDNAT - {totalPrice.toFixed(2)} Kč</Text>
+      <TouchableOpacity style={styles.orderButton}
+      onPress={() => router.push('/payment')}
+      >
+        <Text style={styles.orderText}
+        >ZÁVAZNĚ OBJEDNAT - {totalPrice.toFixed(2)} Kč</Text>
       </TouchableOpacity>
     </View>
   );
