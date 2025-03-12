@@ -24,7 +24,6 @@ export default function Navbar() {
   ]);
 
 
-
   type Notification = {
     id: number;
     title: string;
@@ -83,7 +82,7 @@ export default function Navbar() {
     <div className="pt-[96px]">
       <div className="p-4 fixed top-0 left-0 w-full z-50">
         <div className="container mx-auto flex items-center px-4">
-          <Link href="/">
+          <Link href="/menu">
             <div className="flex-shrink-0 text-white font-bold text-2xl bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] px-9 py- rounded-3xl mr-4 flex items-center h-[calc(48px+1rem)]">
               feedy.
             </div>

@@ -113,19 +113,19 @@ const ManagementOrders = () => {
             <Modal isOpen={modalOrderId !== null} onClose={closeModal}>
                 {modalType === 'accept' ? (
                     <>
-                        <h2 className="text-xl font-semibold mb-4 text-center">Přijetí objednávky</h2>
-                        <p className="text-gray-600 text-center mb-3">Opravdu si přejete tuto objednávku přijmout a připravit na vyzvednutí kurýrem?</p>
-                        <p className="text-red-600 mb-4 text-center">Tato akce nelze vrátit zpět!</p>
+                        <h2 className="text-xl font-semibold mb-4">Přijetí objednávky</h2>
+                        <p className="text-gray-600 mb-3">Opravdu si přejete tuto objednávku přijmout a připravit na vyzvednutí kurýrem?</p>
+                        <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
                     </>
                 ) : modalType === 'ready' ? (
                     <>
-                        <h2 className="text-xl font-semibold mb-4 text-center">Připraveno na vyzvednutí?</h2>
-                        <p className="text-gray-600 text-center">Opravdu si přejete tuto objednávku přenechat kurýrovi pro vyzvednutí?</p>
-                        <p className="text-gray-600 text-center mb-3">Kurýr bude informován o připravené objednávce.</p>
-                        <p className="text-red-600 mb-4 text-center">Tato akce nelze vrátit zpět!</p>
+                        <h2 className="text-xl font-semibold mb-4">Připraveno na vyzvednutí?</h2>
+                        <p className="text-gray-600">Opravdu si přejete tuto objednávku přenechat kurýrovi pro vyzvednutí?</p>
+                        <p className="text-gray-600 mb-3">Kurýr bude informován o připravené objednávce.</p>
+                        <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
                     </>
                 ) : null}
-                <div className="flex justify-center gap-2">
+                <div className="flex justify-end gap-2">
                     <button onClick={closeModal} className="px-4 py-2 bg-gray-200 text-[var(--font)] rounded-md hover:bg-gray-300">
                         Zrušit
                     </button>

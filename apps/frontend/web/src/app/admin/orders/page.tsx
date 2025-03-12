@@ -154,8 +154,9 @@ const AdminOrders = () => {
             </main>
 
             <Modal isOpen={isDeleteModalOpen} onClose={cancelDeleteOrder}>
-                <h2 className="text-lg font-semibold mb-2">Opravdu chcete odstranit objednávku?</h2>
-                <p className="text-gray-600 mb-4">Toto rozhodnutí nelze vrátit zpět.</p>
+                <h2 className="text-lg font-semibold mb-2">Odstranit objednávku</h2>
+                <p className="text-gray-600">Opravdu chcete odstranit tuto objednávku?</p>
+                <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={cancelDeleteOrder}

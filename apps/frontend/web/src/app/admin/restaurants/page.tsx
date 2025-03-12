@@ -142,8 +142,9 @@ const AdminRestaurants = () => {
             </main>
 
             <Modal isOpen={isDeleteModalOpen} onClose={cancelDeleteRestaurant}>
-                <h2 className="text-lg font-semibold mb-2">Opravdu chcete odstranit restauraci?</h2>
-                <p className="text-gray-600 mb-4">Toto rozhodnutí nelze vrátit zpět.</p>
+                <h2 className="text-lg font-semibold mb-2">Odstranit restauraci</h2>
+                <p className="text-gray-600">Opravdu chcete odstranit tuto restauraci?</p>
+                <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={cancelDeleteRestaurant}

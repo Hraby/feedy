@@ -84,8 +84,9 @@ export default function Menu() {
 
     return (
         <div>
+            <div className="flex flex-col min-h-screen">
             <NavbarSwitcher />
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto px-4 flex-grow">
                 <div className="overflow-x-auto sm:overflow-hidden">
                     <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 gap-4 text-center">
                         {[
@@ -149,11 +150,11 @@ export default function Menu() {
                 </div>
 
 
-                <h2 className="text-2xl font-bold mt-12">Co to bude dnes, {user.name}?</h2>
+                <h2 className="text-2xl font-bold pt-12">Co to bude dnes, {user.name}?</h2>
 
                 {filteredRestaurants.length === 0 ? (
                     <div className="flex justify-center flex-col items-center h-96">
-                        <p className="text-gray-500 text-xl">Pod tímto filtrem není aktuálně dostupná žádná restaurace.</p>
+                        <p className="text-gray-500 text-xl">Pod tímto filtrem aktuálně není dostupná žádná restaurace.</p>
                         <p className="text-gray-500 text-xl">Pokud chcete zobrazit kompletní nabídku, deaktivujte veškeré filtry.</p>
                     </div>
                 ) : (
@@ -184,6 +185,7 @@ export default function Menu() {
 
             </div>
             <Footer />
+            </div>
         </div>
     );
 }
