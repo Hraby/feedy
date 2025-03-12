@@ -18,7 +18,7 @@ const ManagementDashboard = () => {
                 <h2 className="text-4xl font-bold mb-2">Dashboard</h2>
                 <p className="text-gray-600 mb-8">Spravujte váš podnik z jednoho místa.</p>
 
-                <div className="grid grid-cols-4 gap-6">
+                <div className="grid grid-cols-4 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     <div className="bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] p-6 rounded-2xl text-white">
                         <p>Počet aktuálních objednávek:</p>
                         <h3 className="text-4xl font-bold">0</h3>

@@ -15,7 +15,7 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
 
     return (
         <aside className="w-60 bg-white p-6 shadow-md rounded-xl h-full">
-            <h1 className="text-xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] p-4 rounded-xl mb-8">feedy manage</h1>
+            <h1 className="text-xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] p-4 rounded-3xl mb-8">feedy manage</h1>
             <nav>
                 <h2 className="text-gray-400 uppercase text-sm mb-4">Menu</h2>
                 <ul className="space-y-4">

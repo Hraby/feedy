@@ -53,7 +53,7 @@ export default function AdminDashboard() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
                     <div className="bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] p-6 rounded-2xl text-white">
                         <p>Celkový počet objednávek:</p>
                         <h3 className="text-4xl font-bold">{loading ? '...' : data.activeOrders}</h3>

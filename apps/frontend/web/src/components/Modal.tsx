@@ -30,7 +30,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out" style={{ opacity: isOpen? 1: 0 }}>
       <div
-        className="bg-white rounded-2xl p-6 md:p-10 w-full max-w-lg relative transform transition-transform duration-300 ease-in-out"
+        className="bg-white rounded-2xl p-6 md:p-6 w-full max-w-xl relative transform transition-transform duration-300 ease-in-out"
         style={{ transform: isOpen? 'translateY(0)': 'translateY(-20px)' }}
         ref={modalRef}
       >
