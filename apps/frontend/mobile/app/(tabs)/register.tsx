@@ -1,6 +1,7 @@
 import { getBackgroundColorAsync } from 'expo-system-ui';
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, ImageBackground, Image, StyleSheet } from 'react-native';
+import { router } from 'expo-router';
 
 export default function RegistrationScreen() {
   return (
@@ -10,7 +11,11 @@ export default function RegistrationScreen() {
       </View>
       <View style={styles.tabs}>
         <Text style={styles.activeTab}>Registrace</Text>
+         <TouchableOpacity 
+                    onPress={() => router.push('/login')}
+                  >
         <Text style={styles.inactiveTab}>Přihlásit se</Text>
+        </TouchableOpacity>
       </View>
       <TextInput placeholder="Uživatelské jméno" style={styles.input} />
       <TextInput placeholder="E-mail" style={styles.input} keyboardType="email-address" />

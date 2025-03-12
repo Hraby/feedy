@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
+
 
 export default function DeliveryScreen() {
   const [deliveryMethod, setDeliveryMethod] = useState("door");
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton} onPress={() => router.push('/chart')}>
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
       
@@ -54,7 +56,8 @@ export default function DeliveryScreen() {
         <Text style={styles.totalPrice}>579,00 Kč</Text>
       </View>
       
-      <TouchableOpacity style={styles.payButton}>
+      <TouchableOpacity style={styles.payButton}       onPress={() => router.push('/payment')}
+      >
         <Text style={styles.payButtonText}>ZAPLATIT</Text>
       </TouchableOpacity>
     </View>

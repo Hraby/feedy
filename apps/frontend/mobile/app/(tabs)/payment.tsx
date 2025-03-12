@@ -1,12 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const PaymentSuccessScreen = ({ navigation }) => {
-  const handleTrackOrder = () => {
-    // Navigace nebo akce pro sledování objednávky
-    console.log("Sledovat objednávku");
-  };
 
   return (
     <View style={styles.container}>
@@ -17,7 +14,8 @@ const PaymentSuccessScreen = ({ navigation }) => {
       <Text style={styles.title}>Platba byla úspěšná</Text>
       <Text style={styles.subtitle}>Na objednávce se pracuje!</Text>
 
-      <TouchableOpacity style={styles.button} onPress={handleTrackOrder}>
+      <TouchableOpacity style={styles.button}
+      onPress={() => router.push('/ordertrack')}>
         <Text style={styles.buttonText}>SLEDOVAT OBJEDNÁVKU</Text>
       </TouchableOpacity>
     </View>
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    bottom: 10,
+    bottom: 95,
     left: 20,
     right: 20,
     backgroundColor: "#FF5500",
