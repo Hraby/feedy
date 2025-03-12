@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { WebView } from 'react-native-webview';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 
 const OrderScreen = () => {
   return (
@@ -13,10 +13,8 @@ const OrderScreen = () => {
         <Text style={styles.header}>Dovoz</Text>
       </View>
       <View style={styles.mapContainer}>
-        <WebView
-          source={{ uri: 'https://en.frame.mapy.cz/s/mapa' }}
-          style={styles.fullWidthMap}
-        />
+      <MapView style={styles.map}>
+      </MapView>
       </View>
       <View style={styles.deliveryInfo}>
         <Text style={styles.deliveryTimeLabel}>Odhadovaný čas</Text>
@@ -74,6 +72,9 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 20,
     marginRight: 10
+  },
+  map: {
+    flex: 1,
   },
   mapContainer: {
     height: 400,
