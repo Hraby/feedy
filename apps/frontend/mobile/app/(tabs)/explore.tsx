@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import { router } from 'expo-router';
 
 interface Category {
   id: string;
@@ -45,17 +46,17 @@ export default function TabTwoScreen() {
       </View>
 
       <View style={styles.rectangle}>
+        <TouchableOpacity 
+                    onPress={() => router.push('/search')}
+                  >
         <Text style={styles.rectangleText}>Na co máte chuť?</Text>
+        </TouchableOpacity>
       </View>
       
       <View style={styles.secondRectangle}>
         <Text style={styles.secondRectangleText}>Ochutnejte</Text>
         <Text style={styles.secondRectangleSubText}>Naše skvělé</Text>
         <Text style={styles.secondRectangleBoldText}>BURGERY</Text>
-        
-        <TouchableOpacity style={styles.menuButton}>
-          <Text style={styles.menuButtonText}>Otevřít nabídku</Text>
-        </TouchableOpacity>
         
         <Image source={require('@/assets/images/burgerAndChips.png')} style={styles.secondRectangleImage} />
       </View>
@@ -74,7 +75,9 @@ export default function TabTwoScreen() {
       <View style={styles.cardsScrollContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {categories.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.restaurantCard}>
+            <TouchableOpacity key={item.id} style={styles.restaurantCard}
+            onPress={() => router.push('/restaurantPage')}
+            >
               <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
               <View style={styles.restaurantInfo}>
                 <View style={styles.restaurantTitleContainer}>
@@ -108,7 +111,9 @@ export default function TabTwoScreen() {
        <View style={styles.cardsScrollContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {categories.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.restaurantCard}>
+            <TouchableOpacity key={item.id} style={styles.restaurantCard}
+            onPress={() => router.push('/restaurantPage')}
+            >
               <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
               <View style={styles.restaurantInfo}>
                 <View style={styles.restaurantTitleContainer}>
@@ -198,7 +203,7 @@ const styles = StyleSheet.create({
   },
   secondRectangle: {
     backgroundColor: '#FF5500',
-    paddingVertical: 95,
+    paddingVertical: 80,
     paddingHorizontal: 15,
     marginHorizontal: 15,
     marginTop: 30,
@@ -206,37 +211,37 @@ const styles = StyleSheet.create({
   },
   secondRectangleText: {
     color: '#fff',
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: '300',
     textAlign: 'left',
     position: 'absolute',
-    marginTop: 15,
+    marginTop: 20,
     marginLeft: 20,
   },
   secondRectangleSubText: {
-    color: '#fff',
-    fontSize: 28,
-    fontWeight: '300',
-    textAlign: 'left',
-    position: 'absolute',
-    marginTop: 45,
-    marginLeft: 20,
-  },
-  secondRectangleBoldText: {
     color: '#fff',
     fontSize: 32,
     fontWeight: '300',
     textAlign: 'left',
     position: 'absolute',
-    marginTop: 75,
+    marginTop: 55,
+    marginLeft: 20,
+  },
+  secondRectangleBoldText: {
+    color: '#fff',
+    fontSize: 45,
+    fontWeight: '500',
+    textAlign: 'left',
+    position: 'absolute',
+    marginTop: 90,
     marginLeft: 20,
   },
   secondRectangleImage: {
-    width: 200,
-    height: 220,
+    width: 180,
+    height: 200,
     position: 'absolute',
     right: -15,
-    top: 0,
+    top: -5,
   },
   menuButton: {
     backgroundColor: '#EBEBEB',
