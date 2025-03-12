@@ -39,7 +39,9 @@ export default function AddressScreen() {
               <Text style={styles.addressType}>{item.type}</Text>
               <Text style={styles.addressText}>{item.address}</Text>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity 
+                  onPress={() => router.push('/adressform')}
+                  >
               <Ionicons name="create-outline" size={20} color="#FF5500" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -48,7 +50,9 @@ export default function AddressScreen() {
           </View>
         )}
       />
-      <TouchableOpacity style={styles.addButton}>
+      <TouchableOpacity style={styles.addButton}
+                                onPress={() => router.push('/adressform')}
+      >
         <Text style={styles.addButtonText}>PŘIDAT NOVOU ADRESU</Text>
       </TouchableOpacity>
     </View>
@@ -112,6 +116,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
     marginTop: 20,
+    marginBottom: 75,
   },
   addButtonText: {
     color: "#FFF",

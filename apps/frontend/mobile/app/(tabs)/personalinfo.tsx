@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
+import { router } from 'expo-router';
 
 const PersonalInfoForm = () => {
   const [firstName, setFirstName] = useState('Miroslav');
@@ -9,7 +10,9 @@ const PersonalInfoForm = () => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton}>
+      <TouchableOpacity style={styles.backButton}
+                          onPress={() => router.push('/usermenu')}
+      >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
 
