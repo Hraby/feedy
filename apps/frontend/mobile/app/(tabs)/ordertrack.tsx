@@ -1,12 +1,11 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { WebView } from "react-native-webview";
+import MapView, { Marker, Polyline } from 'react-native-maps';
 
 const { height } = Dimensions.get("window");
 
 const TrackOrder = () => {
-  const mapUri = "https://en.mapy.cz/";
 
   return (
     <View style={styles.container}>
@@ -15,7 +14,8 @@ const TrackOrder = () => {
 
       <View style={styles.mapWrapper}>
         <View style={styles.mapContainer}>
-          <WebView source={{ uri: mapUri }} style={styles.map} />
+        <MapView style={styles.map}>
+        </MapView>
         </View>
       </View>
 
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   mapContainer: {
-    height: height * 0.35,
+    height: height * 0.53,
   },
   map: {
     flex: 1,
