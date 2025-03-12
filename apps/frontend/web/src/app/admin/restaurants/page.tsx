@@ -1,59 +1,100 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AdminSidebar from '@/components/AdminSidebar';
 import { useState, useEffect } from 'react';
 import { FaTrash, FaCog } from 'react-icons/fa';
 import Modal from '@/components/Modal';
+import { deleteRestaurant, fetchRestaurants, updateRestaurantStatus } from '@/app/actions/adminAction';
+import { useAuth } from '@/contexts/AuthProvider';
 
 interface Restaurant {
-    id: number;
+    id: string;
     name: string;
-    owner: string;
+    description: string;
+    phone: string;
     status: 'Pending' | 'Approved' | 'Rejected';
+    owner: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        email: string;
+        role: string[];
+    };
 }
 
 const statuses = ['Pending', 'Approved', 'Rejected'] as const;
 
-const initialRestaurants: Restaurant[] = [
-    { id: 1, name: 'Pizzerie Bella', owner: 'Jan Novák', status: 'Pending' },
-    { id: 2, name: 'Sushi House', owner: 'Michaela Veselá', status: 'Approved' },
-    { id: 3, name: 'Healthy Bites', owner: 'Petr Malý', status: 'Rejected' },
-];
-
 const AdminRestaurants = () => {
     const pathname = usePathname();
-    const [restaurants, setRestaurants] = useState<Restaurant[]>(initialRestaurants);
-    const [editingRestaurantId, setEditingRestaurantId] = useState<number | null>(null);
-    const [deleteRestaurantId, setDeleteRestaurantId] = useState<number | null>(null);
+    const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+    const [editingRestaurantId, setEditingRestaurantId] = useState<string | null>(null);
+    const [deleteRestaurantId, setDeleteRestaurantId] = useState<string | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);
+
+    const {accessToken} = useAuth();
 
     useEffect(() => {
-            const handleClickOutside = (event: MouseEvent) => {
-                if ((event.target as HTMLElement).closest('.dropdown') === null) {
-                    setEditingRestaurantId(null);
-                }
-            };
-    
-            document.addEventListener('mousedown', handleClickOutside);
-            return () => document.removeEventListener('mousedown', handleClickOutside);
-        }, []);
+        const loadRestaurants = async () => {
+            if (!accessToken) return;
+            
+            setLoading(true);
+            try {
+                const data = await fetchRestaurants(accessToken);
+                setRestaurants(data);
+                setError(null);
+            } catch (err) {
+                console.error('Failed to load users:', err);
+                setError('Nepodařilo se načíst uživatele');
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const handleStatusChange = (id: number, status: Restaurant['status']) => {
-        setRestaurants(restaurants.map(restaurant => (
-            restaurant.id === id ? { ...restaurant, status } : restaurant
-        )));
+        loadRestaurants();
+    }, [accessToken]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if ((event.target as HTMLElement).closest('.dropdown') === null) {
+                setEditingRestaurantId(null);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const handleStatusChange = async (id: string, status: Restaurant['status']) => {
+        if (!accessToken) return;
+
+        try {
+            await updateRestaurantStatus(id, accessToken, status);
+            setRestaurants(restaurants.map(restaurant =>
+                restaurant.id === id ? { ...restaurant, status } : restaurant
+            ));
+            setEditingRestaurantId(null);
+        } catch (error) {
+            console.error('Chyba při aktualizaci statusu:', error);
+        }
     };
 
-    const handleDeleteRestaurant = (id: number) => {
+    const handleDeleteRestaurant = (id: string) => {
         setDeleteRestaurantId(id);
         setIsDeleteModalOpen(true);
     };
 
-    const confirmDeleteRestaurant = () => {
-        if (deleteRestaurantId !== null) {
+    const confirmDeleteRestaurant = async () => {
+        if (!deleteRestaurantId || !accessToken) return;
+
+        try {
+            await deleteRestaurant(deleteRestaurantId, accessToken);
             setRestaurants(restaurants.filter(restaurant => restaurant.id !== deleteRestaurantId));
+        } catch (error) {
+            console.error('Chyba při mazání restaurace:', error);
+        } finally {
             setDeleteRestaurantId(null);
             setIsDeleteModalOpen(false);
         }
@@ -75,6 +116,15 @@ const AdminRestaurants = () => {
                 <p className="text-gray-600 mb-8">Spravujte restaurace z jednoho místa.</p>
 
                 <div className="bg-white p-6 rounded-3xl shadow-sm">
+                {loading ? (
+                        <div className="text-center py-8">
+                            <p>Načítání restaurací...</p>
+                        </div>
+                    ) : error ? (
+                        <div className="text-center py-8 text-red-500">
+                            <p>{error}</p>
+                        </div>
+                    ) : (
                     <table className="w-full text-left">
                         <thead className="sticky top-0 bg-white z-20">
                             <tr className="border-b">
@@ -88,9 +138,9 @@ const AdminRestaurants = () => {
                         <tbody>
                             {restaurants.map((restaurant) => (
                                 <tr key={restaurant.id} className="border-b hover:bg-gray-100">
-                                    <td className="p-4">#{restaurant.id}</td>
+                                    <td className="p-4">{restaurant.id}</td>
                                     <td className="p-4">{restaurant.name}</td>
-                                    <td className="p-4">{restaurant.owner}</td>
+                                    <td className="p-4">{restaurant.owner.firstName} {restaurant.owner.lastName}</td>
                                     <td className="p-4">
                                         <span className={`px-3 py-1 rounded-xl text-white ${restaurant.status === 'Pending' ? 'bg-gray-500' : restaurant.status === 'Approved' ? 'bg-green-500' : 'bg-red-500'}`}>
                                             {restaurant.status}
@@ -138,6 +188,7 @@ const AdminRestaurants = () => {
                             ))}
                         </tbody>
                     </table>
+                    )}
                 </div>
             </main>
 

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/commo
 import { RestaurantsService } from "./restaurants.service";
 import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { Auth, GetUser } from "src/auth/decorators";
-import { Role } from "@prisma/client";
+import { RestaurantStatus, Role } from "@prisma/client";
 import { User } from "src/users/entities/user.entity";
 import { CreateRestaurantDto } from "./dto/create-restaurant.dto";
 import { UpdateRestaurantDto } from "./dto/update-restaurant.dto";
@@ -55,8 +55,8 @@ export class RestaurantsController {
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 500, description: "Server error"})
     @Auth(Role.Admin)
-    async approveRestaurant(@Param("id") id: string, @Body() body: { approve: boolean }) {
-        return this.restaurantsService.approveRestaurant(id, body.approve);
+    async approveRestaurant(@Param("id") id: string, @Body() body: { status: RestaurantStatus }) {
+        return this.restaurantsService.approveRestaurant(id, body.status);
     }
 
     @Patch(":id")
@@ -64,7 +64,7 @@ export class RestaurantsController {
     @ApiResponse({ status: 200, description: "Updated successfully" })
     @ApiResponse({ status: 403, description: "Forbidden" })
     @ApiResponse({ status: 404, description: "Restaurant not found" })
-    @Auth(Role.Restaurant)
+    @Auth(Role.Restaurant, Role.Admin)
     async updateRestaurant(@Param("id") id: string, @Body() dto: UpdateRestaurantDto, @GetUser() user: User) {
         return this.restaurantsService.updateRestaurant(id, dto, user);
     }

@@ -1,5 +1,5 @@
 import { Body, Controller, Param, Patch, Post, UseGuards, Get } from '@nestjs/common';
-import { CourierStatus, Role } from '@prisma/client';
+import { ApprovalStatus, CourierStatus, Role } from '@prisma/client';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { CreateCourierDto } from './dto/create-courier.dto';
 import { CourierService } from './courier.service';
@@ -37,8 +37,8 @@ export class CourierController {
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 500, description: "Server error"})
     @Auth(Role.Admin)
-    async approveCourier(@Param("id") id: string, @Body() body: { approve: boolean }) {
-        return this.courierService.approveCourier(id, body.approve);
+    async approveCourier(@Param("id") id: string, @Body() body: { status: ApprovalStatus }) {
+        return this.courierService.approveCourier(id, body.status);
     }
 
     @Patch(":id/status")

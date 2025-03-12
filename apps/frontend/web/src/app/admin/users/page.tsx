@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import AdminSidebar from '@/components/AdminSidebar';
 import { useState, useEffect } from 'react';
@@ -18,9 +17,9 @@ const roles = ['Admin', 'User'] as const;
 const AdminUsers = () => {
     const pathname = usePathname();
     const [users, setUsers] = useState<User[]>([]);
-    const [editingUserId, setEditingUserId] = useState<number | null>(null);
+    const [editingUserId, setEditingUserId] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const [deleteUserId, setDeleteUserId] = useState<number | null>(null);
+    const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -86,34 +85,34 @@ const AdminUsers = () => {
         return `${day}-${month}-${year}`;
     };    
 
-    const handleRoleChange = async (id: number, role: string) => {
+    const handleRoleChange = async (id: string, role: string) => {
         const user = users.find(u => u.id === id);
         if (!user || !accessToken) return;
     
-        let updatedRoles: string[] = [...user.role];
+        let updatedRoles = [...user.role];
     
-        if (updatedRoles.includes(role)) {
-            updatedRoles = updatedRoles.filter(r => r !== role);
-        } else {
+        if (role === 'Admin' || role === 'Customer') {
+            updatedRoles = updatedRoles.filter(r => r !== 'Admin' && r !== 'Customer');
             updatedRoles.push(role);
-    
-            if (updatedRoles.includes('Admin') && updatedRoles.includes('User')) {
-                alert('Uživatel nemůže mít roli Admin a User současně!');
-                return;
-            }
+        } else {
+            updatedRoles = updatedRoles.includes(role)
+                ? updatedRoles.filter(r => r !== role)
+                : [...updatedRoles, role];
         }
+    
         setUsers(users.map(u => u.id === id ? { ...u, role: updatedRoles } : u));
     
         try {
             await updateUserRole(id, updatedRoles, accessToken);
         } catch (err) {
             console.error('Role update failed:', err);
-            setUsers(prevUsers => [...prevUsers]);
             alert('Nepodařilo se aktualizovat roli uživatele.');
         }
-    };    
+    };
+    
+      
 
-    const handleDeleteUser = (id: number) => {
+    const handleDeleteUser = (id: string) => {
         setDeleteUserId(id);
         setIsDeleteModalOpen(true);
     };
@@ -226,7 +225,7 @@ const AdminUsers = () => {
                                             {editingUserId === user.id && (
                                                 <div className="dropdown absolute right-0 mt-2 bg-white border p-4 rounded-xl shadow-lg z-10">
                                                     <h4 className="text-lg text-center font-semibold mb-4">Role</h4>
-                                                    {['Admin', 'User', 'Courier', 'Restaurant'].map((role) => (
+                                                    {['Admin', 'Customer', 'Courier', 'Restaurant'].map((role) => (
                                                         <label key={role} className="flex items-center gap-3 mb-2 cursor-pointer">
                                                             <input
                                                                 type="checkbox"

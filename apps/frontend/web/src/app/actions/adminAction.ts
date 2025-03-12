@@ -10,7 +10,7 @@ interface DashboardData {
 }
 
 export interface User {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     role: string[];
@@ -42,7 +42,7 @@ export async function fetchOrders(accessToken: string) {
         throw new Error("Orders fetch failed");
     }
 
-    return response.json();
+    return await response.json();
 }
 
 export async function fetchCouriers(accessToken: string){
@@ -63,7 +63,7 @@ export async function fetchCouriers(accessToken: string){
         throw new Error("Couriers fetch failed");
     }
 
-    return response.json();
+    return await response.json();
 }
 
 export async function fetchRestaurants(accessToken: string) {
@@ -84,7 +84,7 @@ export async function fetchRestaurants(accessToken: string) {
         throw new Error("Restaurants fetch failed");
     }
 
-    return response.json();
+    return await response.json();
 }
 
 export async function fetchUsers(accessToken: string) {
@@ -105,7 +105,7 @@ export async function fetchUsers(accessToken: string) {
         throw new Error("Users fetch failed");
     }
 
-    return response.json();
+    return await response.json();
 }
 
 export async function fetchDashboardData(accessToken: string): Promise<DashboardData> {
@@ -133,10 +133,12 @@ export async function fetchDashboardData(accessToken: string): Promise<Dashboard
     }
 }
 
-export async function updateUser(userId: number, userData: UserUpdateData, accessToken: string): Promise<User> {
+export async function updateUser(userId: string, userData: UserUpdateData, accessToken: string): Promise<User> {
     if (!accessToken) {
         throw new Error("Access token not found");
     }
+
+    console.log(userData)
   
     const response = await fetch(`${BACKEND_URL}user/${userId}`, {
         method: "PATCH",
@@ -152,10 +154,10 @@ export async function updateUser(userId: number, userData: UserUpdateData, acces
         throw new Error("User update failed");
     }
   
-    return response.json();
+    return await response.json();
 }
 
-export async function deleteUser(userId: number, accessToken: string): Promise<User> {
+export async function deleteUser(userId: string, accessToken: string): Promise<User> {
     if (!accessToken) {
         throw new Error("Access token not found");
     }
@@ -173,10 +175,75 @@ export async function deleteUser(userId: number, accessToken: string): Promise<U
         throw new Error("User delete failed");
     }
   
-    return response.json();
+    return await response.json();
 }
 
-export async function updateUserRole(userId: number, role: string[], accessToken: string): Promise<User> {
+export async function deleteRestaurant(restaurantId: string, accessToken: string){
+    if(!accessToken){
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}restaurant/${restaurantId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+    });
+  
+    if (!response.ok) {
+        throw new Error("Restaurant delete failed");
+    }
+  
+    return await response.json();
+}
+
+export async function updateRestaurantStatus(restaurantId: string, accessToken: string, status: string){
+    if(!accessToken){
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}restaurant/${restaurantId}/approve`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({status: status}),
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Restaurant update status failed");
+    }
+  
+    return await response.json();
+}
+
+export async function updateCourierStatus(courierId: string, accessToken:string, status: string){
+    if(!accessToken){
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}courier/${courierId}/approve`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({status: status}),
+        credentials: "include",
+    });
+    
+    if (!response.ok) {
+        throw new Error("Restaurant update status failed");
+    }
+  
+    return await response.json();
+}
+
+export async function updateUserRole(userId: string, role: string[], accessToken: string): Promise<User> {
     return updateUser(userId, {role}, accessToken);
 }
 

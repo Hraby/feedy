@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourierDto } from './dto/create-courier.dto';
-import { CourierStatus, User } from '@prisma/client';
+import { ApprovalStatus, CourierStatus, Role, User } from '@prisma/client';
 
 @Injectable()
 export class CourierService {
@@ -39,11 +39,53 @@ export class CourierService {
         }
     }
 
-    async approveCourier(id: string, approve: boolean){
+    async approveCourier(id: string, status: ApprovalStatus){
+        const courier = await this.prisma.courierProfile.findFirst({
+            where: {
+                id: id
+            },
+            include: {
+                user: true
+            }
+        })
+
+        const user = await this.prisma.user.findUnique({
+            where: { id: courier.user.id },
+            select: { role: true },
+        });
+          
+        if (!user) {
+            throw new Error("User not found");
+        }
+          
+        if (status == "Approved") {
+            if (!user.role.includes(Role.Courier)) {
+                await this.prisma.user.update({
+                    where: { id: courier.user.id },
+                    data: {
+                        role: {
+                            push: Role.Courier,
+                        },
+                    },
+                });
+            }
+            } else {
+            if (user.role.includes(Role.Courier)) {
+                await this.prisma.user.update({
+                    where: { id: courier.user.id },
+                    data: {
+                        role: {
+                            set: user.role.filter(r => r !== Role.Courier),
+                        },
+                    },
+                });
+            }
+        }
+
         return this.prisma.courierProfile.update({
             where: { id },
             data: {
-              approvalStatus: approve ? "Approved" : "Rejected",
+                approvalStatus: status,
             },
         });
     }

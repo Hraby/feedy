@@ -1,14 +1,15 @@
 'use client';
 
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import AdminSidebar from '@/components/AdminSidebar';
-import { useState, useEffect } from 'react';
-import { FaTrash, FaCog } from 'react-icons/fa';
 import Modal from '@/components/Modal';
+import { FaCog } from 'react-icons/fa';
+import { fetchCouriers, fetchRestaurants, updateCourierStatus, updateRestaurantStatus } from '@/app/actions/adminAction';
+import { useAuth } from '@/contexts/AuthProvider';
 
 interface Request {
-  id: number;
+  id: string;
   type: 'restaurant' | 'courier';
   firstName: string;
   lastName: string;
@@ -16,22 +17,71 @@ interface Request {
   details: Record<string, any>;
 }
 
-const statuses = ['Pending', 'Approved', 'Rejected'] as const;
-
-const initialRequests: Request[] = [
-  { id: 1, type: 'courier', firstName: 'Jan', lastName: 'Novák', status: 'Pending', details: { Email: 'jan@example.com', City: 'Brno' } },
-  { id: 2, type: 'restaurant', firstName: 'Michaela', lastName: 'Veselá', status: 'Approved', details: { Name: 'Kavárna Slunce', City: 'Praha' } },
-];
-
 const AdminRequests = () => {
   const pathname = usePathname();
-  const [requests, setRequests] = useState<Request[]>(initialRequests);
+  const [requests, setRequests] = useState<Request[]>([]);
   const [viewingRequest, setViewingRequest] = useState<Request | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleStatusChange = (id: number, status: Request['status']) => {
-    setRequests(requests.map(request => (
-      request.id === id ? { ...request, status } : request
-    )));
+  const {accessToken} = useAuth();
+
+  useEffect(() => {
+    const loadRequests = async () => {
+      setLoading(true);
+      if (!accessToken) return;
+
+      try {
+        const [couriers, restaurants] = await Promise.all([
+          fetchCouriers(accessToken),
+          fetchRestaurants(accessToken),
+        ]);
+
+        const filteredRequests: Request[] = [
+          ...couriers
+            .filter((c: any) => c.approvalStatus === 'Pending')
+            .map((c: any) => ({
+              id: c.id,
+              type: 'courier',
+              firstName: c.user.firstName,
+              lastName: c.user.lastName,
+              status: c.approvalStatus,
+              details: { Email: c.user.email, City: c.city },
+            })),
+          ...restaurants
+            .filter((r: any) => r.status === 'Pending')
+            .map((r: any) => ({
+              id: r.id,
+              type: 'restaurant',
+              firstName: r.owner.firstName,
+              lastName: r.owner.lastName,
+              status: r.status,
+              details: { Name: r.name, Phone: r.phone },
+            })),
+        ];
+        setRequests(filteredRequests);
+        setLoading(false)
+      } catch (error) {
+        console.error('Chyba při načítání žádostí:', error);
+      }
+    };
+
+    loadRequests();
+  }, [accessToken]);
+
+  const handleStatusChange = async (id: string, type: 'restaurant' | 'courier', status: 'Approved' | 'Rejected') => {
+    if (!accessToken) return;
+    try {
+      if (type === 'restaurant') {
+        await updateRestaurantStatus(id, accessToken, status);
+      } else {
+        await updateCourierStatus(id, accessToken, status);
+      }
+
+      setRequests(requests.filter(request => request.id !== id));
+      setViewingRequest(null);
+    } catch (error) {
+      console.error('Chyba při aktualizaci statusu:', error);
+    }
   };
 
   return (
@@ -45,48 +95,56 @@ const AdminRequests = () => {
         <p className="text-gray-600 mb-8">Spravujte žádosti o spolupráci.</p>
 
         <div className="bg-white p-6 rounded-3xl shadow-sm">
+        {loading ? (
+          <div className="text-center py-8">
+              <p>Načítání žádostí...</p>
+          </div>
+        ) : (
           <table className="w-full text-left">
             <thead className="sticky top-0 bg-white z-20">
               <tr className="border-b">
                 <th className="p-4">ID</th>
-                <th className="p-4">Typ žádosti</th>
+                <th className="p-4">Typ</th>
                 <th className="p-4">Jméno</th>
                 <th className="p-4">Příjmení</th>
-                <th className="p-4">Status</th>
                 <th className="p-4 text-right">Akce</th>
               </tr>
             </thead>
             <tbody>
-              {requests.map((request) => (
-                <tr key={request.id} className="border-b hover:bg-gray-100">
-                  <td className="p-4">#{request.id}</td>
-                  <td className="p-4">
-                    <span className={`px-3 py-1 rounded-xl text-white ${request.type === 'restaurant' ? 'bg-purple-500' : 'bg-green-500'}`}>
-                      {request.type === 'restaurant' ? 'Restaurace' : 'Kurýr'}
-                    </span>
-                  </td>
-                  <td className="p-4">{request.firstName}</td>
-                  <td className="p-4">{request.lastName}</td>
-                  <td className="p-4">
-                    <span className={`px-3 py-1 rounded-xl text-white ${request.status === 'Pending' ? 'bg-gray-500' : request.status === 'Approved' ? 'bg-green-500' : 'bg-red-500'}`}>
-                      {request.status}
-                    </span>
-                  </td>
-                  <td className="p-4 text-right space-x-4">
-                    <button
-                      type="button"
-                      onClick={() => setViewingRequest(request)}
-                      className="text-gray-700 group"
-                    >
-                      <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-blue-600">
-                        <FaCog size={20} className="text-gray-700 group-hover:text-white" />
-                      </div>
-                    </button>
+              {requests.length > 0 ? (
+                requests.map((request) => (
+                  <tr key={request.id} className="border-b hover:bg-gray-100">
+                    <td className="p-4">{request.id}</td>
+                    <td className="p-4">
+                      <span className={`px-3 py-1 rounded-xl text-white ${request.type === 'restaurant' ? 'bg-purple-500' : 'bg-green-500'}`}>
+                        {request.type === 'restaurant' ? 'Restaurace' : 'Kurýr'}
+                      </span>
+                    </td>
+                    <td className="p-4">{request.firstName}</td>
+                    <td className="p-4">{request.lastName}</td>
+                    <td className="p-4 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setViewingRequest(request)}
+                        className="text-gray-700 group"
+                      >
+                        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-blue-600">
+                          <FaCog size={20} className="text-gray-700 group-hover:text-white" />
+                        </div>
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="p-6 text-center text-gray-500">
+                    Žádné nové žádosti k vyřízení.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
+        )}
         </div>
       </main>
 
@@ -101,16 +159,18 @@ const AdminRequests = () => {
             ))}
             <div className="flex justify-end gap-2 mt-4">
               <button
-                onClick={() => handleStatusChange(viewingRequest.id, 'Rejected')}
+                onClick={() => handleStatusChange(viewingRequest.id, viewingRequest.type, 'Rejected')}
                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                disabled={loading}
               >
-                Zamítnout
+                {loading ? 'Zamítání...' : 'Zamítnout'}
               </button>
               <button
-                onClick={() => handleStatusChange(viewingRequest.id, 'Approved')}
+                onClick={() => handleStatusChange(viewingRequest.id, viewingRequest.type, 'Approved')}
                 className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+                disabled={loading}
               >
-                Schválit
+                {loading ? 'Schvalování...' : 'Schválit'}
               </button>
             </div>
           </div>
