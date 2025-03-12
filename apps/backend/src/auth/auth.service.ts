@@ -32,7 +32,7 @@ export class AuthService {
                     password: hashedPassword,
                     firstName,
                     lastName,
-                    role: "Customer",
+                    role: ["Customer"],
                 }
             });
 
@@ -88,19 +88,19 @@ export class AuthService {
         };
     }
 
-    async generateTokens(payload: { id: string, firstName: string, lastName: string, role: string }) {
+    async generateTokens(payload: { id: string, firstName: string, lastName: string, role: string[] }) {
         const [accessToken, refreshToken] = await Promise.all([
             this.jwtService.signAsync({
                 id: payload.id,
                 name: payload.firstName+" "+payload.lastName,
-                role: payload.role
+                role: payload.role.join(",")
             }, {
                 secret: this.configService.get("JWT_SECRET_KEY"), expiresIn: "15m"
             }),
             this.jwtService.signAsync({
                 id: payload.id,
                 name: payload.firstName+" "+payload.lastName,
-                role: payload.role
+                role: payload.role.join(",")
             }, {
                 secret: this.configService.get("JWT_REFRESH_SECRET"), expiresIn: "7d"
             }),
@@ -119,7 +119,7 @@ export class AuthService {
             }
         });
         if (!user) throw new UnauthorizedException("User not found!");
-        const currentUser = { id: user.id, name: user.firstName+" "+user.lastName, role: user.role };
+        const currentUser = { id: user.id, name: user.firstName+" "+user.lastName, role: user.role.join(",") };
         return currentUser;
     }
 
@@ -139,7 +139,7 @@ export class AuthService {
         if (!refreshTokenMatched)
           throw new UnauthorizedException("Invalid Refresh Token!");
 
-        const currentUser = { id: user.id, name: user.firstName+" "+user.lastName, role: user.role };
+        const currentUser = { id: user.id, name: user.firstName+" "+user.lastName, role: user.role.join(",") };
         return currentUser;
     }
 

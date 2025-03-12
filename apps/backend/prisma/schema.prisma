@@ -17,7 +17,7 @@ model User {
   firstName String
   lastName  String
 
-  role Role @default(Customer)
+  role Role[] @default([Customer])
 
   customerProfile   CustomerProfile?
   courierProfile    CourierProfile?

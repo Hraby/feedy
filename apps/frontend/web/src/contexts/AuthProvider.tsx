@@ -5,7 +5,7 @@ import { useAccessToken } from "@/hooks/useAuth";
 export interface User {
     id: string;
     name: string;
-    role: string;
+    role: string[];
     email: string;
 }
 

@@ -1,5 +1,5 @@
 import { Role } from "@prisma/client";
-import { IsEmail, IsOptional, IsString, Matches, MinLength } from "class-validator";
+import { IsArray, IsEmail, IsEnum, IsOptional, IsString, Matches, MinLength } from "class-validator";
 
 export class CreateUserDto {
     @IsString()
@@ -16,7 +16,7 @@ export class CreateUserDto {
     @Matches(/^(?=.*[0-9])/, { message: "Password must contain at least one number" })
     password: string;
 
-    @IsString()
-    @IsOptional()
-    role?: Role;
+    @IsArray()
+    @IsEnum(Role, { each: true })
+    role?: Role[];
 }

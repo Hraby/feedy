@@ -63,7 +63,11 @@ export class OrdersService {
 
     async assignCourier(id: string) {
         const availableCourier = await this.prisma.user.findFirst({
-            where: { role: "Courier" },
+            where: { 
+                role: {
+                    has: "Courier"
+                }
+            },
         });
 
         if (!availableCourier) throw new NotFoundException("No couriers available");
