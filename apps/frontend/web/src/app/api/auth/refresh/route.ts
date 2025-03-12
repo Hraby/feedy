@@ -6,7 +6,6 @@ import { jwtVerify } from "jose";
 
 export async function GET() {
     const session = await getSession();
-    console.log("Session refresh token:", session);
 
     if (!session) {
         return NextResponse.json({ error: "No session found" }, { status: 401 });

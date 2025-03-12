@@ -78,7 +78,7 @@ const AdminRestaurants = () => {
                     <table className="w-full text-left">
                         <thead className="sticky top-0 bg-white z-20">
                             <tr className="border-b">
-                                <th className="p-4">ID restaurace</th>
+                                <th className="p-4">ID</th>
                                 <th className="p-4">Název</th>
                                 <th className="p-4">Majitel</th>
                                 <th className="p-4">Status</th>
@@ -87,7 +87,7 @@ const AdminRestaurants = () => {
                         </thead>
                         <tbody>
                             {restaurants.map((restaurant) => (
-                                <tr key={restaurant.id} className="border-b">
+                                <tr key={restaurant.id} className="border-b hover:bg-gray-100">
                                     <td className="p-4">#{restaurant.id}</td>
                                     <td className="p-4">{restaurant.name}</td>
                                     <td className="p-4">{restaurant.owner}</td>
@@ -142,8 +142,9 @@ const AdminRestaurants = () => {
             </main>
 
             <Modal isOpen={isDeleteModalOpen} onClose={cancelDeleteRestaurant}>
-                <h2 className="text-lg font-semibold mb-2">Opravdu chcete odstranit restauraci?</h2>
-                <p className="text-gray-600 mb-4">Toto rozhodnutí nelze vrátit zpět.</p>
+                <h2 className="text-lg font-semibold mb-2">Odstranit restauraci</h2>
+                <p className="text-gray-600">Opravdu chcete odstranit tuto restauraci?</p>
+                <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={cancelDeleteRestaurant}

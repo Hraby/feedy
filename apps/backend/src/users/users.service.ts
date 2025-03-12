@@ -18,7 +18,16 @@ export class UsersService {
   ) {}
 
   async updateUser(id: string, updateUserDto: UpdateUserDto, user: User){
-    if (id !== user["id"] && user.role !== "Admin") throw new UnauthorizedException("Unauthorized");
+    if (id !== user.id && !user.role.includes("Admin")) {
+      throw new UnauthorizedException("Unauthorized");
+    }
+
+    if (updateUserDto.role) {
+      const invalidRoles = updateUserDto.role.filter(r => !Object.values(Role).includes(r));
+      if (invalidRoles.length > 0) {
+          throw new BadRequestException(`Invalid roles: ${invalidRoles.join(", ")}`);
+      }
+    }
 
     if (updateUserDto.password) {
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
@@ -27,7 +36,10 @@ export class UsersService {
     try{
       const updatedUser = await this.prisma.user.update({
         where: { id },
-        data: updateUserDto,
+        data: {
+          ...updateUserDto,
+          role: updateUserDto.role ? { set: updateUserDto.role } : undefined
+        },
       });
       return updatedUser;
     } catch(error){
@@ -40,7 +52,7 @@ export class UsersService {
   }
   
   async createUser(data: CreateUserDto) {
-    if (data.role && !Role[data.role]) throw new BadRequestException("Invalid role");
+    if (data.role && !data.role.every(role => Object.values(Role).includes(role))) throw new BadRequestException("Invalid role");
 
     data.email = data.email.toLowerCase().trim();
 
@@ -73,7 +85,7 @@ export class UsersService {
   }
 
   async findById(id: string, user: User){
-    if (id !== user["id"] && user.role !== "Admin") throw new UnauthorizedException("Unauthorized");
+    if (id !== user["id"] && !user.role.includes("Admin")) throw new UnauthorizedException("Unauthorized");
 
     return this.prisma.user.findUnique({
       where: { id },
@@ -90,7 +102,7 @@ export class UsersService {
   }
 
   async deleteUser(id: string, user: User){
-    if (id !== user["id"] && user.role !== "Admin") throw new UnauthorizedException("Unauthorized");
+    if (id !== user["id"] && !user.role.includes("Admin")) throw new UnauthorizedException("Unauthorized");
 
     try {
       await this.prisma.user.delete({

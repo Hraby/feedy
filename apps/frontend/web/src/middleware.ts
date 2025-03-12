@@ -8,9 +8,11 @@ export default async function middleware(req: NextRequest) {
     if (!session)
       return NextResponse.redirect(new URL("/login", req.nextUrl));
   
-    if (typeof session.user.role !== "string" || session.user.role !== "Admin") {
+    if (!Array.isArray(session.user.role) || !session.user.role.includes("Admin")) {
       return NextResponse.redirect(new URL("/", req.nextUrl));
     }
+    
+    
   }
 
   if(req.nextUrl.pathname.startsWith("/profile")){

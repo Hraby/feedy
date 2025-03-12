@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FaChartBar, FaUser, FaShoppingCart, FaUtensils, FaClipboardList, FaCog, FaHome, FaSignOutAlt } from 'react-icons/fa';
+import { signOut } from "@/app/actions/auth";
 
 interface AdminSidebarProps {
     activePath: string;
@@ -8,9 +9,13 @@ interface AdminSidebarProps {
 export default function AdminSidebar({ activePath }: AdminSidebarProps) {
     const isActive = (path: string) => activePath === path ? 'text-[var(--primary)] font-semibold' : 'text-gray-600';
 
+    const handleSignOut = async () => {
+        await signOut();
+    }
+
     return (
-        <aside className="w-64 bg-white p-6 shadow-md rounded-xl h-full">
-            <h1 className="text-2xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] p-4 rounded-xl mb-8">feedy admin</h1>
+        <aside className="w-60 bg-white p-6 shadow-md rounded-xl h-full">
+            <h1 className="text-xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] p-4 rounded-xl mb-8">feedy admin</h1>
             <nav>
                 <h2 className="text-gray-400 uppercase text-sm mb-4">Menu</h2>
                 <ul className="space-y-4">
@@ -38,7 +43,9 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
                         </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/admin/requests')}`}>
-                        <FaClipboardList className="mr-3" /> Žádosti
+                        <Link href="/admin/requests" className="flex items-center">
+                            <FaClipboardList className="mr-3" /> Žádosti
+                        </Link>
                     </li>
                 </ul>
 
@@ -52,8 +59,10 @@ export default function AdminSidebar({ activePath }: AdminSidebarProps) {
                             <FaHome className="mr-3" /> Hlavní stránka
                         </Link>
                     </li>
-                    <li className="flex items-center text-gray-600">
-                        <FaSignOutAlt className="mr-3" /> Odhlásit se
+                    <li className="flex items-center text-red-600">
+                        <p onClick={handleSignOut} className="flex items-center cursor-pointer">
+                            <FaSignOutAlt className="mr-3" /> Odhlásit se
+                        </p>
                     </li>
                 </ul>
             </nav>

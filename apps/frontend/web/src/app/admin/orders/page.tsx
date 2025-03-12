@@ -86,7 +86,7 @@ const AdminOrders = () => {
                     <table className="w-full text-left">
                         <thead className="sticky top-0 bg-white z-20">
                             <tr className="border-b">
-                                <th className="p-4">ID objednávky</th>
+                                <th className="p-4">ID</th>
                                 <th className="p-4 w-1/6">Položky</th>
                                 <th className="p-4 w-1/6">Status</th>
                                 <th className="p-4">Datum a čas</th>
@@ -97,7 +97,7 @@ const AdminOrders = () => {
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order.id} className="border-b">
+                                <tr key={order.id} className="border-b hover:bg-gray-100">
                                     <td className="p-4">#{order.id}</td>
                                     <td className="p-4">{order.items.join(', ')}</td>
                                     <td className="p-4">
@@ -154,8 +154,9 @@ const AdminOrders = () => {
             </main>
 
             <Modal isOpen={isDeleteModalOpen} onClose={cancelDeleteOrder}>
-                <h2 className="text-lg font-semibold mb-2">Opravdu chcete odstranit objednávku?</h2>
-                <p className="text-gray-600 mb-4">Toto rozhodnutí nelze vrátit zpět.</p>
+                <h2 className="text-lg font-semibold mb-2">Odstranit objednávku</h2>
+                <p className="text-gray-600">Opravdu chcete odstranit tuto objednávku?</p>
+                <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={cancelDeleteOrder}

@@ -17,7 +17,7 @@ model User {
   firstName String
   lastName  String
 
-  role Role @default(Customer)
+  role Role[] @default([Customer])
 
   customerProfile   CustomerProfile?
   courierProfile    CourierProfile?
@@ -177,15 +177,25 @@ model OrderItem {
 }
 
 model Address {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   street  String
-  city    String
-  zipCode String
-  country String
+  city    City
+  zipCode String?
+  country Country @default(Czechia)
 
   userId String? @unique
   user   User?   @relation(fields: [userId], references: [id])
 
   restaurantId String?     @unique
   restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+}
+
+enum Country {
+  Czechia
+}
+
+enum City {
+  Zlín
+  Praha
+  Brno
 }

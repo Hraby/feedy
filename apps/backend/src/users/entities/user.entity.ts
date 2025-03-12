@@ -1,5 +1,6 @@
 import { ObjectType, Field, ID, Resolver, Query, Directive } from "@nestjs/graphql";
 import { UsersService } from "../users.service";
+import { Role } from "@prisma/client";
 
 @ObjectType()
 export class User {
@@ -19,7 +20,7 @@ export class User {
   password?: string;
 
   @Field()
-  role: string;
+  role: Role[];
 
   @Field()
   refreshToken?: string;

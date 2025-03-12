@@ -6,6 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
+import { City, Country } from '@prisma/client';
 
 @Injectable()
 export class RestaurantsService {
@@ -21,6 +22,25 @@ export class RestaurantsService {
     }
 
     async requestRestaurant(dto: CreateRestaurantDto, user: User) {
+      const restaurantProfile = await this.prisma.restaurantProfile.findUnique({
+          where: {
+              userId: user.id
+          }
+      });
+
+      let restaurantProfileId: string;
+      if (!restaurantProfile) {
+          const newProfile = await this.prisma.restaurantProfile.create({
+              data: {
+                  userId: user.id,
+                  city: dto.address.city,
+              }
+          });
+          restaurantProfileId = newProfile.id;
+      } else {
+          restaurantProfileId = restaurantProfile.id;
+      }
+
       return this.prisma.restaurant.create({
           data: {
               name: dto.name,
@@ -28,12 +48,13 @@ export class RestaurantsService {
               phone: dto.phone,
               ownerId: user.id,
               status: "Pending",
+              restaurantProfileId: restaurantProfileId,
               address: {
                   create: {
                       street: dto.address.street,
-                      city: dto.address.city,
+                      city: dto.address.city as City,
                       zipCode: dto.address.zipCode,
-                      country: dto.address.country,
+                      country: dto.address.country as Country,
                   },
               },
           },

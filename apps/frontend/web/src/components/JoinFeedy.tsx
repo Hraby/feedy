@@ -4,6 +4,7 @@ import Image from "next/image";
 import Modal from "@/components/Modal";
 import CourierForm from "@/components/CourierForm";
 import RestaurantForm from "@/components/RestaurantForm";
+import { useAuth } from "@/contexts/AuthProvider";
 
 const JoinFeedy = () => {
   const [openModal, setOpenModal] = useState<"courier" | "restaurant" | null>(null);
