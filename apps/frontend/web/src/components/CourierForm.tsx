@@ -79,7 +79,7 @@ export default function CourierForm() {
         const trimmedValue = value.slice(0, 20);
 
         setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
-      };
+    };
 
     if (!user) {
         return (
@@ -113,6 +113,8 @@ export default function CourierForm() {
             <p className="text-center text-gray-600">
                 Předtím, než přijmete Vaši první objednávku, sdělte nám několik základních informací:
             </p>
+
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
             <div className="space-y-4 px-4">
                 <input
@@ -148,10 +150,10 @@ export default function CourierForm() {
 
                 <select name="courierLanguage" className="input-field" onChange={handleChange} required value={formData.courierLanguage}>
                     <option value="" disabled hidden>Vyberte jazyk</option>
-                    <option value="čeština">Čeština</option>
-                    <option value="slovenština">Slovenština</option>
-                    <option value="angličtina">Angličtina</option>
-                    <option value="němčina">Němčina</option>
+                    <option value="Czech">Čeština</option>
+                    <option value="Slovak">Slovenština</option>
+                    <option value="English">Angličtina</option>
+                    <option value="German">Němčina</option>
                 </select>
 
                 <div className="flex space-x-4">
@@ -187,30 +189,19 @@ export default function CourierForm() {
                     />
                 </div>
 
-                <input 
-                    type="tel" 
-                    name="courierPhone" 
-                    placeholder="Telefonní číslo (vč. předvolby)" 
-                    className="input-field" 
-                    required 
-                    value={formData.courierPhone || ''}
-                    onChange={validatePhoneInput}
-                    inputMode="tel"
-                />
-
-                <select name="courierCity" className="input-field" onChange={handleChange} required value={formData.courierCity}>
-                    <option value="" disabled hidden>Vyberte město</option>
+                <select name="courierCity" className="input-field" onChange={handleChange} required defaultValue={formData.courierCity}>
+                    <option value="" disabled>Vyberte město</option>
                     <option value="Praha">Praha</option>
                     <option value="Brno">Brno</option>
                     <option value="Zlín">Zlín</option>
                 </select>
 
                 <select name="courierVehicle" className="input-field" onChange={handleChange} required value={formData.courierVehicle}>
-                    <option value="" disabled hidden>Vyberte dopravní prostředek</option>
-                    <option value="kolo">Kolo</option>
-                    <option value="elektrokolo">Elektrokolo</option>
-                    <option value="auto">Auto</option>
-                    <option value="elektronický skútr">Elektronický skútr</option>
+                    <option value="" disabled>Vyberte dopravní prostředek</option>
+                    <option value="Bicycle">Kolo</option>
+                    <option value="ElectricBicycle">Elektrokolo</option>
+                    <option value="Car">Auto</option>
+                    <option value="ElectricScooter">Elektronický skútr</option>
                 </select>
             </div>
 

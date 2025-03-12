@@ -104,8 +104,13 @@ export default function RestaurantForm() {
                     </select>
 
                     <input type="text" name="restaurantAddress" placeholder="Adresa" className="input-field" onChange={handleChange} defaultValue={formData.restaurantAddress} required />
-                    <input type="text" name="restaurantCity" placeholder="Město" className="input-field" onChange={handleChange} defaultValue={formData.restaurantCity} required />
-
+                    
+                    <select name="restaurantCity" className="input-field" onChange={handleChange} required value={formData.restaurantCity}>
+                        <option value="" disabled>Vyberte město</option>
+                        <option value="Praha">Praha</option>
+                        <option value="Brno">Brno</option>
+                        <option value="Zlín">Zlín</option>
+                    </select>
                     <input type="text" name="restaurantOwnerName" placeholder="Jméno" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerName")} defaultValue={formData.restaurantOwnerName} required />
                     <input type="text" name="restaurantOwnerSurname" placeholder="Příjmení" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerSurname")} defaultValue={formData.restaurantOwnerSurname} required />
                     <input type="email" name="restaurantOwnerEmail" placeholder="Email" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerEmail")} defaultValue={formData.restaurantOwnerEmail} required />

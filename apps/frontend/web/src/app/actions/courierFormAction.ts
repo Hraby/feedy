@@ -5,20 +5,18 @@ import { BACKEND_URL } from "@/lib/constants";
 import { getSession } from "@/lib/session";
 
 export default async function courierFormAction(_: any, formData: FormData): Promise<string | undefined> {
+    const year = formData.get("courierBirthYear");
+    const month = formData.get("courierBirthMonth");
+    const day = formData.get("courierBirthDay")
     const session = await getSession();
     const data = {
-        name: formData.get("restaurantName"),
-        description: formData.get("restaurantDescription"),
-        phone: formData.get("restaurantOwnerPhone"),
-        address: {
-            street: formData.get("restaurantAddress"),
-            city: formData.get("restaurantCity"),
-            country: "CZ",
-            zipCode: "",
-        },
+        city: formData.get("courierCity"),
+        vehicle: formData.get("courierVehicle"),
+        dateBirth: new Date(`${year}-${month}-${day}`),
+        language: formData.get("courierLanguage"),
     };
 
-    const response = await fetch(`${BACKEND_URL}/courier/request`, {
+    const response = await fetch(`${BACKEND_URL}courier/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

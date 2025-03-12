@@ -13,7 +13,7 @@ export default async function restaurantFormAction(_: any, formData: FormData): 
         address: {
             street: formData.get("restaurantAddress"),
             city: formData.get("restaurantCity"),
-            country: "CZ",
+            country: "Czechia",
             zipCode: "",
         },
     };
@@ -29,8 +29,6 @@ export default async function restaurantFormAction(_: any, formData: FormData): 
     });
 
     const json = await response.json();
-
-    console.log(json);
 
     if (response.ok) {
         redirect("/");

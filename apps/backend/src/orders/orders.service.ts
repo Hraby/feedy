@@ -1,8 +1,7 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { User } from 'src/users/entities/user.entity';
 import { OrderStatus } from '@prisma/client';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -14,9 +13,14 @@ export class OrdersService {
         private readonly eventEmitter: EventEmitter2,
       ) {}
 
-      async getOrders() {
+    async getOrders(status?: string) {
+        const statusArray = status ? status.split(',') as OrderStatus[] : undefined;
+
         return this.prisma.order.findMany({
-            include: { CustomerProfile: true, restaurant: true, CourierProfile: true }
+            where: {
+                status: statusArray ? { in: statusArray } : undefined,
+            },
+            orderBy: { updatedAt: "desc" },
         });
     }
 
