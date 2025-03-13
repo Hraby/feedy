@@ -6,7 +6,7 @@ import { User } from 'src/users/entities/user.entity';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
-import { City, Country, RestaurantStatus, Role } from '@prisma/client';
+import { Category, City, Country, RestaurantStatus, Role } from '@prisma/client';
 
 @Injectable()
 export class RestaurantsService {
@@ -43,6 +43,8 @@ export class RestaurantsService {
             restaurantProfileId = restaurantProfile.id;
         }
 
+        const categories = dto.category.map((cat) => cat as Category);
+
         return this.prisma.restaurant.create({
             data: {
                 name: dto.name,
@@ -51,6 +53,7 @@ export class RestaurantsService {
                 ownerId: user.id,
                 status: "Pending",
                 restaurantProfileId: restaurantProfileId,
+                category: categories,
                 address: {
                     create: {
                         street: dto.address.street,

@@ -5,11 +5,13 @@ import { BACKEND_URL } from "@/lib/constants";
 import { getSession } from "@/lib/session";
 
 export default async function restaurantFormAction(_: any, formData: FormData): Promise<string | undefined> {
+    console.log(formData.getAll("restaurantCategory"))
     const session = await getSession();
     const data = {
         name: formData.get("restaurantName"),
         description: formData.get("restaurantDescription"),
         phone: formData.get("restaurantOwnerPhone"),
+        category: formData.getAll("restaurantCategory"),
         address: {
             street: formData.get("restaurantAddress"),
             city: formData.get("restaurantCity"),

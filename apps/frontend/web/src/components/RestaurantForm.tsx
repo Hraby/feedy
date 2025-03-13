@@ -17,6 +17,7 @@ export default function RestaurantForm() {
         restaurantDescription: "",
         restaurantAddress: "",
         restaurantCity: "",
+        restaurantCategory: [] as string[],
         restaurantOwnerName: "",
         restaurantOwnerSurname: "",
         restaurantOwnerEmail: "",
@@ -36,8 +37,15 @@ export default function RestaurantForm() {
     }, [user]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value, multiple, selectedOptions } = e.target as HTMLSelectElement;
+    
+        setFormData({
+            ...formData,
+            [name]: multiple ? Array.from(selectedOptions, option => option.value) : value,
+        });
+
     };
+    
 
     const isFieldDisabled = (fieldName: string) => {
         if (!user || !user.name || !user.email) return false;
@@ -111,6 +119,33 @@ export default function RestaurantForm() {
                         <option value="Brno">Brno</option>
                         <option value="Zlín">Zlín</option>
                     </select>
+
+                    <div className="flex flex-wrap gap-2">
+                    {["Burger", "Kuřecí", "Pizza", "Čína", "Snídaně", "Sushi", "Salát", "Sladké", "Slané"].map((category) => (
+                        <label key={category} className="flex items-center space-x-2 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                name="restaurantCategory"
+                                value={category}
+                                checked={formData.restaurantCategory.includes(category)}
+                                onChange={(e) => {
+                                const { value, checked } = e.target;
+                                setFormData((prevData) => ({
+                                    ...prevData,
+                                    restaurantCategory: checked
+                                    ? [...prevData.restaurantCategory, value]
+                                    : prevData.restaurantCategory.filter((c) => c !== value),
+                                }));
+                                }}
+                                className="hidden"
+                            />
+                            <div className={`px-4 py-2 border rounded-lg ${formData.restaurantCategory.includes(category) ? "bg-orange-500 text-white" : "bg-gray-200 text-black"}`}>
+                                {category}
+                            </div>
+                        </label>
+                    ))}
+                    </div>
+
                     <input type="text" name="restaurantOwnerName" placeholder="Jméno" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerName")} defaultValue={formData.restaurantOwnerName} required />
                     <input type="text" name="restaurantOwnerSurname" placeholder="Příjmení" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerSurname")} defaultValue={formData.restaurantOwnerSurname} required />
                     <input type="email" name="restaurantOwnerEmail" placeholder="Email" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerEmail")} defaultValue={formData.restaurantOwnerEmail} required />

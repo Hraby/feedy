@@ -29,7 +29,7 @@ export async function fetchOrders(accessToken: string) {
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}order`, {
+    const response = await fetch(`${BACKEND_URL}/order`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -50,7 +50,7 @@ export async function fetchCouriers(accessToken: string){
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}courier`, {
+    const response = await fetch(`${BACKEND_URL}/courier`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export async function fetchRestaurants(accessToken: string) {
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}restaurant`, {
+    const response = await fetch(`${BACKEND_URL}/restaurant`, {
         method: "GET",
         headers: {
         "Content-Type": "application/json",
@@ -92,7 +92,7 @@ export async function fetchUsers(accessToken: string) {
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}user`, {
+    const response = await fetch(`${BACKEND_URL}/user`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -140,7 +140,7 @@ export async function updateUser(userId: string, userData: UserUpdateData, acces
 
     console.log(userData)
   
-    const response = await fetch(`${BACKEND_URL}user/${userId}`, {
+    const response = await fetch(`${BACKEND_URL}/user/${userId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -162,7 +162,7 @@ export async function deleteUser(userId: string, accessToken: string): Promise<U
         throw new Error("Access token not found");
     }
   
-    const response = await fetch(`${BACKEND_URL}user/${userId}`, {
+    const response = await fetch(`${BACKEND_URL}/user/${userId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -183,7 +183,7 @@ export async function deleteRestaurant(restaurantId: string, accessToken: string
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}restaurant/${restaurantId}`, {
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}`, {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
@@ -204,7 +204,7 @@ export async function updateRestaurantStatus(restaurantId: string, accessToken: 
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}restaurant/${restaurantId}/approve`, {
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/approve`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",
@@ -226,7 +226,7 @@ export async function updateCourierStatus(courierId: string, accessToken:string,
         throw new Error("Access token not found");
     }
 
-    const response = await fetch(`${BACKEND_URL}courier/${courierId}/approve`, {
+    const response = await fetch(`${BACKEND_URL}/courier/${courierId}/approve`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

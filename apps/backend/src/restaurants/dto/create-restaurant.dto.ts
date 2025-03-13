@@ -1,6 +1,7 @@
-import { IsString, IsOptional, IsPhoneNumber, ValidateNested } from "class-validator";
+import { IsString, IsOptional, IsPhoneNumber, ValidateNested, isString, IsArray } from "class-validator";
 import { Type } from "class-transformer";
 import { AddressDto } from "./address.dto";
+import { Category } from "@prisma/client";
 
 export class CreateRestaurantDto {
   @IsString()
@@ -9,6 +10,10 @@ export class CreateRestaurantDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  @IsOptional()
+  @IsArray()
+  category?: Category[];
 
   @IsPhoneNumber("CZ")
   phone: string;

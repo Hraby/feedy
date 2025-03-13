@@ -45,7 +45,7 @@ const AdminRequests = () => {
               firstName: c.user.firstName,
               lastName: c.user.lastName,
               status: c.approvalStatus,
-              details: { Email: c.user.email, City: c.city },
+              details: { Email: c.user.email, Město: c.city, Vehicle: c.vehicle, DateBirth: c.dateBirth },
             })),
           ...restaurants
             .filter((r: any) => r.status === 'Pending')
@@ -55,7 +55,7 @@ const AdminRequests = () => {
               firstName: r.owner.firstName,
               lastName: r.owner.lastName,
               status: r.status,
-              details: { Name: r.name, Phone: r.phone },
+              details: { Name: r.name, Description: r.description, Phone: r.phone, Category: r.category.join(", ")},
             })),
         ];
         setRequests(filteredRequests);
