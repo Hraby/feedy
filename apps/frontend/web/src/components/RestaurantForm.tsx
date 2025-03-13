@@ -139,7 +139,7 @@ export default function RestaurantForm() {
                                 }}
                                 className="hidden"
                             />
-                            <div className={`px-4 py-2 border rounded-lg ${formData.restaurantCategory.includes(category) ? "bg-orange-500 text-white" : "bg-gray-200 text-black"}`}>
+                            <div className={`px-4 py-2 border rounded-2xl ${formData.restaurantCategory.includes(category) ? "bg-[var(--primary)] text-white" : "bg-gray-200 text-black"}`}>
                                 {category}
                             </div>
                         </label>
