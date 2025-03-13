@@ -98,7 +98,7 @@ export class RestaurantsService {
                     where: { id: restaurant.owner.id },
                     data: {
                         role: {
-                        push: Role.Restaurant,
+                            push: Role.Restaurant,
                         },
                     },
                 });
@@ -109,7 +109,7 @@ export class RestaurantsService {
                     where: { id: restaurant.owner.id },
                     data: {
                         role: {
-                        set: user.role.filter(r => r !== Role.Restaurant),
+                            set: user.role.filter(r => r !== Role.Restaurant),
                         },
                     },
                 });
@@ -125,127 +125,147 @@ export class RestaurantsService {
     }
 
     async updateRestaurant(id: string, dto: UpdateRestaurantDto, user: User) {
-      const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
+        const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
 
-      if (!restaurant) {
-          throw new NotFoundException("Restaurant not found");
-      }
+        if (!restaurant) {
+            throw new NotFoundException("Restaurant not found");
+        }
 
-      if (restaurant.ownerId !== user.id || !user.role.includes("Admin")) {
-          throw new ForbiddenException("You are not the owner of this restaurant");
-      }
+        if (restaurant.ownerId !== user.id || !user.role.includes("Admin")) {
+            throw new ForbiddenException("You are not the owner of this restaurant");
+        }
 
-      return this.prisma.restaurant.update({
-          where: { id },
-          data: { ...dto },
-      });
+        return this.prisma.restaurant.update({
+            where: { id },
+            data: { ...dto },
+        });
     }
 
     async deleteRestaurant(id: string) {
-      const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
+        const restaurant = await this.prisma.restaurant.findUnique({ where: { id }, include: {owner: true} });
 
-      if (!restaurant) {
-          throw new NotFoundException("Restaurant not found");
-      }
+        if (!restaurant) {
+            throw new NotFoundException("Restaurant not found");
+        }
 
-      return this.prisma.restaurant.delete({
-          where: { id },
-      });
+
+        const user = await this.prisma.user.findUnique({
+            where: { id: restaurant.owner.id },
+            select: { role: true },
+        });
+          
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        if (user.role.includes(Role.Restaurant)) {
+            await this.prisma.user.update({
+                where: { id: restaurant.owner.id },
+                data: {
+                    role: {
+                        set: user.role.filter(r => r !== Role.Restaurant),
+                    },
+                },
+            });
+        }
+
+        return this.prisma.restaurant.delete({
+            where: { id },
+        });
     }
 
     async getRestaurantMenu(id: string){
-      const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
+        const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
 
-      if (!restaurant) {
-          throw new NotFoundException("Restaurant not found");
-      }
+        if (!restaurant) {
+            throw new NotFoundException("Restaurant not found");
+        }
 
-      return this.prisma.restaurant.findUnique({
-          where: { id },
-          include: { menuItems: true, address: true },
-      });
+        return this.prisma.restaurant.findUnique({
+            where: { id },
+            include: { menuItems: true, address: true },
+        });
     }
 
     async createMenuItem(restaurantId: string, dto: CreateMenuItemDto, user: User) {
-      const restaurant = await this.prisma.restaurant.findUnique({
-          where: { id: restaurantId },
-      });
+        const restaurant = await this.prisma.restaurant.findUnique({
+            where: { id: restaurantId },
+        });
 
-      if (!restaurant) {
-          throw new NotFoundException("Restaurant not found");
-      }
+        if (!restaurant) {
+            throw new NotFoundException("Restaurant not found");
+        }
 
-      if (restaurant.ownerId !== user.id) {
-          throw new ForbiddenException("You are not the owner of this restaurant");
-      }
+        if (restaurant.ownerId !== user.id) {
+            throw new ForbiddenException("You are not the owner of this restaurant");
+        }
 
-      return this.prisma.menuItem.create({
-        data: {
-            name: dto.name,
-            description: dto.description,
-            price: dto.price,
-            imageUrl: dto.imageUrl,
-            restaurantId: restaurant.id,
-        },
-      });
+        return this.prisma.menuItem.create({
+            data: {
+                name: dto.name,
+                description: dto.description,
+                price: dto.price,
+                imageUrl: dto.imageUrl,
+                restaurantId: restaurant.id,
+            },
+        });
     }
 
     async updateMenuItem(restaurantId: string, menuItemId: string, dto: UpdateMenuItemDto, user: User) {
-      const restaurant = await this.prisma.restaurant.findUnique({
-          where: { id: restaurantId },
-      });
+        const restaurant = await this.prisma.restaurant.findUnique({
+            where: { id: restaurantId },
+        });
 
-      if (!restaurant) {
-          throw new NotFoundException("Restaurant not found");
-      }
+        if (!restaurant) {
+            throw new NotFoundException("Restaurant not found");
+        }
 
-      if (restaurant.ownerId !== user.id) {
-          throw new ForbiddenException("You are not the owner of this restaurant");
-      }
+        if (restaurant.ownerId !== user.id) {
+            throw new ForbiddenException("You are not the owner of this restaurant");
+        }
 
-      const menuItem = await this.prisma.menuItem.findUnique({
-          where: { id: menuItemId },
-      });
+        const menuItem = await this.prisma.menuItem.findUnique({
+            where: { id: menuItemId },
+        });
 
-      if (!menuItem) {
-          throw new NotFoundException("Menu item not found");
-      }
+        if (!menuItem) {
+            throw new NotFoundException("Menu item not found");
+        }
 
-      return this.prisma.menuItem.update({
-          where: { id: menuItemId },
-          data: {
-              name: dto.name,
-              description: dto.description,
-              price: dto.price,
-              imageUrl: dto.imageUrl,
-          },
-      });
+        return this.prisma.menuItem.update({
+            where: { id: menuItemId },
+            data: {
+                name: dto.name,
+                description: dto.description,
+                price: dto.price,
+                imageUrl: dto.imageUrl,
+            },
+        });
     }
 
     async deleteMenuItem(restaurantId: string, menuItemId: string, user: User) {
-      const restaurant = await this.prisma.restaurant.findUnique({
-          where: { id: restaurantId },
-      });
+        const restaurant = await this.prisma.restaurant.findUnique({
+            where: { id: restaurantId },
+        });
 
-      if (!restaurant) {
-          throw new NotFoundException("Restaurant not found");
-      }
+        if (!restaurant) {
+            throw new NotFoundException("Restaurant not found");
+        }
 
-      if (restaurant.ownerId !== user.id) {
-          throw new ForbiddenException("You are not the owner of this restaurant");
-      }
+        if (restaurant.ownerId !== user.id) {
+            throw new ForbiddenException("You are not the owner of this restaurant");
+        }
 
-      const menuItem = await this.prisma.menuItem.findUnique({
-          where: { id: menuItemId },
-      });
+        const menuItem = await this.prisma.menuItem.findUnique({
+            where: { id: menuItemId },
+        });
 
-      if (!menuItem) {
-          throw new NotFoundException("Menu item not found");
-      }
+        if (!menuItem) {
+            throw new NotFoundException("Menu item not found");
+        }
 
-      return this.prisma.menuItem.delete({
-          where: { id: menuItemId },
-      });
+        return this.prisma.menuItem.delete({
+            where: { id: menuItemId },
+        });
     }
-
 }
