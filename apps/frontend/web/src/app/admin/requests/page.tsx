@@ -7,6 +7,7 @@ import Modal from '@/components/Modal';
 import { FaCog } from 'react-icons/fa';
 import { fetchCouriers, fetchRestaurants, updateCourierStatus, updateRestaurantStatus } from '@/app/actions/adminAction';
 import { useAuth } from '@/contexts/AuthProvider';
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
 interface Request {
   id: string;
@@ -77,12 +78,38 @@ const AdminRequests = () => {
         await updateCourierStatus(id, accessToken, status);
       }
 
+      const updatedRequest = requests.find(request => request.id === id);
+      if (updatedRequest) {
+        toast.success(`Žádost ${updatedRequest.firstName} ${updatedRequest.lastName} byla ${status === 'Approved' ? 'schválena' : 'zamítnuta'}!`, {
+          position: 'bottom-right',
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          theme: 'colored',
+          transition: Slide,
+        });
+      }
+
       setRequests(requests.filter(request => request.id !== id));
       setViewingRequest(null);
     } catch (error) {
       console.error('Chyba při aktualizaci statusu:', error);
+      toast.error('Nepodařilo se aktualizovat status žádosti.', {
+        position: 'bottom-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        theme: 'colored',
+        transition: Slide,
+      });
     }
   };
+
+  
 
   return (
     <div className="flex bg-gray-100 min-h-screen">
@@ -147,6 +174,8 @@ const AdminRequests = () => {
         )}
         </div>
       </main>
+
+      <ToastContainer/>
 
       <Modal isOpen={!!viewingRequest} onClose={() => setViewingRequest(null)}>
         {viewingRequest && (

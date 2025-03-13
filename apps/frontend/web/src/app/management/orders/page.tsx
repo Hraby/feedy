@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import Modal from '@/components/Modal';
 import ManagementSidebar from '@/components/ManagementSidebar';
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
 interface Order {
     id: number;
@@ -43,6 +44,7 @@ const ManagementOrders = () => {
                 prevOrders.map((order) => {
                     if (order.id === modalOrderId) {
                         if (modalType === 'accept') {
+
                             return { ...order, status: 'Preparing', new: false };
                         } else if (modalType === 'ready') {
                             return null;
@@ -109,6 +111,8 @@ const ManagementOrders = () => {
                     </table>
                 </div>
             </main>
+
+            <ToastContainer/>
 
             <Modal isOpen={modalOrderId !== null} onClose={closeModal}>
                 {modalType === 'accept' ? (

@@ -4,6 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import registerAction from "./registerAction";
 import { useActionState } from "react";
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
 export default function Register() {
     const [formData, setFormData] = useState({
@@ -33,6 +34,20 @@ export default function Register() {
             <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md">
                 <h2 className="text-4xl font-bold text-center text-gray-800">Registrace</h2>
                 <p className="text-center text-gray-600 mt-2">Zaregistrujte se na platformě Feedy</p>
+
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mt-4" role="alert">
+                        <strong className="font-bold">Chyba!</strong>
+                        <span className="block sm:inline ml-1">{error}</span>
+                    </div>
+                )}
+
+                {errorText && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mt-4" role="alert">
+                        <strong className="font-bold">Chyba!</strong>
+                        <span className="block sm:inline ml-1">{errorText}</span>
+                    </div>
+                )}
 
                 <form action={formAction} className="mt-6 space-y-4">
                     <input
@@ -100,8 +115,6 @@ export default function Register() {
                         </button>
                     </div>
 
-                    {errorText || error && <p className="text-red-500 text-md text-center">{errorText || error}</p>}
-
                     <div className="flex items-center space-x-2 mt-4 px-2">
                         <input
                             type="checkbox"
@@ -133,6 +146,7 @@ export default function Register() {
                     </Link>
                 </p>
             </div>
+            <ToastContainer />
 
             <style jsx>{`
                 .input-field {

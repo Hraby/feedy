@@ -6,6 +6,7 @@ import { FaPlus } from 'react-icons/fa';
 import ManagementSidebar from '@/components/ManagementSidebar';
 import Modal from '@/components/Modal';
 import ItemForm from '@/components/ItemForm';
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
 interface MenuItem {
     id: number;
@@ -56,8 +57,30 @@ const ManagementMenu = () => {
     const handleSaveItem = (item: MenuItem) => {
         if (item.id) {
             setMenuItems((prev) => prev.map((i) => (i.id === item.id ? item : i)));
+            toast.success(`Položka ${item.name} byla úspěšně upravena!`, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         } else {
             setMenuItems((prev) => [...prev, { ...item, id: Date.now() }]);
+            toast.success(`Položka ${item.name} byla úspěšně přidána!`, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         }
         setIsModalOpen(false);
     };
@@ -65,7 +88,19 @@ const ManagementMenu = () => {
     const handleDeleteItem = (id: number) => {
         setMenuItems((prev) => prev.filter((item) => item.id !== id));
         setIsModalOpen(false);
+        toast.success(`Položka ${id} byla úspěšně smazána!`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+        });
     };
+
 
     return (
         <div className="flex bg-gray-100 min-h-screen">
@@ -114,6 +149,7 @@ const ManagementMenu = () => {
                         <p className="text-base sm:text-lg">Přidat novou položku</p>
                     </div>
                 </div>
+                <ToastContainer />
 
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                     <ItemForm item={selectedItem} onSave={handleSaveItem} onDelete={handleDeleteItem} />

@@ -15,6 +15,13 @@ export default function Login() {
                 <h2 className="text-4xl font-bold text-center text-gray-800">Přihlášení</h2>
                 <p className="text-center text-gray-600 mt-2">Přihlaste se ke svému účtu</p>
 
+                {error && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl relative mt-4" role="alert">
+                        <strong className="font-bold">Chyba!</strong>
+                        <span className="block sm:inline ml-1">{error}</span>
+                    </div>
+                )}
+
                 <form action={formAction} className="mt-6 space-y-4">
                     <input
                         type="email"
@@ -47,7 +54,6 @@ export default function Login() {
                         Přihlásit se
                     </button>
                 </form>
-                {error && <p>{error}</p>}
 
                 <p className="text-center text-gray-600 text-sm mt-4">
                     Nemáte účet? {" "}
