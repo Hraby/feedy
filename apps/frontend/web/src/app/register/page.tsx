@@ -124,9 +124,7 @@ export default function Register() {
                         />
                         <label htmlFor="agreement" className="text-sm text-gray-600">
                             Souhlasím se{" "}
-                            <a href="#" className="text-[var(--primary)] underline">
-                                smluvními podmínkami
-                            </a>{" "}
+                            <Link href="/terms" className="text-[var(--primary)] underline">smluvními podmínkami</Link>{" "}
                             a beru na vědomí zpracování mých osobních údajů.
                         </label>
                     </div>

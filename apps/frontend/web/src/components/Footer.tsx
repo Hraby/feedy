@@ -13,7 +13,7 @@ export default function Footer() {
               O nás
             </span>
           </Link>
-          <Link href="#">
+          <Link href="/terms">
             <span className="text-[var(--font)] hover:text-[var(--primary)] transition-colors duration-300">
               Podmínky služby
             </span>
@@ -25,7 +25,6 @@ export default function Footer() {
           </Link>
         </nav>
 
-        {/* Sociální sítě */}
         <div className="flex space-x-6 mt-4">
           <Link href="#">
             <FaFacebookF className="text-[var(--primary)] text-2xl hover:scale-110 transition-transform duration-300" />
