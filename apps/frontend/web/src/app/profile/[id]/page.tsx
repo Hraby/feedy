@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthProvider";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import Modal from "@/components/Modal";
+import Link from "next/link";
 import CourierForm from "@/components/CourierForm";
 import RestaurantForm from "@/components/RestaurantForm";
 import { FaMapMarkerAlt, FaListAlt, FaWallet, FaCog, FaTruck, FaStore, FaHome, FaBuilding, FaTrash } from 'react-icons/fa';
@@ -24,7 +25,8 @@ const Profile = () => {
     ]);
 
     const [newAddress, setNewAddress] = useState("");
-    const [newAddressType, setNewAddressType] = useState("home");
+    const [newAddressType, setNewAddressType] = useState("");
+    const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
 
     const handleSetActiveAddress = (id: string) => {
         setAddresses(prev => prev.map(addr => ({
@@ -35,18 +37,38 @@ const Profile = () => {
 
     const handleAddAddress = () => {
         if (!newAddress) return;
-
-        const id = `<span class="math-inline">\{newAddressType\}\-</span>{Date.now()}`;
-        const label = newAddressType === 'home' ? 'Domov' : newAddressType === 'work' ? 'Práce' : 'Jiné';
-
-        setAddresses(prev => [
-            ...prev,
-            { id, label, details: newAddress, type: newAddressType, active: false }
-        ]);
-
+    
+        if (editingAddressId) {
+            setAddresses(prev =>
+                prev.map(addr => {
+                    if (addr.id === editingAddressId) {
+                        const label = newAddressType === 'home' ? 'Domov' : newAddressType === 'work' ? 'Práce' : 'Jiné';
+                        return { ...addr, details: newAddress, type: newAddressType, label: label };
+                    }
+                    return addr;
+                })
+            );
+            setEditingAddressId(null);
+        } else {
+            const id = `${newAddressType}-${Date.now()}`;
+            const label = newAddressType === 'home' ? 'Domov' : newAddressType === 'work' ? 'Práce' : 'Jiné';
+    
+            setAddresses(prev => [
+                ...prev,
+                { id, label, details: newAddress, type: newAddressType, active: false }
+            ]);
+        }
+    
         setNewAddress("");
         setNewAddressType("home");
     };
+
+    const handleEditAddress = (id: string, details: string, type: string) => {
+        setNewAddress(details);
+        setNewAddressType(type);
+        setEditingAddressId(id);
+    };
+
 
     const handleDeleteAddress = (id: string) => {
         setAddresses((prev) => prev.filter((address) => address.id !== id));
@@ -109,20 +131,54 @@ const Profile = () => {
                         </div>
                         <FaCog className="text-2xl text-gray-600" />
                     </div>
-                    <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setOpenModal("courier")}>
-                        <div>
-                            <p className="text-gray-500 text-sm mb-2">Staňte se partnerským kurýrem feedy</p>
-                            <h2 className="text-2xl font-semibold">Žádost o kurýra</h2>
+                    {user.role.includes("Courier") ? (
+                        <div
+                            className="bg-gradient-to-r from-green-400 to-green-600 rounded-2xl p-6 cursor-pointer flex justify-between items-center"
+                            onClick={() => setOpenModal("courier")}
+                        >
+                            <div>
+                                <p className="text-white text-sm mb-2">Zobrazit dokončené objednávky</p>
+                                <h2 className="text-2xl font-semibold text-white">Rozvoz objednávek</h2>
+                            </div>
+                            <FaTruck className="text-2xl text-white" />
                         </div>
-                        <FaTruck className="text-2xl text-gray-600" />
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setOpenModal("restaurant")}>
-                        <div>
-                            <p className="text-gray-500 text-sm mb-2">Přidejte vaši restauraci</p>
-                            <h2 className="text-2xl font-semibold">Žádost o restauraci</h2>
+
+                    ) : (
+                        <div
+                            className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center"
+                            onClick={() => setOpenModal("courier")}
+                        >
+                            <div>
+                                <p className="text-gray-500 text-sm mb-2">Staňte se partnerským kurýrem Feedy</p>
+                                <h2 className="text-2xl font-semibold">Žádost o kurýra</h2>
+                            </div>
+                            <FaTruck className="text-2xl text-gray-600" />
                         </div>
-                        <FaStore className="text-2xl text-gray-600" />
-                    </div>
+                    )}
+
+                    {user.role.includes("Restaurant") ? (
+                        <div
+                            className="bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] rounded-2xl p-6 cursor-pointer flex justify-between items-center"
+                            onClick={() => window.location.href = "/management"}
+                        >
+                            <div>
+                                <p className="text-white text-sm mb-2">Spravujte svou restauraci</p>
+                                <h2 className="text-2xl font-semibold text-white">Management restaurace</h2>
+                            </div>
+                            <FaStore className="text-2xl text-white" />
+                        </div>
+                    ) : (
+                        <div
+                            className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center"
+                            onClick={() => setOpenModal("restaurant")}
+                        >
+                            <div>
+                                <p className="text-gray-500 text-sm mb-2">Přidejte vaši restauraci</p>
+                                <h2 className="text-2xl font-semibold">Žádost o restauraci</h2>
+                            </div>
+                            <FaStore className="text-2xl text-gray-600" />
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -147,15 +203,26 @@ const Profile = () => {
                             <span className={address.active ? 'text-[var(--primary)] font-bold' : ''}>{address.label}</span><p className="text-sm text-gray-600">{address.details}</p>
                         </div>
 
-                        <button
-                            type="button"
-                            onClick={() => handleDeleteAddress(address.id)}
-                            className="text-gray-700 absolute right-4 group"
-                        >
-                            <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-red-600">
-                                <FaTrash size={15} className="text-gray-700 group-hover:text-white" />
-                            </div>
-                        </button>
+                        <div className="flex gap-2 ml-auto">
+                            <button
+                                type="button"
+                                onClick={() => handleEditAddress(address.id, address.details, address.type)}
+                                className="text-gray-700 group"
+                            >
+                                <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-blue-600">
+                                    <FaCog size={15} className="text-gray-700 group-hover:text-white" />
+                                </div>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleDeleteAddress(address.id)}
+                                className="text-gray-700 group"
+                            >
+                                <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-red-600">
+                                    <FaTrash size={15} className="text-gray-700 group-hover:text-white" />
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 ))}
                 <div className="mt-6 bg-gray-50 p-6 rounded-2xl shadow-md space-y-4">
@@ -189,10 +256,9 @@ const Profile = () => {
                         onClick={handleAddAddress}
                         className="w-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white font-bold py-3 rounded-full hover:opacity-90 transition duration-200"
                     >
-                        Přidat adresu
+                        {editingAddressId ? "Uložit změny" : "Přidat adresu"}
                     </button>
                 </div>
-
             </Modal>
 
             <Modal isOpen={isOrdersOpen} onClose={() => setIsOrdersOpen(false)}>
@@ -206,7 +272,14 @@ const Profile = () => {
             </Modal>
 
             <Modal isOpen={openModal === "courier"} onClose={() => setOpenModal(null)}>
-                <CourierForm />
+                {user.role.includes("Courier") ? (
+                    <div>
+                        <h2 className="text-xl font-bold mb-4">Dokončené objednávky</h2>
+                        <p>Zde budou zobrazeny objednávky, které jste již rozvezli.</p>
+                    </div>
+                ) : (
+                    <CourierForm />
+                )}
             </Modal>
             <Modal isOpen={openModal === "restaurant"} onClose={() => setOpenModal(null)}>
                 <RestaurantForm />
