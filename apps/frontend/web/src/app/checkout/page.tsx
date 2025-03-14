@@ -15,8 +15,6 @@ const Checkout = () => {
     const [itemToRemove, setItemToRemove] = useState<string | null>(null);
     const [activeAddress, setActiveAddress] = useState('');
     const [deliveryTime, setDeliveryTime] = useState<"asap" | "scheduled">("asap");
-    const [scheduledTime, setScheduledTime] = useState<string>("");
-
 
     const [addresses, setAddresses] = useState([
         { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },
@@ -69,7 +67,7 @@ const Checkout = () => {
         return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0 + serviceFee + deliveryFee);
     };
 
-    const { user, accessToken } = useAuth();
+    const { user } = useAuth();
     if (!user) return null
 
     return (

@@ -1,5 +1,4 @@
 'use client';
-import Link from "next/link";
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import Footer from "@/components/Footer";
 

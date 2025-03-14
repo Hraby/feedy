@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthProvider';
 import { fetchDashboardData } from '../actions/adminAction';
 
 export default function AdminDashboard() {
-    const { user, accessToken } = useAuth();
+    const { accessToken } = useAuth();
     const pathname = usePathname();
     
     const [data, setData] = useState({

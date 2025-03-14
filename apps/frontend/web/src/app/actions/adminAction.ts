@@ -1,6 +1,7 @@
 'use server';
 
 import { BACKEND_URL } from '@/lib/constants';
+import { AddressPayload } from '@/lib/session';
 
 interface DashboardData {
     activeOrders: number;
@@ -85,6 +86,30 @@ export async function fetchRestaurants(accessToken: string) {
     }
 
     return await response.json();
+}
+
+export async function fetchApprovedRestaurants(address: AddressPayload, accessToken: string) {
+    const response = await fetch(`${BACKEND_URL}/restaurant`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Restaurants fetch failed");
+    }
+
+    const restaurants = await response.json();
+
+    return await restaurants.filter(
+        (restaurant: any) => 
+            restaurant.status === "Approved" && 
+            restaurant.address?.city === address.city
+    );
+
 }
 
 export async function fetchUsers(accessToken: string) {

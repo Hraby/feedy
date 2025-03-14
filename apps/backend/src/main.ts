@@ -14,14 +14,20 @@ async function bootstrap() {
   );
 
   const cors = {
-    origin: 'http://localhost:3000',
+    origin: '*',
+    methods: 'GET,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
     credentials: true,
+    allowedHeaders: '*',
+    exposedHeaders: ['Authorization', 'Content-Disposition'],
   };
 
   const config = new DocumentBuilder()
     .setTitle("Feedy API")
     .setDescription("API for food delivery platform Feedy")
     .setVersion("1.0")
+    .addBearerAuth()
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("api", app, documentFactory,{
@@ -39,6 +45,7 @@ async function bootstrap() {
   })
 
   app.enableCors(cors);
-  await app.listen(4000);
+  const port = process.env.PORT || 4000;
+  await app.listen(port, '0.0.0.0');
 }
 bootstrap();

@@ -11,8 +11,15 @@ export default async function middleware(req: NextRequest) {
     if (!Array.isArray(session.user.role) || !session.user.role.includes("Admin")) {
       return NextResponse.redirect(new URL("/", req.nextUrl));
     }
-    
-    
+  }
+
+  if(req.nextUrl.pathname.startsWith("/management")){
+    if (!session)
+      return NextResponse.redirect(new URL("/login", req.nextUrl));
+  
+    if (!Array.isArray(session.user.role) || !session.user.role.includes("Admin") || !session.user.role.includes("Restaurant")) {
+      return NextResponse.redirect(new URL("/", req.nextUrl));
+    }
   }
 
   if(req.nextUrl.pathname.startsWith("/profile")){

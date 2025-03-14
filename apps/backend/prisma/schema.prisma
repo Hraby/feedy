@@ -114,6 +114,7 @@ model Restaurant {
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
   category    Category[]
+  imageUrl    String?
 
   menuItems           MenuItem[]
   orders              Order[]

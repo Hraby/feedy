@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
 import { BACKEND_URL } from "@/lib/constants";
 import { getSession, updateTokens, deleteSession } from "@/lib/session";
-import { jwtVerify } from "jose";
 
 export async function GET() {
     const session = await getSession();

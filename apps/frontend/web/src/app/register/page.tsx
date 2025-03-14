@@ -4,7 +4,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Link from "next/link";
 import registerAction from "./registerAction";
 import { useActionState } from "react";
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 export default function Register() {
     const [formData, setFormData] = useState({

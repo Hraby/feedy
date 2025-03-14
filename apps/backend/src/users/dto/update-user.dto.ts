@@ -1,5 +1,7 @@
 import { Role } from "@prisma/client";
-import { IsArray, IsEmail, IsEnum, IsOptional, IsString, Matches, MinLength } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsEmail, IsEnum, IsObject, IsOptional, IsString, Matches, MinLength, ValidateNested } from "class-validator";
+import { AddressDto } from "src/restaurants/dto/address.dto";
 
 export class UpdateUserDto {
     @IsOptional()
@@ -23,4 +25,7 @@ export class UpdateUserDto {
     @IsArray()
     @IsEnum(Role, { each: true })
     role?: Role[];
+
+    @Type(() => AddressDto)
+    address?: AddressDto;
   }

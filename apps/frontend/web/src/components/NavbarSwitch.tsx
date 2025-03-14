@@ -4,7 +4,7 @@ import Navbar from "@/components/Navbar";
 import { useAuth } from "@/contexts/AuthProvider";
 
 export default function NavbarSwitcher() {
-    const {user, accessToken} = useAuth();
+    const {user} = useAuth();
 
     return user ? <Navbar /> : <LandingNavbar />;
 }

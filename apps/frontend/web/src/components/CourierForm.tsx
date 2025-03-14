@@ -5,7 +5,7 @@ import Link from "next/link";
 import courierFormAction from "@/app/actions/courierFormAction";
 
 export default function CourierForm() {
-    const { user, accessToken } = useAuth();
+    const { user } = useAuth();
     const [error, formAction] = useActionState(courierFormAction, undefined);
 
     const [formData, setFormData] = useState({
@@ -54,11 +54,6 @@ export default function CourierForm() {
         setAgreement(e.target.checked);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log("Form data:", formData);
-    };
-
     const validateNumberInput = (
         e: React.ChangeEvent<HTMLInputElement>,
         maxLength: number,
@@ -70,13 +65,6 @@ export default function CourierForm() {
         if (trimmedValue && parseInt(trimmedValue) > maxValue) {
           return;
         }
-
-        setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
-    };
-
-    const validatePhoneInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = e.target.value.replace(/[^\d+() -]/g, '');
-        const trimmedValue = value.slice(0, 20);
 
         setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
     };

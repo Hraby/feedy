@@ -18,6 +18,9 @@ export class CreateRestaurantDto {
   @IsPhoneNumber("CZ")
   phone: string;
 
+  @IsString()
+  imageUrl: string;
+
   @ValidateNested()
   @Type(() => AddressDto)
   address: AddressDto;

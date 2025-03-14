@@ -12,7 +12,6 @@ export interface AdminSidebarProps {
     activePath: string;
 }
 
-const roles = ['Admin', 'User'] as const;
 
 const AdminUsers = () => {
     const pathname = usePathname();

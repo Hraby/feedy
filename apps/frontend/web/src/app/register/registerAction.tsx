@@ -1,8 +1,7 @@
 "use server"
 
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-import { createSession, updateTokens } from "@/lib/session";
+import { createSession } from "@/lib/session";
 import { BACKEND_URL } from "@/lib/constants";
 
 export default async function registerAction(currentState: any, formData: FormData): Promise<string> {

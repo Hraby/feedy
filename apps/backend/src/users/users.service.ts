@@ -6,7 +6,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import * as bcrypt from "bcrypt";
 import { User } from "./entities/user.entity";
 import { UpdateUserDto } from "./dto/update-user.dto";
-import { Role } from "@prisma/client";
+import { City, Role } from "@prisma/client";
 import { CreateUserDto } from "./dto/create-user.dto";
 
 @Injectable()
@@ -38,9 +38,23 @@ export class UsersService {
         where: { id },
         data: {
           ...updateUserDto,
-          role: updateUserDto.role ? { set: updateUserDto.role } : undefined
+          address: updateUserDto.address
+            ? {
+                update: {
+                  street: updateUserDto.address.street,
+                  city: updateUserDto.address.city as City,
+                  zipCode: updateUserDto.address.zipCode,
+                  country: "Czechia",
+                },
+              }
+            : undefined,
+          role: updateUserDto.role ? { set: updateUserDto.role } : undefined,
+        },
+        include: {
+          address: true,
         },
       });
+      
       return updatedUser;
     } catch(error){
       throw new InternalServerErrorException("Server error");

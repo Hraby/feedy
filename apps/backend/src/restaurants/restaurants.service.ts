@@ -19,6 +19,7 @@ export class RestaurantsService {
       return this.prisma.restaurant.findMany({
         include: {
             owner: true,
+            address: true,
         }
       });
     }
@@ -54,6 +55,7 @@ export class RestaurantsService {
                 status: "Pending",
                 restaurantProfileId: restaurantProfileId,
                 category: categories,
+                imageUrl: dto.imageUrl,
                 address: {
                     create: {
                         street: dto.address.street,
