@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { FaClock, FaUtensils } from "react-icons/fa";
@@ -14,12 +14,12 @@ export default function Menu() {
     const searchParams = useSearchParams();
     const { user, accessToken, address } = useAuth();
 
-    const defaultAddress = {
+    const defaultAddress = useMemo(() => ({
         city: "Zlín",
         zipCode: "760 01",
         street: "náměstí Míru 12",
         country: "Czechia"
-    }
+    }), []);
 
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
     const [restaurants, setRestaurants] = useState([]);

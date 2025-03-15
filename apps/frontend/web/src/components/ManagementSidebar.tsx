@@ -72,9 +72,7 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
                         </Link>
                     </li>
                     <li className={`flex items-center ${isActive('/management/stats')}`}>
-                        <Link href={`/management/stats?restaurantId=${restaurantId}`} className="flex items-center">
-                            <FaClipboardList className="mr-3" /> Statistiky
-                        </Link>
+                        <FaClipboardList className="mr-3" /> Statistiky
                     </li>
                     <li className={`flex items-center ${isActive('/management/orders')}`}>
                         <Link href={`/management/orders?restaurantId=${restaurantId}`} className="flex items-center">
