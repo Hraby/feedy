@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -23,6 +23,7 @@ export default function Menu() {
 
     const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
     const [restaurants, setRestaurants] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams);
@@ -44,10 +45,14 @@ export default function Menu() {
     useEffect(() => {
         const loadRestaurants = async () => {
             if (!accessToken) return;
-
-
-            const data = await fetchApprovedRestaurants(address || defaultAddress, accessToken);
-            setRestaurants(data);
+            try {
+                const data = await fetchApprovedRestaurants(address || defaultAddress, accessToken);
+                setRestaurants(data);
+            } catch (error) {
+                console.error("Error:", error);
+            } finally {
+                setLoading(false);
+            }
         };
         loadRestaurants();
     }, [accessToken, address, defaultAddress]);
@@ -59,38 +64,30 @@ export default function Menu() {
             <div className="flex flex-col min-h-screen">
                 <NavbarSwitcher />
                 <div className="container mx-auto px-4 flex-grow">
+
                     <div className="overflow-x-auto sm:overflow-hidden">
                         <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-9 gap-4 text-center">
                             {[
-                            { name: "Burger", icon: "/img/icons/burger.png" },
-                            { name: "Kuřecí", icon: "/img/icons/chicken.png" },
-                            { name: "Pizza", icon: "/img/icons/pizza.png" },
-                            { name: "Čína", icon: "/img/icons/ramen.png" },
-                            { name: "Snídaně", icon: "/img/icons/sandwich.png" },
-                            { name: "Sushi", icon: "/img/icons/sushi.png" },
-                            { name: "Salát", icon: "/img/icons/carrot.png" },
-                            { name: "Sladké", icon: "/img/icons/waffle.png" },
-                            { name: "Slané", icon: "/img/icons/fries.png" }
+                                { name: "Burger", icon: "/img/icons/burger.png" },
+                                { name: "Kuřecí", icon: "/img/icons/chicken.png" },
+                                { name: "Pizza", icon: "/img/icons/pizza.png" },
+                                { name: "Čína", icon: "/img/icons/ramen.png" },
+                                { name: "Snídaně", icon: "/img/icons/sandwich.png" },
+                                { name: "Sushi", icon: "/img/icons/sushi.png" },
+                                { name: "Salát", icon: "/img/icons/carrot.png" },
+                                { name: "Sladké", icon: "/img/icons/waffle.png" },
+                                { name: "Slané", icon: "/img/icons/fries.png" }
                             ].map((category) => (
-                            <button
-                                key={category.name}
-                                onClick={() => toggleFilter(category.name)}
-                                className={`relative rounded-3xl p-4 text-lg bg-[var(--gray)] flex flex-col items-center transition-all duration-300 overflow-hidden group text-gray-700 min-w-[100px] ${
-                                selectedFilters.includes(category.name) ? "text-white font-semibold" : "hover:bg-gray-200"
-                                }`}
-                            >
-                                <span
-                                className={`absolute inset-0 transition-opacity duration-500 bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] ${
-                                    selectedFilters.includes(category.name) ? "opacity-100" : "opacity-0"
-                                }`}
-                                />
-                                <img
-                                src={category.icon}
-                                alt={category.name}
-                                className="w-16 h-16 mb-2 transition-transform duration-300 group-hover:scale-110 relative z-10"
-                                />
-                                <span className="relative z-10">{category.name}</span>
-                            </button>
+                                <button
+                                    key={category.name}
+                                    onClick={() => toggleFilter(category.name)}
+                                    className={`relative rounded-3xl p-4 text-lg bg-[var(--gray)] flex flex-col items-center transition-all duration-300 overflow-hidden group text-gray-700 min-w-[100px] ${
+                                        selectedFilters.includes(category.name) ? "text-white font-semibold" : "hover:bg-gray-200"
+                                    }`}
+                                >
+                                    <img src={category.icon} alt={category.name} className="w-16 h-16 mb-2 transition-transform duration-300 group-hover:scale-110" />
+                                    <span>{category.name}</span>
+                                </button>
                             ))}
                         </div>
                     </div>
@@ -122,16 +119,22 @@ export default function Menu() {
                         </div>
                     </div>
 
-                    <h2 className="text-2xl font-bold pt-12">Co to bude dnes, {user?.name}?</h2>
+                    <h2 className="text-2xl font-bold pt-12">Co to dnes bude, {user?.name.split(' ')[0]}?</h2>
 
-                    {filteredRestaurants.length === 0 ? (
+                    {loading ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-10 animate-pulse">
+                            {[...Array(6)].map((_, index) => (
+                                <div key={index} className="w-full h-64 bg-gray-200 rounded-3xl"></div>
+                            ))}
+                        </div>
+                    ) : filteredRestaurants.length === 0 ? (
                         <div className="flex justify-center flex-col items-center h-96">
                             <p className="text-gray-500 text-xl">Pod tímto filtrem aktuálně není dostupná žádná restaurace.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-10">
                             {filteredRestaurants.map((restaurant: any, index) => (
-                                <Link key={index} href={`/restaurant/${index}`}>
+                                <Link key={index} href={`/restaurant/${restaurant.id}`}>
                                     <div className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl h-full">
                                         <img src={restaurant.imageUrl} alt={restaurant.name} className="w-full h-48 object-cover" />
                                         <div className="p-4">

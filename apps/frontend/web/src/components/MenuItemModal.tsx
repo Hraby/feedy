@@ -5,7 +5,7 @@ interface MenuItem {
   name: string;
   price: number;
   description: string;
-  image: string;
+  imageUrl: string;
   options?: { label: string; checked: boolean }[];
 }
 
@@ -23,8 +23,9 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
       setIsSubmitting(true);
       const payload = { ...item, options };
 
+      // TODO: Odeslat na backend
       /*
-      await fetch("", {
+      await fetch("/api/cart", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -52,7 +53,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
     <Modal isOpen={true} onClose={onClose}>
       <h2 className="text-2xl font-bold mb-4">{item.name}</h2>
       <img
-        src={item.image}
+        src={item.imageUrl}
         alt={item.name}
         className="w-full h-60 object-cover rounded-lg mb-4"
       />
@@ -79,7 +80,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
       <button
         onClick={handleAddToCart}
         disabled={isSubmitting}
-        className="w-full py-3 rounded-xl bg-[var(--primary)] text-white font-semibold hover:bg-orange-600"
+        className="w-full py-3 rounded-xl bg-[var(--primary)] text-white font-semibold hover:bg-orange-600 transition-all duration-300 active:scale-95"
       >
         {isSubmitting ? "Přidávám..." : "Přidat do košíku"}
       </button>

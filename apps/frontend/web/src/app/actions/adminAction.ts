@@ -88,6 +88,24 @@ export async function fetchRestaurants(accessToken: string) {
     return await response.json();
 }
 
+export async function fetchRestaurantId(id: string, accessToken: string){
+    const response = await fetch(`${BACKEND_URL}/restaurant/${id}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+    });
+
+    if (!response.ok) {
+        throw new Error("Restaurant fetch failed");
+    }
+
+    return await response.json();
+
+}
+
 export async function fetchApprovedRestaurants(address: AddressPayload, accessToken: string) {
     const response = await fetch(`${BACKEND_URL}/restaurant`, {
         method: "GET",
