@@ -10,11 +10,14 @@ import { useAuth } from "@/contexts/AuthProvider";
 import { notFound } from "next/navigation";
 
 interface MenuItem {
+  id: string;
   name: string;
   price: number;
   description: string;
   imageUrl: string;
   category: string;
+  available: boolean;
+  restaurantId: string;
 }
 
 interface Restaurant {
@@ -124,9 +127,16 @@ export default function RestaurantDetail() {
                       {items.map((item, index) => (
                         <div
                           key={index}
-                          onClick={() => setSelectedItem(item)}
-                          className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl flex flex-col"
+                          onClick={() => item.available ? setSelectedItem(item) : null}
+                          className={`bg-white rounded-3xl shadow-lg overflow-hidden ${item.available ? 'cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl' : 'opacity-70'} flex flex-col relative`}
                         >
+                          {!item.available && (
+                            <div className="absolute inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center z-10">
+                              <div className="bg-red-500 text-white py-1 px-4 rounded-full font-medium transform -rotate-12">
+                                Momentálně nedostupné
+                              </div>
+                            </div>
+                          )}
                           <img src={item.imageUrl || "/img/burger.png"} alt={item.name} className="w-full h-48 object-cover" />
                           <div className="flex flex-col justify-between p-4 flex-grow">
                             <div>

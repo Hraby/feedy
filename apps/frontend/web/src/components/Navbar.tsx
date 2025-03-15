@@ -6,16 +6,12 @@ import Link from "next/link";
 import { signOut } from "@/app/actions/auth";
 import { useAuth } from "@/contexts/AuthProvider";
 import AutoComplete from "./autoComplete";
+import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 
 export default function Navbar() {
   const {address} = useAuth()
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-
-  const [cartItems, setCartItems] = useState<{ id: string; name: string; description: string; price: number; quantity: number; }[]>([
-    { id: "pizza", name: "Pizza", description: "Pepperoni, sýr, rajčata", price: 300, quantity: 1 },
-    { id: "burger", name: "Burger", description: "Hovězí, salát, omáčka", price: 250, quantity: 1 }
-  ]);
 
   const [addresses, setAddresses] = useState([
     { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },
@@ -30,6 +26,11 @@ export default function Navbar() {
     }
   }, [address]);
 
+  const { cartItems, increaseCartQuantity, decreaseCartQuantity, cartQuantity } = useShoppingCart();
+
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
 
   type Notification = {
     id: number;
@@ -68,20 +69,6 @@ export default function Navbar() {
       ...addr,
       active: addr.id === id
     })));
-  };
-
-  const handleQuantityChange = (id: string, amount: number) => {
-    setCartItems((prev) => {
-      const updatedCart = prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + amount } : item
-      ).filter((item) => item.quantity > 0);
-
-      return updatedCart;
-    });
-  };
-
-  const calculateTotal = () => {
-    return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
   };
 
   return (
@@ -216,18 +203,17 @@ export default function Navbar() {
                         {cartItems.map((item) => (
                           <div key={item.id} className="p-2 text-gray-800 hover:bg-gray-100 rounded-2xl">
                             <p className="text-[var(--font)] font-bold">{item.name}</p>
-                            <p className="text-sm text-gray-500">{item.description}</p>
                             <div className="flex items-center justify-between mt-2">
                               <div className="flex items-center gap-2">
                                 <button
-                                  onClick={() => handleQuantityChange(item.id, -1)}
+                                  onClick={() => decreaseCartQuantity(item.id)}
                                   className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--gray)]"
                                 >
                                   <FaMinus className="text-[var(--font)]" />
                                 </button>
                                 <span>{item.quantity}</span>
                                 <button
-                                  onClick={() => handleQuantityChange(item.id, 1)}
+                                  onClick={() => increaseCartQuantity(item.id)}
                                   className="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--gray)]"
                                 >
                                   <FaPlus className="text-[var(--font)]" />
@@ -242,7 +228,6 @@ export default function Navbar() {
                           <div>Celkem:</div>
                           <div>{calculateTotal()} Kč</div>
                         </div>
-
                         <Link href="/checkout">
                           <button className="items-center font-bold transition p-2 w-full rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white">
                             Pokračovat k platbě

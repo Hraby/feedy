@@ -105,6 +105,9 @@ const ManagementMenu = () => {
                             className="bg-white p-4 rounded-2xl shadow-sm cursor-pointer hover:shadow-md transition flex flex-col items-center"
                             onClick={() => handleEditItem(item)}
                         >
+                            <span className="bg-gray-100 text-gray-600 text-sm font-semibold px-3 py-1 rounded-full">
+                                {item.category}
+                            </span>
                             <div className="w-24 h-24 sm:w-32 sm:h-32 flex justify-center items-center mb-4">
                                 <img
                                     src="/img/burger.png"
@@ -119,14 +122,9 @@ const ManagementMenu = () => {
                                 <p className="text-gray-500 text-sm line-clamp-2 text-center">{item.description}</p>
                             </div>
                             <div className="flex flex-col 2xl:flex-row justify-between items-center w-full mt-3 space-y-2 md:space-y-1 xl:text-center">
-                                <div className="flex flex-row">
-                                    <span className={item.available ? "bg-green-100 text-green-600 text-sm font-semibold px-3 py-1 rounded-full" : "bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded-full"}>
-                                        {item.available ? 'Dostupné' : 'Nedostupné'}
-                                    </span>
-                                    <span className="bg-gray-100 text-gray-600 text-sm font-semibold px-3 py-1 rounded-full">
-                                        {item.category}
-                                    </span>
-                                </div>
+                                <span className={item.available ? "bg-green-100 text-green-600 text-sm font-semibold px-3 py-1 rounded-full max-w-max" : "bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded-full"}>
+                                    {item.available ? 'Dostupné' : 'Nedostupné'}
+                                </span>
                                 <p className="text-[var(--gradient-purple-end)] text-2xl font-bold">{item.price} Kč</p>
                             </div>
                         </div>

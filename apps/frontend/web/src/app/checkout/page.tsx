@@ -15,6 +15,15 @@ const Checkout = () => {
     const [itemToRemove, setItemToRemove] = useState<string | null>(null);
     const [activeAddress, setActiveAddress] = useState('');
     const [deliveryTime, setDeliveryTime] = useState<"asap" | "scheduled">("asap");
+    const {address} = useAuth()
+
+    useEffect(() => {
+        if (address) {
+          setAddresses([{id: "home", label: "Domov", details: `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`, type: "home", active: true}])
+        }else{
+          setAddresses([{id: "home", label: "Domov", details: `náměstí Míru 12, 760 01, Zlín, Czechia`, type: "home", active: true}])
+        }
+      }, [address]);
 
     const [addresses, setAddresses] = useState([
         { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },

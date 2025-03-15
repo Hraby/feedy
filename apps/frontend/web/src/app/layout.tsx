@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthProvider";
 import { getSession } from "@/lib/session";
+import { ShoppingCartProvider } from "@/contexts/ShoppingCartContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,7 +33,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <AuthProvider address={session?.address ? {street: session.address.street, city: session.address.city, country: session.address.country, zipCode: session.address.zipCode}: null} user={session ? { id: session.user.id, name: session.user.name, role: Array.isArray(session.user.role) ? session.user.role : [session.user.role], email: session.user.email } : null}>
-            {children}
+            <ShoppingCartProvider>{children}</ShoppingCartProvider>
         </AuthProvider>
       </body>
     </html>
