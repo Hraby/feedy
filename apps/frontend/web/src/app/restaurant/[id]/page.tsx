@@ -14,6 +14,7 @@ interface MenuItem {
   price: number;
   description: string;
   imageUrl: string;
+  category: string;
 }
 
 interface Restaurant {
@@ -60,7 +61,6 @@ export default function RestaurantDetail() {
             <div className="w-3/4 h-4 bg-gray-200 rounded-md"></div>
           </div>
 
-          <h2 className="text-2xl font-bold mt-16">Menu</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 mb-10">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="bg-white rounded-3xl shadow-lg overflow-hidden">
@@ -105,32 +105,49 @@ export default function RestaurantDetail() {
               </div>
             </div>
 
-            <h2 className="text-2xl font-bold mt-16">Menu</h2>
-
-            {restaurant.menuItems.length > 0 ? (
-              restaurant.menuItems.map((item, index) => (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 mb-10">
-                  <div
-                    key={index}
-                    onClick={() => setSelectedItem(item)}
-                    className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
-                  >
-                    <img src={item.imageUrl} alt={item.name} className="w-full h-48 object-cover" />
-                    <div className="p-4">
-                      <h3 className="text-lg font-semibold">{item.name}</h3>
-                      <p className="text-gray-600 text-sm">{item.description}</p>
-                      <span className="block mt-2 text-xl text-center font-bold text-[var(--primary)]">
-                        {item.price} Kč
-                      </span>
+            <div className="mt-16">
+              {restaurant.menuItems.length > 0 ? (
+                Object.entries(
+                  restaurant.menuItems.reduce<Record<string, MenuItem[]>>((groups, item) => {
+                    const category = item.category || "Ostatní";
+                    if (!groups[category]) {
+                      groups[category] = [];
+                    }
+                    groups[category].push(item);
+                    return groups;
+                  }, {})
+                ).map(([category, items]) => (
+                  <div key={category} className="mb-12">
+                    <h3 className="text-xl font-semibold mb-4 border-b pb-2">{category}</h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                      {items.map((item, index) => (
+                        <div
+                          key={index}
+                          onClick={() => setSelectedItem(item)}
+                          className="bg-white rounded-3xl shadow-lg overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl flex flex-col"
+                        >
+                          <img src={item.imageUrl || "/img/burger.png"} alt={item.name} className="w-full h-48 object-cover" />
+                          <div className="flex flex-col justify-between p-4 flex-grow">
+                            <div>
+                              <h3 className="text-lg font-semibold">{item.name}</h3>
+                              <p className="text-gray-600 text-sm">{item.description}</p>
+                            </div>
+                            <span className="block mt-2 text-xl text-center font-bold text-[var(--primary)]">
+                              {item.price} Kč
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="flex justify-center flex-col items-center h-96">
+                  <p className="text-gray-500 text-xl">Tato restaurace zatím nemá žádné položky v menu.</p>
                 </div>
-              ))
-            ) : (
-              <div className="flex justify-center flex-col items-center h-96">
-                <p className="text-gray-500 text-xl">Tato restaurace zatím nemá žádné položky v menu.</p>
-              </div>
-            )}
+              )}
+            </div>
             {selectedItem && <ItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
           </div>
         )

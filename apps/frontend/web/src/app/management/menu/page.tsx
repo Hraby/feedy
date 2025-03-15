@@ -1,15 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { FaPlus } from 'react-icons/fa';
 import ManagementSidebar from '@/components/ManagementSidebar';
 import Modal from '@/components/Modal';
 import ItemForm from '@/components/ItemForm';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import { useAuth } from '@/contexts/AuthProvider';
+import { createMenuItem, deleteMenuItem, getMenu, updateMenuItem } from '@/app/actions/adminAction';
 
 interface MenuItem {
-    id: number;
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -20,29 +22,29 @@ interface MenuItem {
 
 const ManagementMenu = () => {
     const pathname = usePathname();
-    const [menuItems, setMenuItems] = useState<MenuItem[]>([
-        {
-            id: 1,
-            name: "Pizza Margherita",
-            description: "Klasická pizza s rajčaty, mozzarellou a bazalkou.",
-            price: 189,
-            category: "Pizza",
-            image: "/img/burger.png",
-            available: true,
-        },
-        {
-            id: 2,
-            name: "Hovězí burger",
-            description: "Šťavnatý burger s čedarem a karamelizovanou cibulkou.",
-            price: 229,
-            category: "Burgery",
-            image: "/img/burger.png",
-            available: false,
-        }
-    ]);
+    const searchParams = useSearchParams();
+    
+    const { accessToken } = useAuth();
+    const restaurantId = searchParams.get("restaurantId");
 
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (!accessToken || !restaurantId) return;
+        
+        const fetchMenu = async () => {
+            try {
+                const menuData = await getMenu(accessToken, restaurantId);
+                setMenuItems(menuData);
+            } catch (error) {
+                toast.error("Nepodařilo se načíst menu.");
+            }
+        };
+    
+        fetchMenu();
+    }, [accessToken, restaurantId]);
 
     const handleEditItem = (item: MenuItem) => {
         setSelectedItem(item);
@@ -54,53 +56,37 @@ const ManagementMenu = () => {
         setIsModalOpen(true);
     };
 
-    const handleSaveItem = (item: MenuItem) => {
-        if (item.id) {
-            setMenuItems((prev) => prev.map((i) => (i.id === item.id ? item : i)));
-            toast.success(`Položka ${item.name} byla úspěšně upravena!`, {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Slide,
-            });
-        } else {
-            setMenuItems((prev) => [...prev, { ...item, id: Date.now() }]);
-            toast.success(`Položka ${item.name} byla úspěšně přidána!`, {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: false,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "colored",
-                transition: Slide,
-            });
+    const handleSaveItem = async (item: MenuItem) => {
+        if (!accessToken || !restaurantId) return;
+
+        try {
+            if (item.id != "") {
+                await updateMenuItem(accessToken, restaurantId, item.id.toString(), item);
+                setMenuItems((prev) => prev.map((i) => (i.id === item.id ? item : i)));
+                toast.success(`Položka ${item.name} byla upravena!`);
+            } else {
+                const newItem = await createMenuItem(accessToken, restaurantId, "", item);
+                setMenuItems((prev) => [...prev, newItem]);
+                toast.success(`Položka ${newItem.name} byla přidána!`);
+            }
+        } catch (error) {
+            toast.error("Chyba při ukládání položky.");
         }
         setIsModalOpen(false);
     };
 
-    const handleDeleteItem = (id: number) => {
-        setMenuItems((prev) => prev.filter((item) => item.id !== id));
-        setIsModalOpen(false);
-        toast.success(`Položka ${id} byla úspěšně smazána!`, {
-            position: "bottom-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Slide,
-        });
-    };
+    const handleDeleteItem = async (id: string) => {
+        if (!accessToken || !restaurantId) return;
 
+        try {
+            await deleteMenuItem(accessToken, restaurantId, id.toString(), {});
+            setMenuItems((prev) => prev.filter((item: any) => item.id !== id));
+            toast.success(`Položka byla smazána!`);
+        } catch (error) {
+            toast.error("Chyba při mazání položky.");
+        }
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="flex bg-gray-100 min-h-screen">
@@ -113,15 +99,15 @@ const ManagementMenu = () => {
                 <p className="text-gray-600 mb-8">Spravujte položky z jednoho místa.</p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                    {menuItems.map((item) => (
+                    {menuItems.map((item:any, index) => (
                         <div
-                            key={item.id}
+                            key={index}
                             className="bg-white p-4 rounded-2xl shadow-sm cursor-pointer hover:shadow-md transition flex flex-col items-center"
                             onClick={() => handleEditItem(item)}
                         >
                             <div className="w-24 h-24 sm:w-32 sm:h-32 flex justify-center items-center mb-4">
                                 <img
-                                    src={item.image}
+                                    src="/img/burger.png"
                                     alt={item.name}
                                     className="max-w-full max-h-full object-contain rounded-lg"
                                 />
@@ -133,9 +119,14 @@ const ManagementMenu = () => {
                                 <p className="text-gray-500 text-sm line-clamp-2 text-center">{item.description}</p>
                             </div>
                             <div className="flex flex-col 2xl:flex-row justify-between items-center w-full mt-3 space-y-2 md:space-y-1 xl:text-center">
-                                <span className={item.available ? "bg-green-100 text-green-600 text-sm font-semibold px-3 py-1 rounded-full" : "bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded-full"}>
-                                    {item.available ? 'Dostupné' : 'Nedostupné'}
-                                </span>
+                                <div className="flex flex-row">
+                                    <span className={item.available ? "bg-green-100 text-green-600 text-sm font-semibold px-3 py-1 rounded-full" : "bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded-full"}>
+                                        {item.available ? 'Dostupné' : 'Nedostupné'}
+                                    </span>
+                                    <span className="bg-gray-100 text-gray-600 text-sm font-semibold px-3 py-1 rounded-full">
+                                        {item.category}
+                                    </span>
+                                </div>
                                 <p className="text-[var(--gradient-purple-end)] text-2xl font-bold">{item.price} Kč</p>
                             </div>
                         </div>

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface MenuItem {
-    id: number;
+    id: string;
     name: string;
     description: string;
     price: number;
@@ -15,7 +15,7 @@ interface MenuItem {
 interface ItemFormProps {
     item: MenuItem | null;
     onSave: (item: MenuItem) => void;
-    onDelete: (id: number) => void;
+    onDelete: (id: string) => void;
 }
 
 const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
@@ -36,7 +36,7 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
     const handleSubmit = () => {
         const imageUrl = image ? URL.createObjectURL(image) : item?.image || '/img/default.png';
         onSave({
-            id: item?.id || 0,
+            id: item?.id || "",
             name,
             description,
             price,
@@ -73,7 +73,8 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="input-field"
+                        className="input-field h-32"
+                        style={{resize: "none"}}
                         required
                     />
                 </label>
@@ -100,7 +101,7 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
                     />
                 </label>
 
-                <label className="block">
+                {/* <label className="block">
                     <span className="text-gray-700">Obrázek</span>
                     <input
                         type="file"
@@ -108,7 +109,7 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
                         onChange={handleImageChange}
                         className="input-field"
                     />
-                </label>
+                </label> */}
 
                 <label className="flex items-center space-x-2">
                     <input

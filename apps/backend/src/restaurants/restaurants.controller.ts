@@ -79,7 +79,7 @@ export class RestaurantsController {
     }
 
     @Get(":id/menu")
-    @ApiOperation({ summary: "Delete restaurant (admin only)" })
+    @ApiOperation({ summary: "Get restaurant menu" })
     @ApiResponse({ status: 200, description: "Deleted successfully" })
     @ApiResponse({ status: 404, description: "Restaurant not found" })
     async getRestaurantMenu(@Param("id") id: string){

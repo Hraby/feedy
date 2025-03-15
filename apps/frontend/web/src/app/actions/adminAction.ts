@@ -103,7 +103,118 @@ export async function fetchRestaurantId(id: string, accessToken: string){
     }
 
     return await response.json();
+}
 
+export async function getMenu(accessToken: string, restaurantId: string){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/menu`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+    });
+  
+    if (!response.ok) {
+        throw new Error("Menu item get failed");
+    }
+
+    const data = await response.json();
+
+    return data.menuItems.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        category: item.category,
+        image: "/img/default.png",
+        available: item.available,
+    }));
+}
+
+export async function createMenuItem(accessToken: string, restaurantId: string, menuItemId: string, data: any){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const newData = {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        category: data.category,
+        available: data.available
+    }
+
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/menu`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(newData),
+    });
+  
+    if (!response.ok) {
+        throw new Error("Menu item create failed");
+    }
+
+    return await response.json();
+}
+
+export async function updateMenuItem(accessToken: string, restaurantId: string, menuItemId: string, data: any){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const newData = {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        category: data.category,
+        available: data.available
+    }
+
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/menu/${menuItemId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(newData),
+    });
+  
+    if (!response.ok) {
+        throw new Error("Menu item update failed");
+    }
+
+    return await response.json();
+}
+
+export async function deleteMenuItem(accessToken: string, restaurantId: string, menuItemId: string, data: any){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/menu/${menuItemId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+    });
+  
+    if (!response.ok) {
+        throw new Error("Menu item delete failed");
+    }
+
+    return await response.json();
 }
 
 export async function fetchApprovedRestaurants(address: AddressPayload, accessToken: string) {

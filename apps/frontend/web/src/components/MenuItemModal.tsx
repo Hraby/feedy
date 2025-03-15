@@ -53,7 +53,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
     <Modal isOpen={true} onClose={onClose}>
       <h2 className="text-2xl font-bold mb-4">{item.name}</h2>
       <img
-        src={item.imageUrl}
+        src="/img/burger.png"
         alt={item.name}
         className="w-full h-60 object-cover rounded-lg mb-4"
       />

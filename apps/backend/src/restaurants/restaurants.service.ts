@@ -221,8 +221,10 @@ export class RestaurantsService {
                 name: dto.name,
                 description: dto.description,
                 price: dto.price,
-                imageUrl: dto.imageUrl,
+                imageUrl: "",
                 restaurantId: restaurant.id,
+                category: dto.category,
+                available: dto.available,
             },
         });
     }
@@ -254,7 +256,9 @@ export class RestaurantsService {
                 name: dto.name,
                 description: dto.description,
                 price: dto.price,
-                imageUrl: dto.imageUrl,
+                category: dto.category,
+                available: dto.available,
+                imageUrl: "",
             },
         });
     }

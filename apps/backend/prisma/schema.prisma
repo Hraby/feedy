@@ -147,6 +147,7 @@ model MenuItem {
   price       Float
   available   Boolean @default(true)
   imageUrl    String?
+  category    String?
 
   restaurantId String
   restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])

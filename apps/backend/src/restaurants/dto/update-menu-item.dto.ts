@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber, IsPositive, IsUrl } from "class-validator";
+import { IsString, IsNotEmpty, IsOptional, IsNumber, IsPositive, IsUrl, IsBoolean } from "class-validator";
 
 export class UpdateMenuItemDto {
   @IsOptional()
@@ -14,6 +14,14 @@ export class UpdateMenuItemDto {
   @IsNumber()
   @IsPositive()
   price?: number;
+
+  @IsOptional()
+  @IsString()
+  category: string;
+
+  @IsOptional()
+  @IsBoolean()
+  available: boolean;
 
   @IsOptional()
   @IsUrl()

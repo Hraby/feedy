@@ -13,8 +13,14 @@ export class CreateMenuItemDto {
     @IsNumber()
     @IsPositive()
     price: number;
+
+    @IsString()
+    category: string;
+
+    @IsBoolean()
+    available: boolean;
   
     @IsOptional()
     @IsUrl()
     imageUrl?: string;
-  }
+}
