@@ -17,7 +17,7 @@ const slogans = [
   "Podporujte s námi místní podniky!",
   "Vaše oblíbené jídlo je na dosah ruky!",
   "Měníme způsob objednávání jídla!",
-  "Rychle a jednoduše - to je feedy!"
+  "Rychle a jednoduše, to je feedy!"
 ];
 
 const fadeInUp = {
@@ -48,7 +48,7 @@ export default function Home() {
       <div className="bg-white">
         <NavbarSwitcher />
         <div className="container mx-auto px-4">
-        <section className="min-h-[85vh] flex flex-col lg:flex-row items-center gap-4 lg:gap-64 py-30 lg:py-16 text-center lg:text-left pt-20">
+          <section className="min-h-[85vh] flex flex-col lg:flex-row items-center gap-4 lg:gap-64 py-30 lg:py-16 text-center lg:text-left pt-20">
             <div className="max-w-3xl">
               <AnimatePresence mode="wait">
                 <motion.h1
@@ -66,14 +66,24 @@ export default function Home() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                variants={fadeInUp}
+                className="mt-4 relative w-full max-w-md mx-auto lg:mx-0 lg:text-left flex justify-center lg:justify-start space-x-4"
               >
-                <div className="mt-4 relative w-full max-w-md mx-auto lg:mx-0 lg:text-left flex justify-center lg:justify-start">
-                  <button className="bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] transition-transform duration-300 hover:scale-105 text-white px-10 py-2 rounded-full text-lg font-semibold shadow-lg" onClick={() => window.location.href = user ? '/menu' : '/login'}>
-                    {user ? 'Mám hlad!' : 'Nejprve se přihlásím!'}
+                <button
+                  className="bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] transition-transform duration-300 hover:scale-105 text-white px-7 py-2 rounded-full text-lg font-semibold shadow-lg whitespace-nowrap"
+                  onClick={() => window.location.href = user ? '/menu' : '/login'}
+                >
+                  {user ? 'Mám hlad!' : 'Nejprve se přihlásím'}
+                </button>
+                {!user && (
+                  <button
+                    className="bg-[var(--gray)] transition-transform duration-300 hover:scale-105 px-7 py-2 rounded-full text-lg font-semibold whitespace-nowrap"
+                    onClick={() => window.location.href = '/register'}
+                  >
+                    Nejprve se zaregistruji
                   </button>
-                </div>
+                )}
               </motion.div>
+
             </div>
             <motion.div
               initial="hidden"

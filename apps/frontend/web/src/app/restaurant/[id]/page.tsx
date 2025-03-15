@@ -7,6 +7,7 @@ import NavbarSwitcher from "@/components/NavbarSwitch";
 import ItemModal from "@/components/MenuItemModal";
 import { fetchRestaurantId } from "@/app/actions/adminAction";
 import { useAuth } from "@/contexts/AuthProvider";
+import { notFound } from "next/navigation";
 
 interface MenuItem {
   name: string;
@@ -74,9 +75,7 @@ export default function RestaurantDetail() {
           </div>
         </div>
       ) : (
-        !restaurant ? (
-          <div className="text-center text-red-500 text-xl">Restaurace nenalezena</div>
-        ) : (
+        !restaurant ? notFound() : (
           <div className="container mx-auto px-4">
             <div className="relative">
               <img
@@ -107,9 +106,10 @@ export default function RestaurantDetail() {
             </div>
 
             <h2 className="text-2xl font-bold mt-16">Menu</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 mb-10">
-              {restaurant.menuItems.length > 0 ? (
-                restaurant.menuItems.map((item, index) => (
+
+            {restaurant.menuItems.length > 0 ? (
+              restaurant.menuItems.map((item, index) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-4 mb-10">
                   <div
                     key={index}
                     onClick={() => setSelectedItem(item)}
@@ -124,13 +124,13 @@ export default function RestaurantDetail() {
                       </span>
                     </div>
                   </div>
-                ))
-              ) : (
-                <p className="text-center text-gray-500">
-                  Tato restaurace zatím nemá žádné položky v menu.
-                </p>
-              )}
-            </div>
+                </div>
+              ))
+            ) : (
+              <div className="flex justify-center flex-col items-center h-96">
+                <p className="text-gray-500 text-xl">Tato restaurace zatím nemá žádné položky v menu.</p>
+              </div>
+            )}
             {selectedItem && <ItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />}
           </div>
         )

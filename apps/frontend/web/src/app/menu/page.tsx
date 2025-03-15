@@ -81,12 +81,19 @@ export default function Menu() {
                                 <button
                                     key={category.name}
                                     onClick={() => toggleFilter(category.name)}
-                                    className={`relative rounded-3xl p-4 text-lg bg-[var(--gray)] flex flex-col items-center transition-all duration-300 overflow-hidden group text-gray-700 min-w-[100px] ${
-                                        selectedFilters.includes(category.name) ? "text-white font-semibold" : "hover:bg-gray-200"
-                                    }`}
+                                    className={`relative rounded-3xl p-4 text-lg bg-[var(--gray)] flex flex-col items-center transition-all duration-300 overflow-hidden group text-gray-700 min-w-[100px] ${selectedFilters.includes(category.name) ? "text-white font-semibold" : "hover:bg-gray-200"
+                                        }`}
                                 >
-                                    <img src={category.icon} alt={category.name} className="w-16 h-16 mb-2 transition-transform duration-300 group-hover:scale-110" />
-                                    <span>{category.name}</span>
+                                    <span
+                                        className={`absolute inset-0 transition-opacity duration-500 bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] ${selectedFilters.includes(category.name) ? "opacity-100" : "opacity-0"
+                                            }`}
+                                    />
+                                    <img
+                                        src={category.icon}
+                                        alt={category.name}
+                                        className="w-16 h-16 mb-2 transition-transform duration-300 group-hover:scale-110 relative z-10"
+                                    />
+                                    <span className="relative z-10">{category.name}</span>
                                 </button>
                             ))}
                         </div>

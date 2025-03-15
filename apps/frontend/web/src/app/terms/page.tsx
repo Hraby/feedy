@@ -8,7 +8,7 @@ export default function Terms() {
             <div className="flex flex-col min-h-screen">
                 <NavbarSwitcher />
                 <div className="container mx-auto px-4 flex-grow">
-                    <h1 className="text-4xl font-bold my-8 text-center">Smluvní podmínky služby Feedy</h1>
+                    <h1 className="text-4xl font-bold my-8 text-center">Smluvní podmínky společnosti Feedy</h1>
 
                     <p className="mb-4 text-gray-500">Poslední aktualizace: 14. března 2025</p>
 
