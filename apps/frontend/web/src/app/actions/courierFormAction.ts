@@ -16,7 +16,7 @@ export default async function courierFormAction(_: any, formData: FormData): Pro
         language: formData.get("courierLanguage"),
     };
 
-    const response = await fetch(`${BACKEND_URL}courier/request`, {
+    const response = await fetch(`${BACKEND_URL}/courier/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
