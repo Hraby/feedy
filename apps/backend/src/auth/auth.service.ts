@@ -148,7 +148,6 @@ export class AuthService {
             where: { id: userId },
             select: { id: true, firstName: true, lastName: true, role: true, hashedRefreshToken: true },
         });
-        console.log("test")
 
         if (!user || !user.hashedRefreshToken) {
             throw new UnauthorizedException("Invalid refresh token");

@@ -13,6 +13,9 @@ export default function Menu() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const { user, accessToken, address } = useAuth();
+    const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
+    const [restaurants, setRestaurants] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const defaultAddress = useMemo(() => ({
         city: "Zlín",
@@ -21,9 +24,26 @@ export default function Menu() {
         country: "Czechia"
     }), []);
 
-    const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
-    const [restaurants, setRestaurants] = useState([]);
-    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const loadRestaurants = async () => {
+            if (!accessToken) return;
+    
+            const currentAddress = address || defaultAddress;
+    
+            try {
+                const data = await fetchApprovedRestaurants(currentAddress, accessToken);
+                setRestaurants(data);
+            } catch (error) {
+                console.log("Error:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+    
+        if (accessToken) {
+            loadRestaurants();
+        }
+    }, [accessToken, address]);
 
     useEffect(() => {
         const params = new URLSearchParams(searchParams);
@@ -41,21 +61,6 @@ export default function Menu() {
         const query = newFilters.length > 0 ? `?category=${newFilters.join(",")}` : "";
         router.push(`/menu${query}`);
     };
-
-    useEffect(() => {
-        const loadRestaurants = async () => {
-            if (!accessToken) return;
-            try {
-                const data = await fetchApprovedRestaurants(address || defaultAddress, accessToken);
-                setRestaurants(data);
-            } catch (error) {
-                console.error("Error:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadRestaurants();
-    }, [accessToken, address, defaultAddress]);
 
     const filteredRestaurants = selectedFilters.length === 0 ? restaurants : restaurants.filter((restaurant: any) => restaurant.category.some((cat: string) => selectedFilters.includes(cat)));
 

@@ -16,7 +16,7 @@ export class RestaurantsService {
       ) {}
 
     async getRestaurants(){
-      return this.prisma.restaurant.findMany({
+      return await this.prisma.restaurant.findMany({
         include: {
             owner: true,
             address: true,
@@ -46,7 +46,7 @@ export class RestaurantsService {
 
         const categories = dto.category.map((cat) => cat as Category);
 
-        return this.prisma.restaurant.create({
+        return await this.prisma.restaurant.create({
             data: {
                 name: dto.name,
                 description: dto.description,
@@ -69,32 +69,32 @@ export class RestaurantsService {
     }
 
     async getRestaurantById(id: string) {
-        return this.prisma.restaurant.findUnique({
+        return await this.prisma.restaurant.findUnique({
             where: { id },
             include: { menuItems: true, address: true },
         });
     }
 
     async approveRestaurant(id: string, status: RestaurantStatus) {
-        const restaurant = await this.prisma.restaurant.findFirst({
-            where: {
-                id: id
-            },
-            include: {
-                owner: true
-            }
-        })
-
+        const restaurant = await this.prisma.restaurant.findUnique({
+            where: { id },
+            include: { owner: true },
+        });
+    
+        if (!restaurant) {
+            throw new Error("Restaurant not found");
+        }
+    
         const user = await this.prisma.user.findUnique({
             where: { id: restaurant.owner.id },
             select: { role: true },
         });
-          
+    
         if (!user) {
             throw new Error("User not found");
         }
-          
-        if (status === "Approved") {
+    
+        if (status == "Approved") {
             if (!user.role.includes(Role.Restaurant)) {
                 await this.prisma.user.update({
                     where: { id: restaurant.owner.id },
@@ -105,24 +105,30 @@ export class RestaurantsService {
                     },
                 });
             }
-            } else {
-            if (user.role.includes(Role.Restaurant)) {
+        } else {
+            const hasOtherApprovedRestaurants = await this.prisma.restaurant.count({
+                where: {
+                    ownerId: restaurant.owner.id,
+                    status: "Approved",
+                    id: { not: id },
+                },
+            });
+    
+            if (hasOtherApprovedRestaurants === 0 && user.role.includes(Role.Restaurant)) {
                 await this.prisma.user.update({
                     where: { id: restaurant.owner.id },
                     data: {
                         role: {
-                            set: user.role.filter(r => r !== Role.Restaurant),
+                            set: user.role.filter((r) => r !== Role.Restaurant),
                         },
                     },
                 });
             }
         }
-
-        return this.prisma.restaurant.update({
+    
+        return await this.prisma.restaurant.update({
             where: { id },
-            data: {
-                status: status,
-            },
+            data: { status },
         });
     }
 
@@ -144,36 +150,44 @@ export class RestaurantsService {
     }
 
     async deleteRestaurant(id: string) {
-        const restaurant = await this.prisma.restaurant.findUnique({ where: { id }, include: {owner: true} });
-
+        const restaurant = await this.prisma.restaurant.findUnique({
+            where: { id },
+            include: { owner: true },
+        });
+    
         if (!restaurant) {
             throw new NotFoundException("Restaurant not found");
         }
-
-
+    
         const user = await this.prisma.user.findUnique({
             where: { id: restaurant.owner.id },
             select: { role: true },
         });
-          
+    
         if (!user) {
             throw new Error("User not found");
         }
-
-        if (user.role.includes(Role.Restaurant)) {
+    
+        const hasOtherApprovedRestaurants = await this.prisma.restaurant.count({
+            where: {
+                ownerId: restaurant.owner.id,
+                status: "Approved",
+                id: { not: id },
+            },
+        });
+    
+        if (hasOtherApprovedRestaurants == 0 && user.role.includes(Role.Restaurant)) {
             await this.prisma.user.update({
                 where: { id: restaurant.owner.id },
                 data: {
                     role: {
-                        set: user.role.filter(r => r !== Role.Restaurant),
+                        set: user.role.filter((r) => r !== Role.Restaurant),
                     },
                 },
             });
         }
-
-        return this.prisma.restaurant.delete({
-            where: { id },
-        });
+    
+        return this.prisma.restaurant.delete({ where: { id } });
     }
 
     async getRestaurantMenu(id: string){

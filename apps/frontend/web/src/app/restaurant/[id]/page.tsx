@@ -38,7 +38,7 @@ export default function RestaurantDetail() {
         const data = await fetchRestaurantId(id as string, accessToken);
         setRestaurant(data);
       } catch (error) {
-        console.error("Error:", error);
+        console.log("Error:", error);
       } finally {
         setLoading(false);
       }
