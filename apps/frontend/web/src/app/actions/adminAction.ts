@@ -98,8 +98,6 @@ export async function fetchRestaurantId(id: string, accessToken: string){
         credentials: "include",
     });
 
-    console.log(await response.json())
-
     if (!response.ok) {
         throw new Error("Restaurant fetch failed");
     }

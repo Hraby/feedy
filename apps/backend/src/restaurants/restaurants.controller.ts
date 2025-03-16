@@ -20,7 +20,8 @@ export class RestaurantsController {
     @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
     @ApiResponse({status: 401, description: "Unauthorized"})
     @ApiResponse({status: 403, description: "Forbidden" })
-    @ApiResponse({status: 500, description: "Server error"})         
+    @ApiResponse({status: 500, description: "Server error"})       
+    @Auth(Role.Customer, Role.Admin, Role.Courier, Role.Restaurant)  
     async getRestaurants() {
         return this.restaurantsService.getRestaurants();
     }
@@ -29,6 +30,10 @@ export class RestaurantsController {
     @ApiOperation({
         summary: "Get restaurant by id",
     })
+    @ApiResponse({status: 200, description: "Ok", type: User, isArray: true})
+    @ApiResponse({status: 401, description: "Unauthorized"})
+    @ApiResponse({status: 403, description: "Forbidden" })
+    @ApiResponse({status: 500, description: "Server error"})  
     async getRestaurant(@Param("id") id: string) {
        return this.restaurantsService.getRestaurantById(id);
     }
