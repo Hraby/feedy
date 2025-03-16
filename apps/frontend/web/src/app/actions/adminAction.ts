@@ -98,6 +98,8 @@ export async function fetchRestaurantId(id: string, accessToken: string){
         credentials: "include",
     });
 
+    console.log(await response.json())
+
     if (!response.ok) {
         throw new Error("Restaurant fetch failed");
     }
@@ -413,4 +415,89 @@ export async function searchUsers(query: string, accessToken: string): Promise<U
         user.firstName.toLowerCase().includes(searchLower) || 
         user.lastName.toLowerCase().includes(searchLower)
     );
+}
+
+export async function getOrdersRestaurant(accessToken: string, restaurantId: string){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+    }); 
+  
+    if (!response.ok) {
+        throw new Error("Get orders failed");
+    }
+
+    const data = await response.json();
+
+    return data.orders.map((order: any) => {
+        const items = order.orderItems.map((item: any) => item.menuItem.name);
+        
+        const orderDate = new Date(order.createdAt);
+        const formattedDate = orderDate.toISOString().split('T')[0];
+        const formattedTime = orderDate.toTimeString().split(' ')[0];
+        
+        const restaurantName = "Restaurant Name";
+        
+        return {
+          id: order.id,
+          items: items,
+          status: order.status,
+          orderDate: formattedDate,
+          orderTime: formattedTime,
+          restaurantName: restaurantName,
+          courier: order.courierProfileId,
+          new: true
+        };
+    });
+}
+
+export async function approveOrder(accessToken: string, orderId: string){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}/order/${orderId}/prepare`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({status: "Preparing"})
+    });
+
+    if (!response.ok) {
+        throw new Error("Order approve failed");
+    }
+    return await response.json();
+}
+
+export async function markOrderReady(accessToken: string, orderId: string){
+    if (!accessToken) {
+        throw new Error("Access token not found");
+    }
+
+    const response = await fetch(`${BACKEND_URL}/order/${orderId}/ready`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({status: "Ready"})
+    });
+  
+    if (!response.ok) {
+        throw new Error("Order ready failed");
+    }
+
+    return await response.json();
 }

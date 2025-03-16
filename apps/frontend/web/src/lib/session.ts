@@ -91,7 +91,7 @@ export async function updateTokens(accessToken: string, refreshToken: string) {
       accessToken,
       refreshToken,
     },
-    session.address // Zachová adresu
+    session.address
   );
 }
 

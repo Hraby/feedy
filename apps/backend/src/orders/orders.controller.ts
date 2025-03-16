@@ -19,23 +19,23 @@ export class OrdersController {
 
     @Get(":id")
     @ApiOperation({ summary: "Get specific order" }) 
-    @Auth(Role.Customer, Role.Restaurant, Role.Courier)
+    @Auth(Role.Customer, Role.Restaurant, Role.Courier, Role.Admin)
     async getOrder(@Param("id") id: string) {
         return this.ordersService.getOrderById(id);
     }
 
-    @Post()
-    @ApiOperation({ summary: "Create new order" })
-    @Auth(Role.Customer)
-    async createOrder(@Body() dto: CreateOrderDto, @GetUser() user: User) {
-        return this.ordersService.createOrder(dto, user);
+    @Get(":id/status")
+    @ApiOperation({ summary: "Get specific order status" }) 
+    @Auth(Role.Customer, Role.Restaurant, Role.Courier, Role.Admin)
+    async getOrderStatus(@Param("id") id: string) {
+        return this.ordersService.getOrderStatusById(id);
     }
 
-    @Patch(":id/accept")
-    @ApiOperation({ summary: "Accept order (restaurant only)" })
-    @Auth(Role.Restaurant)
-    async acceptOrder(@Param("id") id: string) {
-        return this.ordersService.updateOrderStatus(id, OrderStatus.Accepted);
+    @Post()
+    @ApiOperation({ summary: "Create new order" })
+    @Auth(Role.Customer, Role.Admin)
+    async createOrder(@Body() dto: CreateOrderDto, @GetUser() user: User) {
+        return this.ordersService.createOrder(dto, user);
     }
 
     @Patch(":id/prepare")
@@ -49,7 +49,7 @@ export class OrdersController {
     @ApiOperation({ summary: "Mark order as ready for pickup (restaurant only)" })
     @Auth(Role.Restaurant)
     async readyForPickup(@Param("id") id: string) {
-        return this.ordersService.updateOrderStatus(id, OrderStatus.OutForDelivery);
+        return this.ordersService.updateOrderStatus(id, OrderStatus.Ready);
     }
 
     @Patch(":id/assign")

@@ -1,21 +1,73 @@
 'use client';
 import NavbarSwitcher from "@/components/NavbarSwitch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
 import { FaPizzaSlice, FaTruck, FaCheckCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { MdDoneAll } from "react-icons/md";
+import { MdDoneAll, MdRestaurant } from "react-icons/md";
+import { GiCook } from "react-icons/gi";
+import { useShoppingCart } from "@/contexts/ShoppingCartContext";
+import { useParams } from "next/navigation";
+import { useAuth } from "@/contexts/AuthProvider";
+import { BACKEND_URL } from "@/lib/constants";
 
 const Order = () => {
-    const [orderStep] = useState(1);
+    const { id } = useParams();
+    const [orderStep, setOrderStep] = useState(1);
     const [deliveryTime] = useState("20 minut");
+    const { orderStatus, setOrderStatus } = useShoppingCart();
+    const {accessToken} = useAuth();
 
-    const isOrderComplete = orderStep === 5;
+    type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'OutForDelivery' | 'Delivered' | 'Cancelled';
+
+    const statusToStepMap: Record<OrderStatus, number> = {
+        "Pending": 1,
+        "Preparing": 2,
+        "Ready": 3,
+        "OutForDelivery": 4,
+        "Delivered": 5,
+        "Cancelled": 1
+    };
+
+    useEffect(() => {
+        if (!accessToken) return;
+        const fetchOrderStatus = async () => {
+            try {
+                const response = await fetch(`${BACKEND_URL}/order/${id}/status`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch order status");
+                
+                const data = await response.json();
+                const status = data.status as OrderStatus;
+                setOrderStatus(status);
+                
+                if (status && status in statusToStepMap) {
+                    setOrderStep(statusToStepMap[status]);
+                }
+            } catch (error) {
+                console.error("Error fetching order status:", error);
+            }
+        };
+
+        fetchOrderStatus();
+        
+        const intervalId = setInterval(fetchOrderStatus, 5000);
+        
+        return () => clearInterval(intervalId);
+    }, [id, setOrderStatus, accessToken]);
+
+    const isOrderComplete = orderStep === 6;
 
     const steps = [
-        { id: 1, label: "Objednávka byla přijata", icon: <FiCheckCircle /> },
-        { id: 2, label: "Objednávka se připravuje", icon: <FaPizzaSlice /> },
-        { id: 3, label: "Objednávka čeká na vyzvednutí", icon: <FaTruck /> },
+        { id: 1, label: "Čeká se na restauraci", icon: <FiCheckCircle /> },
+        { id: 2, label: "Objednávka se připravuje", icon: <GiCook /> },
+        { id: 3, label: "Objednávka je připravena", icon: <FaPizzaSlice /> },
         { id: 4, label: "Objednávka je na cestě", icon: <FaTruck /> },
         { id: 5, label: "Objednávka byla doručena!", icon: <MdDoneAll /> },
     ];
@@ -38,10 +90,13 @@ const Order = () => {
                     {steps.map((step, index) => (
                         <div key={step.id} className={`flex items-center ${index < steps.length - 1 ? 'w-full' : ''}`}>
                             <div
-                                className={`p-3 rounded-full z-10 ${orderStep >= step.id
-                                    ? `${isOrderComplete ? 'bg-green-500' : 'bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)]'} text-white`
-                                    : "bg-gray-200 text-gray-400"
-                                    }`}
+                                className={`p-3 rounded-full z-10 ${
+                                    orderStep === step.id 
+                                        ? `${isOrderComplete ? 'bg-green-500' : 'bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)]'} text-white`
+                                        : orderStep > step.id
+                                            ? 'bg-gray-400 text-white'
+                                            : "bg-gray-200 text-gray-400"
+                                }`}
                             >
                                 {step.icon}
                             </div>
@@ -78,7 +133,7 @@ const Order = () => {
                                 </div>
                             ) : (
                                 <div>
-                                    1. {steps[orderStep - 1].label}...
+                                    {orderStep}. {steps[orderStep - 1].label}...
                                 </div>
                             )}
                         </h2>
@@ -88,9 +143,15 @@ const Order = () => {
                         )}
 
                         <ul className="space-y-2 text-2xl text-gray-500">
-                            {steps.slice(orderStep).map((step, index) => (
+                            {steps.slice(0, orderStep - 1).map((step) => (
+                                <li key={`previous-${step.id}`} className="text-gray-400">
+                                    {step.id}. {step.label}
+                                </li>
+                            ))}
+                            
+                            {steps.slice(orderStep).map((step) => (
                                 <li key={step.id}>
-                                    {index + 2}. {step.label}
+                                    {step.id}. {step.label}
                                 </li>
                             ))}
                         </ul>

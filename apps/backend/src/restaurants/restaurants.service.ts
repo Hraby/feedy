@@ -69,10 +69,24 @@ export class RestaurantsService {
     }
 
     async getRestaurantById(id: string) {
-        return await this.prisma.restaurant.findUnique({
+        const res = await this.prisma.restaurant.findUnique({
             where: { id },
-            include: { menuItems: true, address: true },
+            include: {
+                menuItems: true,
+                address: true,
+                orders: {
+                    include: {
+                        orderItems: {
+                            include: {
+                                menuItem: true
+                            }
+                        }
+                    }
+                }
+            },
         });
+        console.log(await res)
+        return res
     }
 
     async approveRestaurant(id: string, status: RestaurantStatus) {

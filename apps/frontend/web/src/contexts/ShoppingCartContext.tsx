@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { useAuth } from "./AuthProvider";
 
 export type CartItem = {
   id: string;
@@ -30,6 +31,7 @@ type ShoppingCartContextType = {
 const ShoppingCartContext = createContext<ShoppingCartContextType | undefined>(undefined);
 
 export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
+  const {accessToken} = useAuth();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [orderStatus, setOrderStatus] = useState<string | null>(null);

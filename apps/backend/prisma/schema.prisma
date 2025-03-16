@@ -19,7 +19,7 @@ model User {
 
   role Role[] @default([Customer])
 
-  customerProfile   CustomerProfile?
+  orders            Order[]
   courierProfile    CourierProfile?
   restaurantProfile RestaurantProfile?
 
@@ -89,13 +89,6 @@ model RestaurantProfile {
   updatedAt   DateTime     @updatedAt
 }
 
-model CustomerProfile {
-  id     String  @id @default(uuid())
-  userId String  @unique
-  user   User    @relation(fields: [userId], references: [id])
-  orders Order[]
-}
-
 enum CourierStatus {
   Available
   Busy
@@ -163,17 +156,18 @@ model Order {
   restaurantId String
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
 
-  orderItems        OrderItem[]
-  CourierProfile    CourierProfile?  @relation(fields: [courierProfileId], references: [id])
-  courierProfileId  String?
-  CustomerProfile   CustomerProfile? @relation(fields: [customerProfileId], references: [id])
-  customerProfileId String?
+  orderItems       OrderItem[]
+  CourierProfile   CourierProfile? @relation(fields: [courierProfileId], references: [id])
+  courierProfileId String?
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
 }
 
 enum OrderStatus {
   Pending
-  Accepted
   Preparing
+  Ready
   OutForDelivery
   Delivered
   Cancelled
