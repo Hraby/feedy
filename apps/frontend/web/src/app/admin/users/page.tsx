@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import { FaTrash, FaCog } from 'react-icons/fa';
 import Modal from '@/components/Modal';
 import { fetchUsers, deleteUser, searchUsers, User, updateUserRole } from '@/app/actions/adminAction';
+import { toast, Slide } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthProvider';
 
 export interface AdminSidebarProps {
@@ -98,6 +99,18 @@ const AdminUsers = () => {
                 ? updatedRoles.filter(r => r !== role)
                 : [...updatedRoles, role];
         }
+
+        toast.success("Role uživatele byla úspěšně změněna!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+        });
     
         setUsers(users.map(u => u.id === id ? { ...u, role: updatedRoles } : u));
     
@@ -126,6 +139,18 @@ const AdminUsers = () => {
             
             setDeleteUserId(null);
             setIsDeleteModalOpen(false);
+
+            toast.success("Uživatel byl úspěšně smazán z databáze!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         } catch (err) {
             console.error('User deletion failed:', err);
             const loadUsers = async () => {
@@ -137,7 +162,17 @@ const AdminUsers = () => {
                 }
             };
             loadUsers();
-            alert('Nepodařilo se odstranit uživatele.');
+            toast.error("Nepodařilo se odstranit uživatele.", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         }
     };
 

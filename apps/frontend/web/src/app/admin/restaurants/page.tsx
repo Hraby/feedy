@@ -7,6 +7,7 @@ import { FaTrash, FaCog } from 'react-icons/fa';
 import Modal from '@/components/Modal';
 import { deleteRestaurant, fetchRestaurants, updateRestaurantStatus } from '@/app/actions/adminAction';
 import { useAuth } from '@/contexts/AuthProvider';
+import { toast, Slide } from 'react-toastify';
 
 interface Restaurant {
     id: string;
@@ -76,8 +77,30 @@ const AdminRestaurants = () => {
                 restaurant.id === id ? { ...restaurant, status } : restaurant
             ));
             setEditingRestaurantId(null);
+            toast.success("Status restaurace byl upraven!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         } catch (error) {
             console.error('Chyba při aktualizaci statusu:', error);
+            toast.error("Chyba při aktualizaci statusu.", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         }
     };
 
@@ -97,6 +120,17 @@ const AdminRestaurants = () => {
         } finally {
             setDeleteRestaurantId(null);
             setIsDeleteModalOpen(false);
+            toast.success("Restaurace byla úspěšně smazána z databáze!", {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         }
     };
 

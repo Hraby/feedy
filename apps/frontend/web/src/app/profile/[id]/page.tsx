@@ -19,6 +19,14 @@ const Profile = () => {
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
     const [openModal, setOpenModal] = useState<"courier" | "restaurant" | null>(null);
 
+
+    const mockOrders = [
+        { id: 1, items: 'Burger, Fries', date: '2023-11-15', restaurant: 'Burger King', price: 150 },
+        { id: 2, items: 'Pizza Margherita', date: '2023-11-14', restaurant: 'Pizza Hut', price: 200 },
+        { id: 3, items: 'Sushi Set', date: '2023-11-13', restaurant: 'Sushi Bar', price: 350 },
+    ];
+
+
     const [addresses, setAddresses] = useState([
         { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },
         { id: 'work', label: 'Práce', details: 'Office Park 456', type: 'work', active: false }
@@ -37,7 +45,7 @@ const Profile = () => {
 
     const handleAddAddress = () => {
         if (!newAddress) return;
-    
+
         if (editingAddressId) {
             setAddresses(prev =>
                 prev.map(addr => {
@@ -52,13 +60,13 @@ const Profile = () => {
         } else {
             const id = `${newAddressType}-${Date.now()}`;
             const label = newAddressType === 'home' ? 'Domov' : newAddressType === 'work' ? 'Práce' : 'Jiné';
-    
+
             setAddresses(prev => [
                 ...prev,
                 { id, label, details: newAddress, type: newAddressType, active: false }
             ]);
         }
-    
+
         setNewAddress("");
         setNewAddressType("home");
     };
@@ -263,6 +271,28 @@ const Profile = () => {
 
             <Modal isOpen={isOrdersOpen} onClose={() => setIsOrdersOpen(false)}>
                 <h2 className="text-xl font-bold mb-4">Objednávky</h2>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead className="sticky top-0 bg-white z-20">
+                            <tr className="border-b">
+                                <th className="p-4">Položky</th>
+                                <th className="p-4">Datum</th>
+                                <th className="p-4">Restaurace</th>
+                                <th className="p-4">Cena</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {mockOrders.map((order) => (
+                                <tr key={order.id} className="border-b hover:bg-gray-100">
+                                    <td className="p-4">{order.items}</td>
+                                    <td className="p-4">{order.date}</td>
+                                    <td className="p-4">{order.restaurant}</td>
+                                    <td className="p-4">{order.price} Kč</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </Modal>
             <Modal isOpen={isBalanceOpen} onClose={() => setIsBalanceOpen(false)}>
                 <h2 className="text-xl font-bold mb-4">Zůstatek</h2>

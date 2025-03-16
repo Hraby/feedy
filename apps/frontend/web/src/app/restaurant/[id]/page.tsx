@@ -96,14 +96,11 @@ export default function RestaurantDetail() {
                 <span className="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-600 rounded-full">
                   <FaCheckCircle /> Otevřeno
                 </span>
-                <span className="flex items-center gap-2 px-3 py-1 bg-yellow-100 text-yellow-600 rounded-full">
-                  <FaStar /> 4.5/5
-                </span>
                 <span className="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-600 rounded-full">
-                  <FaClock /> 25 min
+                  <FaClock /> 30 min
                 </span>
                 <span className="flex items-center gap-2 px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
-                  <FaMoneyBillWave /> 16 Kč za dopravu
+                  <FaMoneyBillWave /> 34 Kč za dopravu
                 </span>
               </div>
             </div>

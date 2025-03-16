@@ -7,7 +7,7 @@ import Modal from '@/components/Modal';
 import { FaCog } from 'react-icons/fa';
 import { fetchCouriers, fetchRestaurants, updateCourierStatus, updateRestaurantStatus } from '@/app/actions/adminAction';
 import { useAuth } from '@/contexts/AuthProvider';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { Slide, toast } from 'react-toastify';
 
 interface Request {
   id: string;
@@ -174,8 +174,6 @@ const AdminRequests = () => {
         )}
         </div>
       </main>
-
-      <ToastContainer/>
 
       <Modal isOpen={!!viewingRequest} onClose={() => setViewingRequest(null)}>
         {viewingRequest && (

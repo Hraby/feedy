@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Modal from "@/components/Modal";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
+import { toast, Slide } from 'react-toastify';
 
 interface MenuItem {
   id: string;
@@ -39,6 +40,18 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
       restaurantId: item.restaurantId,
     });
 
+    toast.success(`Položka ${item.name} byla přidána do košíku!`, {
+      position: "bottom-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      transition: Slide,
+      });
+
     onClose();
   };
 
@@ -69,7 +82,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
         <button
           onClick={handleAddToCart}
           disabled={isSubmitting}
-          className="w-full py-3 rounded-xl bg-orange-500 text-white font-semibold hover:bg-orange-600 transition-all duration-300 active:scale-95"
+          className="w-full py-3 rounded-xl bg-[var(--primary)] text-white font-semibold hover:bg-orange-600 transition-all duration-300 active:scale-95"
         >
           {isSubmitting ? "Přidávám..." : "Přidat do košíku"}
         </button>

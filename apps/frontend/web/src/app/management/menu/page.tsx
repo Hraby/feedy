@@ -6,7 +6,7 @@ import { FaPlus } from 'react-icons/fa';
 import ManagementSidebar from '@/components/ManagementSidebar';
 import Modal from '@/components/Modal';
 import ItemForm from '@/components/ItemForm';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, Slide } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthProvider';
 import { createMenuItem, deleteMenuItem, getMenu, updateMenuItem } from '@/app/actions/adminAction';
 
@@ -23,7 +23,7 @@ interface MenuItem {
 const ManagementMenu = () => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    
+
     const { accessToken } = useAuth();
     const restaurantId = searchParams.get("restaurantId");
 
@@ -35,19 +35,29 @@ const ManagementMenu = () => {
 
     useEffect(() => {
         if (!accessToken || !restaurantId) return;
-        
+
         const fetchMenu = async () => {
             setIsLoading(true)
             try {
                 const menuData = await getMenu(accessToken, restaurantId);
                 setMenuItems(menuData);
             } catch (error) {
-                toast.error("Nepodařilo se načíst menu.");
-            } finally{
+                toast.error('Nepodařilo se načíst menu!', {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Slide,
+                });
+            } finally {
                 setIsLoading(false);
             }
         };
-    
+
         fetchMenu();
     }, [accessToken, restaurantId]);
 
@@ -68,14 +78,44 @@ const ManagementMenu = () => {
             if (item.id != "") {
                 await updateMenuItem(accessToken, restaurantId, item.id.toString(), item);
                 setMenuItems((prev) => prev.map((i) => (i.id === item.id ? item : i)));
-                toast.success(`Položka ${item.name} byla upravena!`);
+                toast.success(`Položka ${item.name} byla upravena!`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Slide,
+                });
             } else {
                 const newItem = await createMenuItem(accessToken, restaurantId, "", item);
                 setMenuItems((prev) => [...prev, newItem]);
-                toast.success(`Položka ${newItem.name} byla přidána!`);
+                toast.success(`Položka ${newItem.name} byla přidána!`, {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: false,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition: Slide,
+                });
             }
         } catch (error) {
-            toast.error("Chyba při ukládání položky.");
+            toast.error('Chyba při ukládání položky.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         }
         setIsModalOpen(false);
     };
@@ -86,9 +126,29 @@ const ManagementMenu = () => {
         try {
             await deleteMenuItem(accessToken, restaurantId, id.toString(), {});
             setMenuItems((prev) => prev.filter((item: any) => item.id !== id));
-            toast.success(`Položka byla smazána!`);
+            toast.success('Položka byla smazána!', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         } catch (error) {
-            toast.error("Chyba při mazání položky.");
+            toast.error('Chyba při mazání položky.', {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+                transition: Slide,
+            });
         }
         setIsModalOpen(false);
     };
@@ -115,7 +175,7 @@ const ManagementMenu = () => {
                     </div>
                 ) : menuItems.length > 0 ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                        {menuItems.map((item:any, index) => (
+                        {menuItems.map((item: any, index) => (
                             <div
                                 key={index}
                                 className="bg-white p-4 rounded-2xl shadow-sm cursor-pointer hover:shadow-md transition flex flex-col items-center"
@@ -162,7 +222,7 @@ const ManagementMenu = () => {
                             </svg>
                             <h3 className="text-lg font-medium text-gray-700">Žádné položky v menu</h3>
                             <p className="mt-1 text-sm text-gray-500">Zatím nemáte žádné položky v menu. Přidejte svou první položku tlačítkem níže.</p>
-                            <button 
+                            <button
                                 onClick={handleAddNewItem}
                                 className="mt-4 px-4 py-2 bg-[var(--gradient-purple-start)] text-white rounded-2xl hover:bg-[var(--gradient-purple-end)]"
                             >
@@ -171,8 +231,6 @@ const ManagementMenu = () => {
                         </div>
                     </div>
                 )}
-                
-                <ToastContainer />
 
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                     <ItemForm item={selectedItem} onSave={handleSaveItem} onDelete={handleDeleteItem} />
