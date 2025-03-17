@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons'; 
 import { ScrollView } from 'react-native';
 import {
@@ -7,9 +7,13 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  Animated,
 } from 'react-native';
 import { router } from 'expo-router';
 import AddressSelect from '@/components/AddressSelect';
+import { BACKEND_URL } from '@/lib/constants';
+import { useAuth } from '@/context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Category {
   id: string;
@@ -17,22 +21,279 @@ interface Category {
   image: any; 
 }
 
-const categories: Category[] = [
-  { id: '1', title: 'Kategorie 1', image: require('@/assets/images/card1.jpeg') },
-  { id: '2', title: 'Kategorie 2', image: require('@/assets/images/card1.jpeg') },
-  { id: '3', title: 'Kategorie 3', image: require('@/assets/images/card1.jpeg') },
-  { id: '4', title: 'Kategorie 4', image: require('@/assets/images/card1.jpeg') },
-];
+interface Restaurant {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  category: string[];
+  status: string;
+  rating?: number;
+  deliveryTime?: string;
+  address?: {
+    city: string;
+    zipCode: string;
+    street: string;
+    country: string;
+  };
+}
 
 const menuCategories = [
   { id: '1', title: 'Burger', icon: require('@/assets/images/burger.png') },
   { id: '2', title: 'Kuřecí', icon: require('@/assets/images/chicken.png') },
   { id: '3', title: 'Pizza', icon: require('@/assets/images/pizza.png') },
-  { id: '4', title: 'Ramen', icon: require('@/assets/images/ramen.png') },
-  { id: '5', title: 'Sushi', icon: require('@/assets/images/sushi.png') },
+  { id: '4', title: 'Čína', icon: require('@/assets/images/ramen.png') },
+  { id: '5', title: 'Snídaně', icon: require('@/assets/images/sandwich.png') },
+  { id: '6', title: 'Sushi', icon: require('@/assets/images/sushi.png') },
+  { id: '7', title: 'Salát', icon: require('@/assets/images/carrot.png') },
+  { id: '8', title: 'Sladké', icon: require('@/assets/images/waffle.png') },
+  { id: '9', title: 'Slané', icon: require('@/assets/images/fries.png') },
 ];
 
 export default function IndexScreen() {
+  const { user, accessToken, address } = useAuth();
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [newRestaurants, setNewRestaurants] = useState<Restaurant[]>([]);
+  const [newRestaurantsLoading, setNewRestaurantsLoading] = useState(true);
+  const [pulseAnim] = useState(new Animated.Value(0.3));
+
+  const defaultAddress = {
+    city: "Zlín",
+    zipCode: "760 01",
+    street: "náměstí Míru 12",
+    country: "Czechia"
+  };
+
+    useEffect(() => {
+    const pulsate = Animated.sequence([
+      Animated.timing(pulseAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(pulseAnim, {
+        toValue: 0.3,
+        duration: 800,
+        useNativeDriver: true,
+      })
+    ]);
+    
+    Animated.loop(pulsate).start();
+    
+    return () => {
+      pulseAnim.stopAnimation();
+    };
+  }, []);
+
+  const fetchApprovedRestaurants = async (address: any, accessToken: any) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/restaurant`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Restaurants fetch failed");
+      }
+
+      const data = await response.json();
+      
+      return data.filter(
+        (restaurant: any) => 
+          restaurant.status === "Approved" && 
+          restaurant.address?.city === JSON.parse(address).city
+      );
+    } catch (error) {
+      console.error("Error fetching restaurants:", error);
+      return [];
+    }
+  };
+
+  const fetchNewRestaurants = async (address: any, accessToken: any) => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/restaurant`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("New restaurants fetch failed");
+      }
+
+      const data = await response.json();
+        const filteredData = data.filter(
+        (restaurant: any) => 
+          restaurant.status === "Approved" && 
+          restaurant.address?.city === JSON.parse(address).city
+      );
+      
+      return filteredData
+        .sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+        .slice(0, 10)
+        .map((restaurant: any) => ({
+          ...restaurant,
+          rating: (Math.random() * 2 + 3).toFixed(1),
+          deliveryTime: `${Math.floor(Math.random() * 20) + 20} min`
+        }));
+    } catch (error) {
+      console.error("Error fetching new restaurants:", error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    const loadRestaurants = async () => {
+      if (!accessToken) return;
+
+      const savedAddress = await AsyncStorage.getItem('deliveryAddress');
+      console.log(savedAddress)
+      const currentAddress = savedAddress || defaultAddress;
+      setLoading(true);
+      setNewRestaurantsLoading(true);
+
+      try {
+        const [restaurantsData, newRestaurantsData] = await Promise.all([
+          fetchApprovedRestaurants(currentAddress, accessToken),
+          fetchNewRestaurants(currentAddress, accessToken)
+        ]);
+        
+        setRestaurants(restaurantsData);
+        setFilteredRestaurants(restaurantsData);
+        setNewRestaurants(newRestaurantsData);
+      } catch (error) {
+        console.log("Error:", error);
+      } finally {
+        setTimeout(() => {
+          setLoading(false);
+          setNewRestaurantsLoading(false);
+        }, 1200);
+      }
+    };
+
+    if (accessToken) {
+      loadRestaurants();
+    }
+  }, [accessToken, address]);
+
+  const toggleFilter = (categoryName: string) => {
+    if (selectedCategory === categoryName) {
+      setSelectedCategory(null);
+      setFilteredRestaurants(restaurants);
+    } else {
+      setSelectedCategory(categoryName);
+      const filtered = restaurants.filter(restaurant => 
+        restaurant.category && restaurant.category.includes(categoryName)
+      );
+      setFilteredRestaurants(filtered);
+    }
+  };
+
+  const RestaurantSkeleton = () => (
+    <Animated.View 
+      style={[
+        styles.restaurantCard, 
+        { opacity: pulseAnim }
+      ]}
+    >
+      <View style={[styles.skeletonImage, { backgroundColor: '#e0e0e0' }]} />
+      <View style={styles.restaurantInfo}>
+        <View style={styles.restaurantTitleContainer}>
+          <View style={[styles.skeletonText, { width: '50%', height: 14, backgroundColor: '#e0e0e0' }]} />
+          <View style={[styles.skeletonText, { width: '30%', height: 12, backgroundColor: '#e0e0e0' }]} />
+        </View>
+        <View style={[styles.skeletonText, { width: '90%', height: 12, marginTop: 5, backgroundColor: '#e0e0e0' }]} />
+        <View style={[styles.skeletonText, { width: '70%', height: 12, marginTop: 3, backgroundColor: '#e0e0e0' }]} />
+        <View style={styles.restaurantTags}>
+          <View style={[styles.skeletonTag, { width: 70, backgroundColor: '#e0e0e0' }]} />
+          <View style={[styles.skeletonTag, { width: 60, backgroundColor: '#e0e0e0' }]} />
+        </View>
+      </View>
+    </Animated.View>
+  );
+
+  const renderSkeletons = (count = 4) => {
+    return Array(count).fill(0).map((_, index) => (
+      <RestaurantSkeleton key={index} />
+    ));
+  };
+
+  const RestaurantCard = ({ restaurant, onPress }: { restaurant: Restaurant, onPress: () => void }) => (
+    <TouchableOpacity 
+      style={styles.restaurantCard}
+      onPress={onPress}
+    >
+      <Image 
+        source={{ uri: restaurant.imageUrl }} 
+        style={styles.restaurantImage} 
+        resizeMode="cover"
+        defaultSource={require('@/assets/images/placeholder.png')}
+      />
+      <View style={styles.restaurantInfo}>
+        <View style={styles.restaurantTitleContainer}>
+          <Text style={styles.restaurantTitle}>{restaurant.name}</Text>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.ratingText}>{restaurant.rating || "4.0"}</Text>
+            <Ionicons name="star" size={16} color="#FF5500" />
+          </View>
+        </View>
+        <Text style={styles.restaurantDescription} numberOfLines={2}>
+          {restaurant.description}
+        </Text>
+        <View style={styles.restaurantTags}>
+          {restaurant.category && restaurant.category.map((cat: string, i: number) => (
+            <View key={i} style={styles.tag}>
+              <Ionicons name="fast-food-outline" size={16} color="#252B33" />
+              <Text style={styles.tagText}>{cat}</Text>
+            </View>
+          )).slice(0, 2)}
+          <View style={styles.tag}>
+            <Ionicons name="time-outline" size={16} color="#252B33" />
+            <Text style={styles.tagText}>{restaurant.deliveryTime || "25 min"}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const NewRestaurantsSection = () => (
+    <>
+      <Text style={styles.sectionTitle}>Vyzkoušejte něco nového</Text>
+      <View style={styles.cardsScrollContainer}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {newRestaurantsLoading ? (
+            renderSkeletons(4)
+          ) : newRestaurants.length === 0 ? (
+            <View style={styles.emptyStateContainer}>
+              <Text style={styles.emptyStateText}>
+                Momentálně nejsou dostupné žádné nové restaurace.
+              </Text>
+            </View>
+          ) : (
+            newRestaurants.map((restaurant, index) => (
+              <RestaurantCard 
+                key={index} 
+                restaurant={restaurant} 
+                onPress={() => router.push({
+                  pathname: '/(app)/(user)/[id]',
+                  params: { id: restaurant.id }
+                })}
+              />
+            ))
+          )}
+        </ScrollView>
+      </View>
+    </>
+  );
+
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }} style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -65,84 +326,59 @@ export default function IndexScreen() {
 
         <View style={styles.menuScrollContainer}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {menuCategories.map((item, index) => (
-              <TouchableOpacity key={item.id} style={[styles.menuItem, index === 0 && styles.menuItemActive]}>
+            {menuCategories.map((item) => (
+              <TouchableOpacity 
+                key={item.id} 
+                style={[
+                  styles.menuItem, 
+                  selectedCategory === item.title && styles.menuItemActive
+                ]}
+                onPress={() => toggleFilter(item.title)}
+              >
                 <Image source={item.icon} style={styles.menuIcon} />
-                <Text style={[styles.menuText, index === 0 && styles.menuTextActive]}>{item.title}</Text>
+                <Text style={[
+                  styles.menuText, 
+                  selectedCategory === item.title && styles.menuTextActive
+                ]}>
+                  {item.title}
+                </Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
+       
+        <Text style={styles.sectionTitle}>
+          {user?.firstName ? `Co to dnes bude, ${user.firstName}` : 'Co to dnes bude?'}
+        </Text>
 
         <View style={styles.cardsScrollContainer}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {categories.map((item) => (
-              <TouchableOpacity key={item.id} style={styles.restaurantCard}
-              onPress={() => router.push('/(app)/(user)/restaurantPage')}
-              >
-                <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
-                <View style={styles.restaurantInfo}>
-                  <View style={styles.restaurantTitleContainer}>
-                    <Text style={styles.restaurantTitle}>{item.title}</Text>
-                    <View style={styles.ratingContainer}>
-                      <Text style={styles.ratingText}>4/5</Text>
-                      <Ionicons name="star" size={16} color="#FF5500" />
-                    </View>
-                  </View>
-                  <Text style={styles.restaurantDescription}>
-                    Popis kategorie {item.title}.
-                  </Text>
-                  <View style={styles.restaurantTags}>
-                    <View style={styles.tag}>
-                      <Ionicons name="fast-food-outline" size={16} color="#252B33" />
-                      <Text style={styles.tagText}>Kategorie</Text>
-                    </View>
-                    <View style={styles.tag}>
-                      <Ionicons name="car-outline" size={16} color="#252B33" />
-                      <Text style={styles.tagText}>30 min</Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          {loading ? (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {renderSkeletons(4)}
+            </ScrollView>
+          ) : filteredRestaurants.length === 0 ? (
+            <View style={styles.emptyStateContainer}>
+              <Text style={styles.emptyStateText}>
+                Pod tímto filtrem aktuálně není dostupná žádná restaurace.
+              </Text>
+            </View>
+          ) : (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {filteredRestaurants.map((restaurant, index) => (
+                <RestaurantCard 
+                  key={index} 
+                  restaurant={restaurant} 
+                  onPress={() => router.push({
+                    pathname: '/(app)/(user)/[id]',
+                    params: { id: restaurant.id }
+                  })}
+                />
+              ))}
+            </ScrollView>
+          )}
         </View>
 
-        <Text style={styles.sectionTitle}>Vyzkoušejte něco nového</Text>
-
-        <View style={styles.cardsScrollContainer}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {categories.map((item) => (
-              <TouchableOpacity key={item.id} style={styles.restaurantCard}
-              onPress={() => router.push('/(app)/(user)/restaurantPage')}
-              >
-                <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
-                <View style={styles.restaurantInfo}>
-                  <View style={styles.restaurantTitleContainer}>
-                    <Text style={styles.restaurantTitle}>{item.title}</Text>
-                    <View style={styles.ratingContainer}>
-                      <Text style={styles.ratingText}>4/5</Text>
-                      <Ionicons name="star" size={16} color="#FF5500" />
-                    </View>
-                  </View>
-                  <Text style={styles.restaurantDescription}>
-                    Popis kategorie {item.title}.
-                  </Text>
-                  <View style={styles.restaurantTags}>
-                    <View style={styles.tag}>
-                      <Ionicons name="fast-food-outline" size={16} color="#252B33" />
-                      <Text style={styles.tagText}>Kategorie</Text>
-                    </View>
-                    <View style={styles.tag}>
-                      <Ionicons name="car-outline" size={16} color="#252B33" />
-                      <Text style={styles.tagText}>30 min</Text>
-                    </View>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
+        <NewRestaurantsSection />
       </View>
     </ScrollView>
   );
@@ -296,6 +532,7 @@ const styles = StyleSheet.create({
   },
   restaurantCard: {
     width: 160,
+    height: 220,
     backgroundColor: '#fff',
     borderRadius: 12,
     overflow: 'hidden',
@@ -314,6 +551,7 @@ const styles = StyleSheet.create({
   },
   restaurantInfo: {
     padding: 8,
+    flex: 1,
   },
   restaurantTitleContainer: {
     flexDirection: 'row',
@@ -324,6 +562,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#252B33',
+    flex: 1,
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -339,15 +578,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#252B33',
     marginTop: 5,
+    flex: 1,
   },
   restaurantTags: {
     flexDirection: 'row',
     marginTop: 8,
+    flexWrap: 'wrap',
   },
   tag: {
     flexDirection: 'row',
     alignItems: 'center',
     marginRight: 10,
+    marginBottom: 5,
   },
   tagText: {
     fontSize: 12,
@@ -371,5 +613,32 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 10,
   },
+  emptyStateContainer: {
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 150,
+    width: 300,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+  },
+  // Skeleton loading styles
+  skeletonImage: {
+    width: '100%',
+    height: 95,
+  },
+  skeletonText: {
+    height: 10,
+    borderRadius: 4,
+    marginVertical: 3,
+  },
+  skeletonTag: {
+    height: 12,
+    borderRadius: 4,
+    marginRight: 10,
+    marginTop: 8,
+  }
 });
-

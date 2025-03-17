@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
 
 interface Address {
   id: string;
@@ -165,6 +166,7 @@ const AddressSelect = () => {
       setIsEditing(false);
       setIsDropdownVisible(false);
       Keyboard.dismiss();
+      router.push("/(app)/(user)")
     } catch (error) {
       console.error('Chyba při ukládání adresy', error);
     }

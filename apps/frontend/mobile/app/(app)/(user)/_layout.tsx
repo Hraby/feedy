@@ -196,7 +196,17 @@ export default function TabLayout() {
           ),
         }}
       />
-    </Tabs>
+      <Tabs.Screen
+        name="[id]"
+        options={{
+          title: 'Restaurant page',
+          href: null,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
+    </Tabs>    
   );
 }
 
