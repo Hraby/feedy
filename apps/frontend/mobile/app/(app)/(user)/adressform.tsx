@@ -1,18 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from "expo-location";
 import { router } from 'expo-router';
+import { useAuth } from '@/context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height } = Dimensions.get("window");
 
+const defaultAddress = { city: "Zlín", zipCode: "760 01", street: "náměstí Míru 12", country: "Czechia" };
+
 const AddressForm = () => {
-  const [selectedLabel, setSelectedLabel] = useState("Domov");
+  const { address, refresh } = useAuth();
   const [location, setLocation] = useState(null);
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState(address?.city || defaultAddress.city);
+  const [street, setStreet] = useState(address?.street || defaultAddress.street);
+  const [postalCode, setPostalCode] = useState(address?.zipCode || defaultAddress.zipCode);
+
+  useEffect(() => {
+    if (address) {
+      setCity(address.city);
+      setStreet(address.street);
+      setPostalCode(address.zipCode);
+    }
+  }, [address]);
 
   const getCoordinates = async (address) => {
     try {
@@ -28,9 +40,27 @@ const AddressForm = () => {
     }
   };
 
-  const handleSaveAddress = () => {
-    const address = `${street}, ${city}, ${postalCode}`;
-    getCoordinates(address);
+  const handleSaveAddress = async () => {
+    if (!city || !street || !postalCode) {
+      Alert.alert("Chyba", "Vyplňte prosím všechna pole");
+      return;
+    }
+
+    const newAddress = {
+      street,
+      city,
+      zipCode: postalCode,
+      country: "Czechia"
+    };
+
+    try {
+      await AsyncStorage.setItem('deliveryAddress', JSON.stringify(newAddress));
+      await refresh(); // Refresh auth context to update the address
+      router.push('/adress');
+    } catch (error) {
+      console.error('Error saving address:', error);
+      Alert.alert("Chyba", "Nepodařilo se uložit adresu");
+    }
   };
 
   return (
@@ -55,7 +85,7 @@ const AddressForm = () => {
       </View>
 
       <TouchableOpacity style={styles.backButton}
-            onPress={() => router.push('/adress')}
+        onPress={() => router.push('/adress')}
       >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>

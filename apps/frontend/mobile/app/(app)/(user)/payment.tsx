@@ -15,7 +15,7 @@ const PaymentSuccessScreen = ({ navigation }) => {
       <Text style={styles.subtitle}>Na objednávce se pracuje!</Text>
 
       <TouchableOpacity style={styles.button}
-      onPress={() => router.push('/ordertrack')}>
+      onPress={() => router.push('/(app)/(user)/ordertrack')}>
         <Text style={styles.buttonText}>SLEDOVAT OBJEDNÁVKU</Text>
       </TouchableOpacity>
     </View>

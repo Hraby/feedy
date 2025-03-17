@@ -1,9 +1,15 @@
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { TabBarIcon } from '@/components/navigation/TabBarIcon';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { StyleSheet } from 'react-native';
+import { useDriver } from '@/context/DriverContext';
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
+  const { activeOrder } = useDriver();
+
   return (
     <Tabs
       screenOptions={{
@@ -16,97 +22,40 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
+          title: 'Příjem objednávek',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'mail-outline' : 'mail-outline'} color={color} size={28} />
+            <TabBarIcon name={focused ? 'mail' : 'mail-outline'} color={color} size={28} />
           ),
         }}
       />
+      {activeOrder ? (
+        <Tabs.Screen
+          name="driverdelivery"
+          options={{
+            title: 'Aktivní doručení',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'bicycle' : 'bicycle-outline'} color={color} size={28} />
+            ),
+          }}
+        />
+      ) : (
+        <Tabs.Screen
+          name="driverdelivery"
+          options={{
+            title: 'Aktivní doručení',
+            tabBarIcon: ({ color, focused }) => (
+              <TabBarIcon name={focused ? 'bicycle' : 'bicycle-outline'} color={color} size={28} />
+            ),
+            href: null,
+          }}
+        />
+      )}
       <Tabs.Screen
         name="usermenu"
         options={{
+          title: 'Menu',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'menu' : 'menu-outline'} color={color} size={28} />
-          ),
-          href: "/(app)/(shared)/usermenu"
-        }}
-      />
-      <Tabs.Screen
-        name="payment"
-        options={{
-          title: 'PaymentSuccess',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="adress"
-        options={{
-          title: 'Adress',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="adressform"
-        options={{
-          title: 'Form',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="delivery"
-        options={{
-          title: 'Delivery',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="driverdelivery"
-        options={{
-          title: 'DriverDelivery',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="ordersummary"
-        options={{
-          title: 'OSummary',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="order"
-        options={{
-          title: 'Order',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="ordertrack"
-        options={{
-          title: 'Ordertrack',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
           ),
         }}
       />
@@ -114,86 +63,6 @@ export default function TabLayout() {
         name="personalinfo"
         options={{
           title: 'PI',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="restaurantPage"
-        options={{
-          title: 'RP',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="login"
-        options={{
-          title: 'Login',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="register"
-        options={{
-          title: 'Register',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="balance"
-        options={{
-          title: 'Balance',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="info"
-        options={{
-          title: 'Info',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="chart"
-        options={{
-          title: 'Chart',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          href: null,
-          tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="search"
-        options={{
-          title: 'Search',
           href: null,
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />

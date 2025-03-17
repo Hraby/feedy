@@ -1,39 +1,66 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { RectButton, Swipeable } from "react-native-gesture-handler";
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useShoppingCart } from "@/context/CartShoppingContext";
+import { useCallback } from "react";
 
 const { width } = Dimensions.get("window");
 
-const initialCart = [
-  { id: "1", name: "Kebab klasický", price: 305, quantity: 1, image: require("@/assets/images/kebab.png") },
-  { id: "2", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
-  { id: "3", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
-  { id: "4", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
-  { id: "5", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
-  { id: "6", name: "Burger hovězí", price: 259, quantity: 1, image: require("@/assets/images/kebab.png") },
-];
+const getDefaultImage = (category: string) => {
+  switch (category.toLowerCase()) {
+    case 'burger':
+      return require('@/assets/images/burger.png');
+    case 'kuřecí':
+      return require('@/assets/images/chicken.png');
+    case 'pizza':
+      return require('@/assets/images/pizza.png');
+    case 'čína':
+      return require('@/assets/images/ramen.png');
+    case 'snídaně':
+      return require('@/assets/images/sandwich.png');
+    case 'sushi':
+      return require('@/assets/images/sushi.png');
+    case 'salát':
+      return require('@/assets/images/carrot.png');
+    case 'sladké':
+      return require('@/assets/images/waffle.png');
+    case 'slané':
+      return require('@/assets/images/fries.png');
+    default:
+      return require('@/assets/images/placeholder.png');
+  }
+};
 
 export default function CartScreen() {
-  const [cart, setCart] = useState(initialCart);
+  const {
+    cartItems,
+    increaseCartQuantity,
+    decreaseCartQuantity,
+    removeFromCart,
+    cartQuantity
+  } = useShoppingCart();
+
   const swipeableRefs = useRef<Map<string, Swipeable>>(new Map());
 
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Cart items updated:", cartItems);
+    }, [cartItems])
+  );
+
   const handleIncrease = (id: string) => {
-    setCart(cart.map((item) => (item.id === id ? { ...item, quantity: item.quantity + 1 } : item)));
+    increaseCartQuantity(id);
   };
 
   const handleDecrease = (id: string) => {
-    setCart(cart.map((item) =>
-      item.id === id && item.quantity > 1
-        ? { ...item, quantity: item.quantity - 1 }
-        : item
-    ));
+    decreaseCartQuantity(id);
   };
 
   const handleRemove = (id: string) => {
-    setCart(cart.filter((item) => item.id !== id));
+    removeFromCart(id);
   };
 
   const renderRightActions = (id: string) => {
@@ -74,7 +101,7 @@ export default function CartScreen() {
     >
       <View style={styles.cartItem}>
         <View style={styles.itemRow}>
-          <Image source={item.image} style={styles.itemImage} />
+          <Image source={item.image || getDefaultImage(item.category || '')} style={styles.itemImage} />
           <View style={styles.itemInfo}>
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemPrice}>{item.price.toFixed(2)} Kč</Text>
@@ -101,8 +128,10 @@ export default function CartScreen() {
     </Swipeable>
   );
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = cartItems.reduce((sum: any, item: any) => sum + item.price * item.quantity, 0);
+  const totalItems = cartItems.reduce((sum: any, item: any) => sum + item.quantity, 0);
+
+  console.log(cartItems)
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: "#FBFBFB"}}>
@@ -114,7 +143,7 @@ export default function CartScreen() {
         </TouchableOpacity>
         
         <View style={styles.restaurantHeader}>
-          <Text style={styles.restaurantName}>Kebab House Zlín</Text>
+          <Text style={styles.restaurantName}>{cartItems[0]?.restaurantName || 'Košík'}</Text>
           <View style={styles.separator} />
         </View>
 
@@ -123,9 +152,9 @@ export default function CartScreen() {
           <Text style={styles.deleteText}>Pro smazání přejeďte položku vlevo</Text>
         </View>
 
-        {cart.length > 0 ? (
+        {cartItems.length > 0 ? (
           <FlatList 
-            data={cart} 
+            data={cartItems} 
             keyExtractor={(item) => item.id} 
             renderItem={renderItem} 
             contentContainerStyle={styles.listContainer}
@@ -151,9 +180,9 @@ export default function CartScreen() {
           </View>
           
           <TouchableOpacity 
-            style={[styles.checkoutButton, cart.length === 0 && styles.disabledButton]} 
-            onPress={() => router.push('/(app)/(shared)/delivery')}
-            disabled={cart.length === 0}
+            style={[styles.checkoutButton, cartItems.length === 0 && styles.disabledButton]} 
+            onPress={() => router.push('/(app)/(user)/delivery')}
+            disabled={cartItems.length === 0}
           >
             <Text style={styles.checkoutButtonText}>Pokračovat k platbě</Text>
             <Ionicons name="arrow-forward" size={20} color="#FFF" />

@@ -1,57 +1,99 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
-import { Checkbox, Button } from 'react-native-paper';
+import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, Alert } from 'react-native';
+import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { useLocalSearchParams, router } from 'expo-router';
+import { useShoppingCart } from '@/context/CartShoppingContext';
 
 const { width } = Dimensions.get('window');
 
-export default function OrderScreen() {
-  const [quantity, setQuantity] = useState(1);
-  const [sauces, setSauces] = useState(['Bylinková omáčka', 'Česneková omáčka']);
+interface MenuItem {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  imageUrl: string;
+  restaurantId: string;
+  restaurantName: string;
+}
 
-  const handleSauceToggle = (sauce) => {
-    if (sauces.includes(sauce)) {
-      if (sauces.length > 1) {
-        setSauces(sauces.filter((s) => s !== sauce));
-      }
-    } else if (sauces.length < 2) {
-      setSauces([...sauces, sauce]);
-    }
-  };
+export default function OrderScreen() {
+  const params = useLocalSearchParams<Record<string, string>>();
+  const { addToCart, cartItems, clearCart } = useShoppingCart();
+  const [quantity, setQuantity] = useState(1);
 
   const handleIncrease = () => setQuantity(quantity + 1);
   const handleDecrease = () => {
     if (quantity > 1) setQuantity(quantity - 1);
   };
 
+  const handleAddToCart = () => {
+    if (cartItems.length > 0 && cartItems[0].restaurantId !== params.restaurantId) {
+      Alert.alert(
+        "Změna restaurace",
+        "Máte v košíku položky z jiné restaurace. Chcete vymazat košík a přidat tuto položku?",
+        [
+          {
+            text: "Ne, ponechat",
+            style: "cancel"
+          },
+          {
+            text: "Ano, vymazat košík",
+            onPress: () => {
+              clearCart();
+              addToCart({
+                id: params.id,
+                name: params.name,
+                price: Number(params.price),
+                quantity: quantity,
+                restaurantId: params.restaurantId,
+                restaurantName: params.restaurantName,
+                image: params.imageUrl ? { uri: params.imageUrl } : undefined
+              });
+              router.push(`/(app)/(user)/${params.restaurantId}`);
+            }
+          }
+        ]
+      );
+    } else {
+      addToCart({
+        id: params.id,
+        name: params.name,
+        price: Number(params.price),
+        quantity: quantity,
+        restaurantId: params.restaurantId,
+        restaurantName: params.restaurantName,
+        image: params.imageUrl ? { uri: params.imageUrl } : undefined
+      });
+      router.push(`/(app)/(user)/${params.restaurantId}`);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.imageWrapper}>
-        <Image source={require('@/assets/images/kebab2.png')} style={styles.topImage} />
-        <TouchableOpacity style={styles.backButton}>
+        <Image 
+          source={params.imageUrl ? { uri: params.imageUrl } : require('@/assets/images/placeholder.png')} 
+          style={styles.topImage} 
+        />
+        <TouchableOpacity style={styles.backButton} onPress={() => router.push(`/(app)/(user)/${params.restaurantId}`)}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.infoBlock}>
-          <Text style={styles.foodTitle}>Kebab klasický</Text>
+          <Text style={styles.foodTitle}>{params.name}</Text>
           <View style={styles.restaurantContainer}>
-  <Ionicons name="home-outline" size={20} color="gray" style={styles.homeIcon} />
-  <Text style={styles.restaurant}>Kebab Haus Zlín</Text>
-</View>
-          <Text style={styles.description}>Maso, turecký chléb, zelí, dresink</Text>
-
-          <Text style={styles.sectionTitle}>Jakou omáčku si přejete?</Text>
-          <Text style={styles.sauceHint}>Vyberte alespoň 1 možnost, nejvíce 2.</Text>
-          <Checkbox.Item label="Bez omáčky" status={sauces.length === 0 ? 'checked' : 'unchecked'} onPress={() => setSauces([])} />
-          <Checkbox.Item label="Bylinková omáčka" status={sauces.includes('Bylinková omáčka') ? 'checked' : 'unchecked'} onPress={() => handleSauceToggle('Bylinková omáčka')} />
-          <Checkbox.Item label="Česneková omáčka" status={sauces.includes('Česneková omáčka') ? 'checked' : 'unchecked'} onPress={() => handleSauceToggle('Česneková omáčka')} />
+            <Ionicons name="home-outline" size={20} color="gray" style={styles.homeIcon} />
+            <Text style={styles.restaurant}>{params.restaurantName}</Text>
+          </View>
+          <Text style={styles.description}>{params.description}</Text>
         </View>
 
         <View style={styles.boxContainer}>
           <View style={styles.priceQuantityContainer}>
-            <Text style={styles.price}>{(305 * quantity).toFixed(2)} Kč</Text>
+            <Text style={styles.price}>{(Number(params.price) * quantity).toFixed(2)} Kč</Text>
 
             <View style={styles.quantityBox}>
               <TouchableOpacity onPress={handleDecrease} style={styles.quantityButton}>
@@ -64,7 +106,7 @@ export default function OrderScreen() {
             </View>
           </View>
 
-          <Button mode="contained" style={styles.addButton}>
+          <Button mode="contained" style={styles.addButton} onPress={handleAddToCart}>
             PŘIDAT DO KOŠÍKU
           </Button>
         </View>
@@ -116,16 +158,6 @@ const styles = StyleSheet.create({
     fontWeight: 'light',
     marginBottom: 10,
     marginTop: 5,
-  },
-  sectionTitle: {
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 5,
-    fontSize: 18,
-  },
-  sauceHint: {
-    color: '#FF5500',
-    marginBottom: 5,
   },
   boxContainer: {
     backgroundColor: '#F0F5FA',

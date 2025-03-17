@@ -47,6 +47,16 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="order/[id]"
+        options={{
+          title: 'OrderStatus',
+          href: null,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="payment"
         options={{
           title: 'PaymentSuccess',

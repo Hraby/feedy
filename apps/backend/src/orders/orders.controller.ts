@@ -12,7 +12,7 @@ export class OrdersController {
 
     @Get()
     @ApiOperation({ summary: "Get all orders" }) 
-    @Auth(Role.Admin)
+    @Auth(Role.Admin, Role.Courier)
     async getOrders(@Query("status") status?: string) {
         return this.ordersService.getOrders(status);
     }

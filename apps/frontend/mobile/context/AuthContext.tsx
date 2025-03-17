@@ -3,6 +3,7 @@ import { BACKEND_URL } from '@/lib/constants';
 import { fetch } from 'expo/fetch';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import { jwtDecode } from 'jwt-decode';
 
 export interface User {
   id: string;
@@ -19,8 +20,14 @@ export interface AddressPayload {
   country: string;
 }
 
+interface DecodedToken {
+  exp: number;
+  iat: number;
+}
+
 interface AuthContextType {
   user: User | null;
+  refreshToken: string | null;
   accessToken: string | null;
   address: AddressPayload | null;
   loading: boolean;
@@ -34,6 +41,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   accessToken: null,
+  refreshToken: null,
   address: null,
   loading: true,
   error: null,
@@ -42,6 +50,9 @@ const AuthContext = createContext<AuthContextType>({
   logout: async () => {},
   refresh: async () => {}
 });
+
+const TOKEN_REFRESH_INTERVAL = 13 * 60 * 1000; // 13 minutes
+const TOKEN_EXPIRY_BUFFER = 60 * 1000; // 1 minute
 
 async function getSessionData() {
   try {
@@ -68,6 +79,17 @@ async function getSessionData() {
   }
 }
 
+function isTokenExpired(token: string): boolean {
+  try {
+    const decoded = jwtDecode<DecodedToken>(token);
+    const currentTime = Date.now() / 1000;
+    return decoded.exp < currentTime;
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return true;
+  }
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -76,33 +98,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const loadUserData = useCallback(async () => {
-    try {
-      setLoading(true);
-      const session = await getSessionData();
-      
-      if (session) {
-        setUser(session.user);
-        setAccessToken(session.accessToken);
-        setRefreshToken(session.refreshToken);
-        setAddress(session.address);
-      } else {
-        setUser(null);
-        setAccessToken(null);
-        setRefreshToken(null);
-        setAddress(null);
-      }
-    } catch (error) {
-      console.error("Failed to load user data:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   const refreshTokenFn = useCallback(async () => {
     if (!refreshToken) return null;
-    
+
     try {
+      console.log("Attempting to refresh token...");
       const response = await fetch(`${BACKEND_URL}/auth/refresh-token`, {
         method: "POST",
         headers: {
@@ -118,6 +118,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const data = await response.json();
+      console.log("Token refresh successful");
       
       await Promise.all([
         SecureStore.setItemAsync("accessToken", data.accessToken),
@@ -135,16 +136,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [refreshToken]);
 
+  const loadUserData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const session = await getSessionData();
+      
+      if (session) {
+        if (isTokenExpired(session.accessToken)) {
+          console.log("Access token expired, refreshing...");
+          const newAccessToken = await refreshTokenFn();
+          if (!newAccessToken) {
+            throw new Error("Failed to refresh token");
+          }
+        }
+
+        setUser(session.user);
+        setAccessToken(session.accessToken);
+        setRefreshToken(session.refreshToken);
+        setAddress(session.address);
+      } else {
+        setUser(null);
+        setAccessToken(null);
+        setRefreshToken(null);
+        setAddress(null);
+      }
+    } catch (error) {
+      console.error("Failed to load user data:", error);
+      await logout();
+    } finally {
+      setLoading(false);
+    }
+  }, [refreshTokenFn]);
+
   useEffect(() => {
     loadUserData();
-  }, []);
+  }, [loadUserData]);
 
   useEffect(() => {
     if (!refreshToken) return;
-    
-    const interval = setInterval(refreshTokenFn, 14 * 60 * 1000);
+
+    const interval = setInterval(async () => {
+      if (accessToken && isTokenExpired(accessToken)) {
+        console.log("Access token expired during interval, refreshing...");
+        await refreshTokenFn();
+      }
+    }, TOKEN_REFRESH_INTERVAL);
+  
     return () => clearInterval(interval);
-  }, [refreshToken, refreshTokenFn]);
+  }, [refreshToken, accessToken, refreshTokenFn]);
 
   const login = async (email: string, password: string) => {
     try {
@@ -252,6 +291,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return (
     <AuthContext.Provider
       value={{
+        refreshToken,
         user,
         accessToken,
         address,
