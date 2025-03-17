@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import AppWidget from "../components/LandingWidget";
+import AppBanner from "../components/AppBanner";
 import Footer from "../components/Footer";
-import { FiMapPin } from 'react-icons/fi';
 import { FaShoppingBasket, FaBolt, FaStar } from 'react-icons/fa';
 import JoinFeedy from "../components/JoinFeedy";
 import NavbarSwitcher from "@/components/NavbarSwitch";
@@ -66,17 +65,17 @@ export default function Home() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                className="mt-4 relative w-full max-w-md mx-auto lg:mx-0 lg:text-left flex justify-center lg:justify-start space-x-4"
+                variants={fadeInUp}
               >
                 <button
-                  className="bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] transition-transform duration-300 hover:scale-105 text-white px-7 py-2 rounded-full text-lg font-semibold shadow-lg whitespace-nowrap"
+                  className="mt-3 bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] transition-transform duration-300 hover:scale-105 text-white px-7 py-2 rounded-full text-lg font-semibold shadow-lg whitespace-nowrap"
                   onClick={() => window.location.href = user ? '/menu' : '/login'}
                 >
                   {user ? 'Mám hlad!' : 'Nejprve se přihlásím'}
                 </button>
                 {!user && (
                   <button
-                    className="bg-[var(--gray)] transition-transform duration-300 hover:scale-105 px-7 py-2 rounded-full text-lg font-semibold whitespace-nowrap"
+                    className="mt-3 ml-3 bg-[var(--gray)] transition-transform duration-300 hover:scale-105 px-7 py-2 rounded-full text-lg font-semibold whitespace-nowrap"
                     onClick={() => window.location.href = '/register'}
                   >
                     Nejprve se zaregistruji
@@ -154,7 +153,7 @@ export default function Home() {
           variants={fadeInUp}
         >
           <div className="container mx-auto px-4">
-            <AppWidget />
+            <AppBanner />
           </div>
         </motion.div>
       </section>

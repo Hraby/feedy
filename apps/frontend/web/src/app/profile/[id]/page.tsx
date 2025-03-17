@@ -85,21 +85,24 @@ const Profile = () => {
     if (!user || user.id !== id) return <p>Uživatel nenalezen</p>;
 
     return (
-        <div className="bg-gray-100 h-screen">
+        <div className="bg-gray-100 min-h-screen">
             <NavbarSwitcher />
 
-            <div className="flex flex-col items-center py-10">
-                <div className="max-w-6xl w-full bg-white  rounded-2xl p-10 space-y-6">
-                    <div className="flex items-center space-x-6">
+            <div className="flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-6xl w-full bg-white rounded-2xl p-6 sm:p-10 space-y-6">
+                    <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
                         <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center text-4xl text-gray-600">
                             {user.name[0]}
                         </div>
-                        <div>
-                            <h1 className="text-4xl font-bold flex items-center">
+                        <div className="text-center sm:text-left">
+                            <h1 className="text-3xl sm:text-4xl font-bold flex flex-wrap justify-center sm:justify-start">
                                 {user.name}
                                 <div className="flex space-x-2 ml-4">
                                     {user.role.map((role) => (
-                                        <span key={role} className={`px-2 py-0.5 rounded-lg text-lg text-white ${role === 'Admin' ? 'bg-red-500' : role === 'Courier' ? 'bg-green-500' : role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}>
+                                        <span
+                                            key={role}
+                                            className={`px-3 rounded-full text-base text-white flex items-center justify-center ${role === 'Admin' ? 'bg-red-500' : role === 'Courier' ? 'bg-green-500' : role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}
+                                        >
                                             {role}
                                         </span>
                                     ))}
@@ -110,52 +113,35 @@ const Profile = () => {
                     </div>
                 </div>
 
-                <div className="max-w-6xl w-full grid grid-cols-2 gap-6 mt-6">
-                    <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setIsAddressOpen(true)}>
-                        <div>
-                            <p className="text-gray-500 text-sm mb-2">Přidejte nebo upravte vaši adresu</p>
-                            <h2 className="text-2xl font-semibold">Adresa</h2>
-                        </div>
-                        <FaMapMarkerAlt className="text-2xl text-gray-600" />
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setIsOrdersOpen(true)}>
-                        <div>
-                            <p className="text-gray-500 text-sm mb-2">Podívejte se na vaše objednávky</p>
-                            <h2 className="text-2xl font-semibold">Objednávky</h2>
-                        </div>
-                        <FaListAlt className="text-2xl text-gray-600" />
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setIsBalanceOpen(true)}>
-                        <div>
-                            <p className="text-gray-500 text-sm mb-2">Dobijte si kredit pro objednávky</p>
-                            <h2 className="text-2xl font-semibold">Zůstatek</h2>
-                        </div>
-                        <FaWallet className="text-2xl text-gray-600" />
-                    </div>
-                    <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setIsSettingsOpen(true)}>
-                        <div>
-                            <p className="text-gray-500 text-sm mb-2">Upravte si profil, jak jen chcete</p>
-                            <h2 className="text-2xl font-semibold">Nastavení</h2>
-                        </div>
-                        <FaCog className="text-2xl text-gray-600" />
-                    </div>
-                    {user.role.includes("Courier") ? (
-                        <div
-                            className="bg-gradient-to-r from-green-400 to-green-600 rounded-2xl p-6 cursor-pointer flex justify-between items-center"
-                            onClick={() => setOpenModal("courier")}
-                        >
+                <div className="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mt-6">
+                    {[{
+                        label: "Adresa", desc: "Přidejte nebo upravte vaši adresu", icon: FaMapMarkerAlt, action: () => setIsAddressOpen(true)
+                    }, {
+                        label: "Objednávky", desc: "Podívejte se na vaše objednávky", icon: FaListAlt, action: () => setIsOrdersOpen(true)
+                    }, {
+                        label: "Zůstatek", desc: "Dobijte si kredit pro objednávky", icon: FaWallet, action: () => setIsBalanceOpen(true)
+                    }, {
+                        label: "Nastavení", desc: "Upravte si profil, jak jen chcete", icon: FaCog, action: () => setIsSettingsOpen(true)
+                    }].map(({ label, desc, icon: Icon, action }, idx) => (
+                        <div key={idx} className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={action}>
                             <div>
-                                <p className="text-white text-sm mb-2">Zobrazit dokončené objednávky</p>
-                                <h2 className="text-2xl font-semibold text-white">Rozvoz objednávek</h2>
+                                <p className="text-gray-500 text-sm mb-2">{desc}</p>
+                                <h2 className="text-2xl font-semibold">{label}</h2>
                             </div>
-                            <FaTruck className="text-2xl text-white" />
+                            <Icon className="text-2xl text-gray-600" />
                         </div>
+                    ))}
 
+                    {user.role.includes("Courier") ? (
+                        <div className="bg-green-500 rounded-2xl p-6 cursor-pointer flex justify-between items-center text-white" onClick={() => setOpenModal("courier")}>
+                            <div>
+                                <p className="text-sm mb-2">Zobrazit dokončené objednávky</p>
+                                <h2 className="text-2xl font-semibold">Rozvoz objednávek</h2>
+                            </div>
+                            <FaTruck className="text-2xl" />
+                        </div>
                     ) : (
-                        <div
-                            className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center"
-                            onClick={() => setOpenModal("courier")}
-                        >
+                        <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setOpenModal("courier")}>
                             <div>
                                 <p className="text-gray-500 text-sm mb-2">Staňte se partnerským kurýrem Feedy</p>
                                 <h2 className="text-2xl font-semibold">Žádost o kurýra</h2>
@@ -165,21 +151,15 @@ const Profile = () => {
                     )}
 
                     {user.role.includes("Restaurant") ? (
-                        <div
-                            className="bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] rounded-2xl p-6 cursor-pointer flex justify-between items-center"
-                            onClick={() => window.location.href = "/management"}
-                        >
+                        <div className="bg-purple-500 rounded-2xl p-6 cursor-pointer flex justify-between items-center text-white" onClick={() => window.location.href = "/management"}>
                             <div>
-                                <p className="text-white text-sm mb-2">Spravujte svou restauraci</p>
-                                <h2 className="text-2xl font-semibold text-white">Management restaurace</h2>
+                                <p className="text-sm mb-2">Spravujte svou restauraci</p>
+                                <h2 className="text-2xl font-semibold">Management restaurace</h2>
                             </div>
-                            <FaStore className="text-2xl text-white" />
+                            <FaStore className="text-2xl" />
                         </div>
                     ) : (
-                        <div
-                            className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center"
-                            onClick={() => setOpenModal("restaurant")}
-                        >
+                        <div className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={() => setOpenModal("restaurant")}>
                             <div>
                                 <p className="text-gray-500 text-sm mb-2">Přidejte vaši restauraci</p>
                                 <h2 className="text-2xl font-semibold">Žádost o restauraci</h2>

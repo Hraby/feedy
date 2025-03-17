@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function AppWidget() {
+export default function AppBanner() {
   return (
     <div className="container mx-auto px-6 md:px-16 lg:px-16 mt-10 relative">
       <div
