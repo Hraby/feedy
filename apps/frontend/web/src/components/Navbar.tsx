@@ -230,7 +230,7 @@ export default function Navbar() {
                         </div>
                         <Link href="/checkout">
                           <button className="items-center font-bold transition p-2 w-full rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white">
-                            Pokračovat k platbě
+                            Shrnutí objednávky
                           </button>
                         </Link>
                       </>

@@ -50,7 +50,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
       progress: undefined,
       theme: "colored",
       transition: Slide,
-      });
+    });
 
     onClose();
   };

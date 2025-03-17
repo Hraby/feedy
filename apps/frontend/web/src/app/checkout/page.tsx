@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FaHome, FaBuilding, FaCircle, FaPlus, FaMinus } from "react-icons/fa";
 import Footer from "@/components/Footer";
 import Modal from "@/components/Modal";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { BACKEND_URL } from "@/lib/constants";
+import { toast, Slide } from 'react-toastify';
 
 type Address = {
   id: string;
@@ -32,26 +34,26 @@ const Checkout = () => {
   const serviceFee = 8.25;
   const deliveryFee = 34;
   const router = useRouter();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState<string | null>(null);
   const [activeAddress, setActiveAddress] = useState('');
   const [deliveryTime, setDeliveryTime] = useState<"asap" | "scheduled">("asap");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { user, address, accessToken } = useAuth();
-  const { 
-    cartItems, 
-    removeFromCart, 
-    increaseCartQuantity, 
+  const {
+    cartItems,
+    removeFromCart,
+    increaseCartQuantity,
     decreaseCartQuantity,
     setOrderStatus,
     clearOrder
   } = useShoppingCart();
-  
+
   const [addresses, setAddresses] = useState<Address[]>([]);
-  
+
   useState(() => {
     if (address) {
       setAddresses([{
@@ -105,23 +107,35 @@ const Checkout = () => {
   const confirmRemoveItem = () => {
     if (itemToRemove) {
       removeFromCart(itemToRemove);
+      toast.success(`Položka byla odebrána z košíku!`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+      });
+      redirect("/menu")
     }
     setIsModalOpen(false);
   };
 
   const calculateTotal = () => {
-    return cartItems.reduce((acc:any, item:any) => acc + item.price * item.quantity, 0) + serviceFee + deliveryFee;
+    return cartItems.reduce((acc: any, item: any) => acc + item.price * item.quantity, 0) + serviceFee + deliveryFee;
   };
 
   const handleCheckout = async () => {
     if (!user || cartItems.length === 0) return;
-    
+
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const restaurantId = cartItems[0]?.restaurantId || "";
-      
+
       const orderDto: OrderDTO = {
         restaurantId,
         items: cartItems.map((item: any) => ({
@@ -130,8 +144,8 @@ const Checkout = () => {
           price: item.price
         }))
       };
-      
-      const response = await fetch(BACKEND_URL+'/order', {
+
+      const response = await fetch(BACKEND_URL + '/order', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -139,13 +153,13 @@ const Checkout = () => {
         },
         body: JSON.stringify(orderDto)
       });
-      
+
       if (!response.ok) {
         throw new Error('Failed to create order');
       }
-      
+
       const order = await response.json();
-      
+
       setOrderStatus('Pending');
       clearOrder();
 
@@ -171,11 +185,11 @@ const Checkout = () => {
           loading="lazy"
         ></iframe>
       </div>
-      
+
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense flex-grow">
         <div>
           <h1 className="text-3xl font-bold mb-6">Dokončení objednávky</h1>
-          
+
           <label className="block mb-4 font-semibold">Kam to bude?</label>
           {addresses.map((address) => (
             <div
@@ -198,13 +212,13 @@ const Checkout = () => {
               </div>
             </div>
           ))}
-          
+
           <Link href={`/profile/${user.id}`}>
             <button className="items-center font-bold transition mt-2 p-2 w-2/3 rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white">
               Přidat novou adresu
             </button>
           </Link>
-          
+
           <label className="block mt-6 mb-4 font-semibold">Kdy to bude?</label>
           <div className="flex flex-col gap-2 w-2/3">
             <button
@@ -217,7 +231,7 @@ const Checkout = () => {
                 <p className="text-sm">Očekáváno doručení do 35 minut.</p>
               </div>
             </button>
-            
+
             <button
               className={`p-4 text-left rounded-2xl border disabled cursor-not-allowed flex items-center gap-2 ${deliveryTime === "scheduled" ? "border-[var(--primary)]" : "border-[var(--gray)]"}`}
               disabled
@@ -232,11 +246,11 @@ const Checkout = () => {
             </button>
           </div>
         </div>
-        
+
         <div className="bg-white shadow-2xl rounded-3xl h-fit p-8 flex flex-col flex-grow mb-10">
           <div>
             <h2 className="text-2xl font-bold mb-6">Shrnutí objednávky</h2>
-            
+
             {cartItems.length === 0 ? (
               <p className="text-gray-500 text-center">Košík je prázdný!</p>
             ) : (
@@ -268,9 +282,9 @@ const Checkout = () => {
                     </div>
                   </div>
                 ))}
-                
+
                 <hr className="my-4 border-t border-gray-200 shadow-sm" />
-                
+
                 <div className="p-2 text-gray-800 hover:bg-gray-100 rounded-2xl">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
@@ -280,7 +294,7 @@ const Checkout = () => {
                     <span className="text-[var(--primary)] text-lg whitespace-nowrap">{serviceFee}Kč</span>
                   </div>
                 </div>
-                
+
                 <div className="p-2 text-gray-800 hover:bg-gray-100 rounded-2xl">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
@@ -290,19 +304,19 @@ const Checkout = () => {
                     <span className="text-[var(--primary)] text-lg whitespace-nowrap">{deliveryFee}Kč</span>
                   </div>
                 </div>
-                
+
                 <div className="flex justify-between text-xl font-bold text-[var(--primary)] mt-5">
                   <span>Celková cena</span>
                   <span>{calculateTotal()}Kč</span>
                 </div>
-                
+
                 {error && (
                   <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-lg">
                     {error}
                   </div>
                 )}
-                
-                <button 
+
+                <button
                   className="mt-5 w-full font-bold text-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-full"
                   onClick={handleCheckout}
                   disabled={isLoading || cartItems.length === 0}
@@ -314,9 +328,9 @@ const Checkout = () => {
           </div>
         </div>
       </div>
-      
+
       <Footer />
-      
+
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Odebrat položku</h2>
         <p className="text-gray-500">
@@ -324,14 +338,14 @@ const Checkout = () => {
         </p>
         <p className="text-red-600 mb-4">Tato akce nelze vrátit zpět!</p>
         <div className="mt-6 flex justify-end gap-4">
-          <button 
-            onClick={() => setIsModalOpen(false)} 
+          <button
+            onClick={() => setIsModalOpen(false)}
             className="px-4 py-2 bg-gray-200 rounded-lg"
           >
             Zrušit
           </button>
-          <button 
-            onClick={confirmRemoveItem} 
+          <button
+            onClick={confirmRemoveItem}
             className="px-4 py-2 bg-red-500 text-white rounded-lg"
           >
             Odebrat
