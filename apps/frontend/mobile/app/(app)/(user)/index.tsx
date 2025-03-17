@@ -9,6 +9,7 @@ import {
   Image,
 } from 'react-native';
 import { router } from 'expo-router';
+import AddressSelect from '@/components/AddressSelect';
 
 interface Category {
   id: string;
@@ -31,119 +32,119 @@ const menuCategories = [
   { id: '5', title: 'Sushi', icon: require('@/assets/images/sushi.png') },
 ];
 
-export default function TabTwoScreen() {
+export default function IndexScreen() {
   return (
-    <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.leftContainer}>
-          <Ionicons name="navigate" size={24} color="#FF5500" style={styles.icon} />
-          <Text style={styles.headerTitle}>Poloha 9876</Text>
+    <ScrollView contentContainerStyle={{ paddingBottom: 100 }} style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.leftContainer}>
+            <AddressSelect />
+          </View>
+          <View style={styles.rightContainer}>
+            <TouchableOpacity onPress={() => router.push("/(app)/(user)/usermenu")}>
+              <Ionicons name="person-circle-outline" size={20} color="#fff" />
+            </TouchableOpacity>
+          </View>
         </View>
-        <View style={styles.rightContainer}>
-          <Ionicons name="image" size={20} color="#fff" />
-        </View>
-      </View>
 
-      <View style={styles.rectangle}>
-        <TouchableOpacity 
-                    onPress={() => router.push('/search')}
-                  >
-        <Text style={styles.rectangleText}>Na co máte chuť?</Text>
-        </TouchableOpacity>
-      </View>
-      
-      <View style={styles.secondRectangle}>
-        <Text style={styles.secondRectangleText}>Ochutnejte</Text>
-        <Text style={styles.secondRectangleSubText}>Naše skvělé</Text>
-        <Text style={styles.secondRectangleBoldText}>BURGERY</Text>
+        <View style={styles.rectangle}>
+          <TouchableOpacity 
+            style={styles.searchBar}
+            onPress={() => router.push('/(app)/(user)/search')}>
+            <Text style={styles.rectangleText}>Na co máte chuť?</Text>
+          </TouchableOpacity>
+        </View>
         
-        <Image source={require('@/assets/images/burgerAndChips.png')} style={styles.secondRectangleImage} />
-      </View>
+        <View style={styles.secondRectangle}>
+          <Text style={styles.secondRectangleText}>Ochutnejte</Text>
+          <Text style={styles.secondRectangleSubText}>Naše skvělé</Text>
+          <Text style={styles.secondRectangleBoldText}>BURGERY</Text>
+          
+          <Image source={require('@/assets/images/burgerAndChips.png')} style={styles.secondRectangleImage} />
+        </View>
 
-      <View style={styles.menuScrollContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {menuCategories.map((item, index) => (
-            <TouchableOpacity key={item.id} style={[styles.menuItem, index === 0 && styles.menuItemActive]}>
-              <Image source={item.icon} style={styles.menuIcon} />
-              <Text style={[styles.menuText, index === 0 && styles.menuTextActive]}>{item.title}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+        <View style={styles.menuScrollContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {menuCategories.map((item, index) => (
+              <TouchableOpacity key={item.id} style={[styles.menuItem, index === 0 && styles.menuItemActive]}>
+                <Image source={item.icon} style={styles.menuIcon} />
+                <Text style={[styles.menuText, index === 0 && styles.menuTextActive]}>{item.title}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
-      <View style={styles.cardsScrollContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {categories.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.restaurantCard}
-            onPress={() => router.push('/restaurantPage')}
-            >
-              <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
-              <View style={styles.restaurantInfo}>
-                <View style={styles.restaurantTitleContainer}>
-                  <Text style={styles.restaurantTitle}>{item.title}</Text>
-                  <View style={styles.ratingContainer}>
-                    <Text style={styles.ratingText}>4/5</Text>
-                    <Ionicons name="star" size={16} color="#FF5500" />
+        <View style={styles.cardsScrollContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {categories.map((item) => (
+              <TouchableOpacity key={item.id} style={styles.restaurantCard}
+              onPress={() => router.push('/(app)/(user)/restaurantPage')}
+              >
+                <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
+                <View style={styles.restaurantInfo}>
+                  <View style={styles.restaurantTitleContainer}>
+                    <Text style={styles.restaurantTitle}>{item.title}</Text>
+                    <View style={styles.ratingContainer}>
+                      <Text style={styles.ratingText}>4/5</Text>
+                      <Ionicons name="star" size={16} color="#FF5500" />
+                    </View>
+                  </View>
+                  <Text style={styles.restaurantDescription}>
+                    Popis kategorie {item.title}.
+                  </Text>
+                  <View style={styles.restaurantTags}>
+                    <View style={styles.tag}>
+                      <Ionicons name="fast-food-outline" size={16} color="#252B33" />
+                      <Text style={styles.tagText}>Kategorie</Text>
+                    </View>
+                    <View style={styles.tag}>
+                      <Ionicons name="car-outline" size={16} color="#252B33" />
+                      <Text style={styles.tagText}>30 min</Text>
+                    </View>
                   </View>
                 </View>
-                <Text style={styles.restaurantDescription}>
-                  Popis kategorie {item.title}.
-                </Text>
-                <View style={styles.restaurantTags}>
-                  <View style={styles.tag}>
-                    <Ionicons name="fast-food-outline" size={16} color="#252B33" />
-                    <Text style={styles.tagText}>Kategorie</Text>
-                  </View>
-                  <View style={styles.tag}>
-                    <Ionicons name="car-outline" size={16} color="#252B33" />
-                    <Text style={styles.tagText}>30 min</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
 
-       <Text style={styles.sectionTitle}>Vyzkoušejte něco nového</Text>
+        <Text style={styles.sectionTitle}>Vyzkoušejte něco nového</Text>
 
-       <View style={styles.cardsScrollContainer}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {categories.map((item) => (
-            <TouchableOpacity key={item.id} style={styles.restaurantCard}
-            onPress={() => router.push('/restaurantPage')}
-            >
-              <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
-              <View style={styles.restaurantInfo}>
-                <View style={styles.restaurantTitleContainer}>
-                  <Text style={styles.restaurantTitle}>{item.title}</Text>
-                  <View style={styles.ratingContainer}>
-                    <Text style={styles.ratingText}>4/5</Text>
-                    <Ionicons name="star" size={16} color="#FF5500" />
+        <View style={styles.cardsScrollContainer}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {categories.map((item) => (
+              <TouchableOpacity key={item.id} style={styles.restaurantCard}
+              onPress={() => router.push('/(app)/(user)/restaurantPage')}
+              >
+                <Image source={item.image} style={styles.restaurantImage} resizeMode="cover" />
+                <View style={styles.restaurantInfo}>
+                  <View style={styles.restaurantTitleContainer}>
+                    <Text style={styles.restaurantTitle}>{item.title}</Text>
+                    <View style={styles.ratingContainer}>
+                      <Text style={styles.ratingText}>4/5</Text>
+                      <Ionicons name="star" size={16} color="#FF5500" />
+                    </View>
+                  </View>
+                  <Text style={styles.restaurantDescription}>
+                    Popis kategorie {item.title}.
+                  </Text>
+                  <View style={styles.restaurantTags}>
+                    <View style={styles.tag}>
+                      <Ionicons name="fast-food-outline" size={16} color="#252B33" />
+                      <Text style={styles.tagText}>Kategorie</Text>
+                    </View>
+                    <View style={styles.tag}>
+                      <Ionicons name="car-outline" size={16} color="#252B33" />
+                      <Text style={styles.tagText}>30 min</Text>
+                    </View>
                   </View>
                 </View>
-                <Text style={styles.restaurantDescription}>
-                  Popis kategorie {item.title}.
-                </Text>
-                <View style={styles.restaurantTags}>
-                  <View style={styles.tag}>
-                    <Ionicons name="fast-food-outline" size={16} color="#252B33" />
-                    <Text style={styles.tagText}>Kategorie</Text>
-                  </View>
-                  <View style={styles.tag}>
-                    <Ionicons name="car-outline" size={16} color="#252B33" />
-                    <Text style={styles.tagText}>30 min</Text>
-                  </View>
-                </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
       </View>
-    </View>
     </ScrollView>
-
   );
 }
 
@@ -307,7 +308,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ddd', 
   },
-  
   restaurantImage: {
     width: '100%',
     height: 95,
@@ -354,12 +354,22 @@ const styles = StyleSheet.create({
     color: '#252B33',
     marginLeft: 5,
   },
-
   sectionTitle: {
     fontSize: 20,
     fontWeight: '500',
     color: '#252B33',
     marginLeft: 15,
     marginTop: 20,
-    },
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EAEAEA',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 25,
+    marginHorizontal: 15,
+    marginTop: 10,
+  },
 });
+

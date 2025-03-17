@@ -33,7 +33,7 @@ export default function AddressScreen() {
         renderItem={({ item }) => (
           <View style={styles.addressItem}>
             <View style={styles.iconContainer}>
-              <Ionicons name={item.icon} size={24} color="#FF5500" />
+              <Ionicons name={item.icon as any} size={24} color="#FF5500" />
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.addressType}>{item.type}</Text>

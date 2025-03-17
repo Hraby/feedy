@@ -19,7 +19,7 @@ const SearchScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}
-              onPress={() => router.push('/explore')}
+              onPress={() => router.push("/(app)/(user)")}
               >
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>

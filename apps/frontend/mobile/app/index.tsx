@@ -1,8 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import { router } from 'expo-router';
+import { useAuth } from '@/context/AuthContext';
 
-export default function HomeScreen() {
+export default function AuthIndex() {
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace('/(app)/(user)');
+    }
+  }, [user, loading]);
+
+  if (loading) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <ImageBackground 

@@ -20,7 +20,7 @@ const sections = [
 const InfoMenuPage = () => {
   const [openSection, setOpenSection] = useState(null);
 
-  const toggleSection = (index) => {
+  const toggleSection = (index: any) => {
     setOpenSection(openSection === index ? null : index);
   };
 

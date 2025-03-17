@@ -9,7 +9,7 @@ const orders = [
   { id: 3, name: "Pizza Hut", price: "350 Kč", items: "03 Items", distance: "Do 25 km" }
 ];
 
-const OrderScreen = () => {
+const TakeOrderScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.headerContainer}>
@@ -31,8 +31,8 @@ const OrderScreen = () => {
           </View>
           <View style={styles.buttonsBackground}>
             <View style={styles.buttonsContainer}>
-              <TouchableOpacity style={styles.acceptButton}                     onPress={() => router.push('/driverdelivery')}
-              ><Text style={styles.acceptText}>Přijmout</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.acceptButton}onPress={() => router.push('/(app)/(shared)/delivery')}>
+                <Text style={styles.acceptText}>Přijmout</Text></TouchableOpacity>
               <TouchableOpacity style={styles.cancelButton}><Text style={styles.cancelText}>Cancel</Text></TouchableOpacity>
             </View>
           </View>
@@ -149,4 +149,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderScreen;
+export default TakeOrderScreen;
