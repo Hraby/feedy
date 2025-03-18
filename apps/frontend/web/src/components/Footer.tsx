@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="text-2xl font-bold text-[var(--primary)]">feedy.</div>
 
         <nav className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6">
-          <Link href="#">
+          <Link href="/about">
             <span className="text-[var(--font)] hover:text-[var(--primary)] transition-colors duration-300">
               O nás
             </span>
@@ -18,7 +18,7 @@ export default function Footer() {
               Podmínky služby
             </span>
           </Link>
-          <Link href="#">
+          <Link href="/about">
             <span className="text-[var(--font)] hover:text-[var(--primary)] transition-colors duration-300">
               Kontakt
             </span>

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { FaHome, FaBuilding, FaCircle, FaPlus, FaMinus } from "react-icons/fa";
 import Footer from "@/components/Footer";
 import Modal from "@/components/Modal";
@@ -137,7 +136,6 @@ const Checkout = () => {
 
   const confirmRemoveItem = () => {
     if (itemToRemove) {
-      removeFromCart(itemToRemove);
       toast.success(`Položka byla odebrána z košíku!`, {
         position: "bottom-right",
         autoClose: 5000,
@@ -149,7 +147,7 @@ const Checkout = () => {
         theme: "colored",
         transition: Slide,
       });
-      redirect("/menu")
+      removeFromCart(itemToRemove);
     }
     setIsModalOpen(false);
   };

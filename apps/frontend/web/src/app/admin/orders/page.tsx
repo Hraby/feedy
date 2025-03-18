@@ -5,6 +5,7 @@ import AdminSidebar from '@/components/AdminSidebar';
 import { useState, useEffect } from 'react';
 import { FaTrash, FaCog } from 'react-icons/fa';
 import Modal from '@/components/Modal';
+import { toast, Slide } from 'react-toastify';
 
 export interface AdminSidebarProps {
     activePath: string;
@@ -51,6 +52,17 @@ const AdminOrders = () => {
         setOrders(orders.map(order => (
             order.id === id ? { ...order, status } : order
         )));
+        toast.success(`Stav objednávky byl upraven!`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
     };
 
     const handleDeleteOrder = (id: number) => {
@@ -64,6 +76,17 @@ const AdminOrders = () => {
             setDeleteOrderId(null);
             setIsDeleteModalOpen(false);
         }
+        toast.success(`Objednávka byla smazána z databáze!`, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Slide,
+          });
     };
 
     const cancelDeleteOrder = () => {
@@ -87,7 +110,7 @@ const AdminOrders = () => {
                             <tr className="border-b">
                                 <th className="p-4">ID</th>
                                 <th className="p-4 w-1/6">Položky</th>
-                                <th className="p-4 w-1/6">Status</th>
+                                <th className="p-4 w-1/6">Stav</th>
                                 <th className="p-4">Datum a čas</th>
                                 <th className="p-4">Restaurace</th>
                                 <th className="p-4">Kurýr</th>

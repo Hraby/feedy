@@ -8,6 +8,8 @@ import ItemModal from "@/components/MenuItemModal";
 import { fetchRestaurantId } from "@/app/actions/adminAction";
 import { useAuth } from "@/contexts/AuthProvider";
 import { notFound } from "next/navigation";
+import { ToastContainer } from 'react-toastify';
+import Link from "next/link";
 
 interface MenuItem {
   id: string;
@@ -159,6 +161,9 @@ export default function RestaurantDetail() {
           </div>
         )
       )}
+      <Link href="/checkout">
+        <ToastContainer/>
+      </Link>
     </div>
   );
 }

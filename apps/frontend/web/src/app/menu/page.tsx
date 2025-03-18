@@ -109,7 +109,7 @@ export default function Menu() {
                             <div className="w-2/3">
                                 <h2 className="text-xl font-bold">Feedy spouští své služby!</h2>
                                 <p className="text-base">Online objednávání jídla nebylo nikdy jednodušší.</p>
-                                <button className="mt-4 bg-white text-[#f5880b] font-semibold py-2 px-4 rounded-lg w-fit transform transition-all duration-300 hover:scale-105">✔ To chci!</button>
+                                <button disabled className="mt-4 bg-white cursor-not-allowed text-[#f5880b] font-semibold py-2 px-4 rounded-lg w-fit transform transition-all duration-300 hover:scale-105">✔ To chci!</button>
                             </div>
                             <img
                                 src="https://images.pexels.com/photos/248444/pexels-photo-248444.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
@@ -121,7 +121,7 @@ export default function Menu() {
                             <div className="w-2/3">
                                 <h2 className="text-xl font-bold">Získejte 100 Kč na první objednávku!</h2>
                                 <p className="text-base">Na první objednávku rozdáváme slevu až 100 Kč.</p>
-                                <button className="mt-4 bg-white text-[#9D174D] font-semibold py-2 px-4 rounded-lg w-fit transform transition-all duration-300 hover:scale-105">✔ Jdu do toho!</button>
+                                <button disabled className="mt-4 bg-white cursor-not-allowed text-[#9D174D] font-semibold py-2 px-4 rounded-lg w-fit transform transition-all duration-300 hover:scale-105">✔ Jdu do toho!</button>
                             </div>
                             <img
                                 src="https://images.pexels.com/photos/375467/pexels-photo-375467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"

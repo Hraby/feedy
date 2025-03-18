@@ -10,12 +10,12 @@ export default function AppBanner() {
         }}
       >
         <div className="max-w-lg relative z-10 text-center md:text-left w-full md:w-auto">
-          <h2 className="text-2xl md:text-3xl font-bold whitespace-nowrap">Vyzkoušeli jste už naši mobilní aplikaci?</h2>
+          <h2 className="text-2xl md:text-3xl font-bold lg:whitespace-nowrap">Vyzkoušeli jste už naši mobilní aplikaci?</h2>
           <p className="mt-3 text-base md:text-lg">
             Objednávejte jídlo rychle a pohodlně přímo z mobilu. Stáhněte si naši aplikaci a užijte si skvělé výhody.
           </p>
           <button
-            className="bg-white text-[var(--primary)] mt-3 transition-transform duration-300 hover:scale-105 px-7 py-2 rounded-full text-lg font-semibold whitespace-nowrap"
+            className="bg-white text-[var(--primary)] mt-3 transition-transform duration-300 hover:scale-105 px-7 py-2 rounded-full text-lg font-semibold md:whitespace-nowrap"
           >
             Stáhnout aplikaci
           </button>
