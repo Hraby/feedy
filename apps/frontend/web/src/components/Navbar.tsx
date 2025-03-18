@@ -19,10 +19,7 @@ export default function Navbar() {
     document.body.classList.toggle("overflow-hidden", isMobileMenuOpen);
   };
 
-  const [addresses, setAddresses] = useState([
-    { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },
-    { id: 'work', label: 'Práce', details: 'Office Park 456', type: 'work', active: false }
-  ]);
+  const [addresses, setAddresses] = useState([{ id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true }]);
 
   useEffect(() => {
     if (address) {
@@ -171,7 +168,7 @@ export default function Navbar() {
                             </div>
                           </div>
                         ))}
-                        <button
+                        {/* <button
                           onClick={(e) => {
                             e.stopPropagation();
                             setIsEditing(true);
@@ -179,10 +176,10 @@ export default function Navbar() {
                           className="w-full mt-2 p-2 text-center text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-300"
                         >
                           Změnit adresu
-                        </button>
+                        </button> */}
                         <Link href={`/profile/${user.id}`}>
                           <button className="items-center font-bold transition mt-2 p-2 w-full rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white">
-                            Přidat další adresu
+                            Upravit adresu
                           </button>
                         </Link>
                       </div>
