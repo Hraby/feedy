@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons'; 
 import { ScrollView } from 'react-native';
 import {
@@ -9,11 +9,12 @@ import {
   Image,
   Animated,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import AddressSelect from '@/components/AddressSelect';
 import { BACKEND_URL } from '@/lib/constants';
 import { useAuth } from '@/context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchRestaurants } from '@/lib/api';
 
 interface Category {
   id: string;
@@ -52,22 +53,76 @@ const menuCategories = [
 
 export default function IndexScreen() {
   const { user, accessToken, address } = useAuth();
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
+  const [restaurantsData, setRestaurantsData] = useState({
+    all: [],
+    filtered: [],
+    loading: true,
+    newLoading: true,
+  });
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [newRestaurants, setNewRestaurants] = useState<Restaurant[]>([]);
-  const [newRestaurantsLoading, setNewRestaurantsLoading] = useState(true);
   const [pulseAnim] = useState(new Animated.Value(0.3));
 
-  const defaultAddress = {
-    city: "Zlín",
-    zipCode: "760 01",
-    street: "náměstí Míru 12",
-    country: "Czechia"
+  const defaultAddress = { city: "Zlín", zipCode: "760 01", street: "náměstí Míru 12", country: "Czechia" };
+
+  const loadRestaurants = async () => {
+    if (!accessToken) return;
+
+    const savedAddress = await AsyncStorage.getItem('deliveryAddress');
+    const currentAddress = JSON.parse(savedAddress!) || defaultAddress;
+    setRestaurantsData((prevState) => ({ ...prevState, loading: true, newLoading: true }));
+
+    try{
+      const allRestaurants = await fetchRestaurants(currentAddress, accessToken);
+      setRestaurantsData({
+        all: allRestaurants,
+        filtered: allRestaurants,
+        loading: false,
+        newLoading: false,
+      });
+    } catch (error) {
+      console.log("Error loading restaurants:", error);
+      setRestaurantsData({ ...restaurantsData, loading: false, newLoading: false });
+    }
   };
 
-    useEffect(() => {
+  useEffect(() => {
+    if (accessToken) {
+      loadRestaurants();
+    }
+  }, [accessToken, address]);
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log('Page focused, loading restaurants...');
+      loadRestaurants();
+      return () => console.log('Page unfocused, cleaning up...');
+    }, [])
+  );
+
+  const toggleFilter = (categoryName: string) => {
+    if (categoryName === selectedCategory) {
+      setSelectedCategory(null);
+      setRestaurantsData({
+        ...restaurantsData,
+        filtered: restaurantsData.all,
+      });
+    } else {
+      setSelectedCategory(categoryName);
+      setRestaurantsData({
+        ...restaurantsData,
+        filtered: restaurantsData.all.filter((restaurant: any) =>
+          restaurant.category.includes(categoryName)
+        ),
+      });
+    }
+  };
+  
+
+  const handleAddressChange = () => {
+    loadRestaurants();
+  };
+
+  useEffect(() => {
     const pulsate = Animated.sequence([
       Animated.timing(pulseAnim, {
         toValue: 1,
@@ -87,115 +142,6 @@ export default function IndexScreen() {
       pulseAnim.stopAnimation();
     };
   }, []);
-
-  const fetchApprovedRestaurants = async (address: any, accessToken: any) => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/restaurant`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("Restaurants fetch failed");
-      }
-
-      const data = await response.json();
-      
-      return data.filter(
-        (restaurant: any) => 
-          restaurant.status === "Approved" && 
-          restaurant.address?.city === JSON.parse(address).city
-      );
-    } catch (error) {
-      console.error("Error fetching restaurants:", error);
-      return [];
-    }
-  };
-
-  const fetchNewRestaurants = async (address: any, accessToken: any) => {
-    try {
-      const response = await fetch(`${BACKEND_URL}/restaurant`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("New restaurants fetch failed");
-      }
-
-      const data = await response.json();
-        const filteredData = data.filter(
-        (restaurant: any) => 
-          restaurant.status === "Approved" && 
-          restaurant.address?.city === JSON.parse(address).city
-      );
-      
-      return filteredData
-        .sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
-        .slice(0, 10)
-        .map((restaurant: any) => ({
-          ...restaurant,
-          rating: (Math.random() * 2 + 3).toFixed(1),
-          deliveryTime: `${Math.floor(Math.random() * 20) + 20} min`
-        }));
-    } catch (error) {
-      console.error("Error fetching new restaurants:", error);
-      return [];
-    }
-  };
-
-  useEffect(() => {
-    const loadRestaurants = async () => {
-      if (!accessToken) return;
-
-      const savedAddress = await AsyncStorage.getItem('deliveryAddress');
-      console.log(savedAddress)
-      const currentAddress = savedAddress || defaultAddress;
-      setLoading(true);
-      setNewRestaurantsLoading(true);
-
-      try {
-        const [restaurantsData, newRestaurantsData] = await Promise.all([
-          fetchApprovedRestaurants(currentAddress, accessToken),
-          fetchNewRestaurants(currentAddress, accessToken)
-        ]);
-        
-        setRestaurants(restaurantsData);
-        setFilteredRestaurants(restaurantsData);
-        setNewRestaurants(newRestaurantsData);
-      } catch (error) {
-        console.log("Error:", error);
-      } finally {
-        setTimeout(() => {
-          setLoading(false);
-          setNewRestaurantsLoading(false);
-        }, 1200);
-      }
-    };
-
-    if (accessToken) {
-      loadRestaurants();
-    }
-  }, [accessToken, address]);
-
-  const toggleFilter = (categoryName: string) => {
-    if (selectedCategory === categoryName) {
-      setSelectedCategory(null);
-      setFilteredRestaurants(restaurants);
-    } else {
-      setSelectedCategory(categoryName);
-      const filtered = restaurants.filter(restaurant => 
-        restaurant.category && restaurant.category.includes(categoryName)
-      );
-      setFilteredRestaurants(filtered);
-    }
-  };
 
   const RestaurantSkeleton = () => (
     <Animated.View 
@@ -269,16 +215,16 @@ export default function IndexScreen() {
       <Text style={styles.sectionTitle}>Vyzkoušejte něco nového</Text>
       <View style={styles.cardsScrollContainer}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {newRestaurantsLoading ? (
+          {restaurantsData.loading ? (
             renderSkeletons(4)
-          ) : newRestaurants.length === 0 ? (
+          ) : restaurantsData.all.length === 0 ? (
             <View style={styles.emptyStateContainer}>
               <Text style={styles.emptyStateText}>
                 Momentálně nejsou dostupné žádné nové restaurace.
               </Text>
             </View>
           ) : (
-            newRestaurants.map((restaurant, index) => (
+            restaurantsData.all.map((restaurant: any, index) => (
               <RestaurantCard 
                 key={index} 
                 restaurant={restaurant} 
@@ -296,24 +242,24 @@ export default function IndexScreen() {
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }} style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.leftContainer}>
-            <AddressSelect />
-          </View>
-          <View style={styles.rightContainer}>
-            <TouchableOpacity onPress={() => router.push("/(app)/(user)/usermenu")}>
-              <Ionicons name="person-circle-outline" size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.leftContainer}>
+          <AddressSelect onAddressChange={() => {}} />
         </View>
+        <View style={styles.rightContainer}>
+          <TouchableOpacity onPress={() => router.push("/(app)/(user)/usermenu")}>
+            <Ionicons name="person-circle-outline" size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
         <View style={styles.rectangle}>
-          <TouchableOpacity 
-            style={styles.searchBar}
-            onPress={() => router.push('/(app)/(user)/search')}>
-            <Text style={styles.rectangleText}>Na co máte chuť?</Text>
-          </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.searchBar}
+          onPress={() => router.push('/(app)/(user)/search')}>
+          <Text style={styles.searchBarText}>Na co máte chuť?</Text>
+        </TouchableOpacity>
         </View>
         
         <View style={styles.secondRectangle}>
@@ -352,11 +298,11 @@ export default function IndexScreen() {
         </Text>
 
         <View style={styles.cardsScrollContainer}>
-          {loading ? (
+          {restaurantsData.loading ? (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               {renderSkeletons(4)}
             </ScrollView>
-          ) : filteredRestaurants.length === 0 ? (
+          ) : restaurantsData.filtered.length === 0 ? (
             <View style={styles.emptyStateContainer}>
               <Text style={styles.emptyStateText}>
                 Pod tímto filtrem aktuálně není dostupná žádná restaurace.
@@ -364,7 +310,7 @@ export default function IndexScreen() {
             </View>
           ) : (
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {filteredRestaurants.map((restaurant, index) => (
+              {restaurantsData.filtered.map((restaurant: any, index) => (
                 <RestaurantCard 
                   key={index} 
                   restaurant={restaurant} 
@@ -406,14 +352,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 20,
   },
-  icon: {
-    marginRight: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'light',
-    color: '#252B33',
-  },
   rightContainer: {
     backgroundColor: '#FF5500',
     width: 40,
@@ -423,9 +361,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 20,
   },
+  icon: {
+    marginRight: 8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'light',
+    color: '#252B33',
+  },
   rectangle: {
     backgroundColor: 'rgba(255, 85, 0, 0.3)',
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     marginHorizontal: 15,
     marginTop: 10,
@@ -604,14 +550,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EAEAEA',
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 25,
     marginHorizontal: 15,
     marginTop: 10,
+    borderRadius: 15,
+  },
+  searchBarText: {
+    color: '#252B33',
+    fontSize: 18,
+    fontWeight: 'light',
+    marginLeft: 0,
+    marginBottom: 7,
+    letterSpacing: 0.5,
   },
   emptyStateContainer: {
     padding: 20,
@@ -625,7 +576,6 @@ const styles = StyleSheet.create({
     color: '#888',
     textAlign: 'center',
   },
-  // Skeleton loading styles
   skeletonImage: {
     width: '100%',
     height: 95,

@@ -168,6 +168,7 @@ enum OrderStatus {
   Pending
   Preparing
   Ready
+  CourierPickup
   OutForDelivery
   Delivered
   Cancelled

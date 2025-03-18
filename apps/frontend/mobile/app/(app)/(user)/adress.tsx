@@ -1,32 +1,36 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from 'expo-router';
+import { useAuth } from '@/context/AuthContext';
+import AddressSelect from '@/components/AddressSelect';
 
-const addresses = [
-  {
-    id: "1",
-    type: "DOMOV",
-    address: "Dřevnická 1788, Zlín\nČeská republika",
-    icon: "home-outline",
-  },
-  {
-    id: "2",
-    type: "PRÁCE",
-    address: "Dukelská 1977, Zlín\nČeská republika",
-    icon: "briefcase-outline",
-  },
-];
+const defaultAddress = { city: "Zlín", zipCode: "760 01", street: "náměstí Míru 12", country: "Czechia" };
 
 export default function AddressScreen() {
+  const { address } = useAuth();
+  const currentAddress = address || defaultAddress;
+
+  const addresses = [
+    {
+      id: "1",
+      type: "DOMOV",
+      address: `${currentAddress.street}, ${currentAddress.zipCode}, ${currentAddress.city}\n${currentAddress.country}`,
+      icon: "home-outline",
+    }
+  ];
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton}
-      onPress={() => router.push('/usermenu')}
+        onPress={() => router.push('/usermenu')}
       >
         <Ionicons name="arrow-back" size={24} color="#000" />
       </TouchableOpacity>
       <Text style={styles.header}>Moje adresa</Text>
+      
+      <AddressSelect onAddressChange={() => {}} />
+      
       <FlatList
         data={addresses}
         keyExtractor={(item) => item.id}
@@ -40,8 +44,8 @@ export default function AddressScreen() {
               <Text style={styles.addressText}>{item.address}</Text>
             </View>
             <TouchableOpacity 
-                  onPress={() => router.push('/adressform')}
-                  >
+              onPress={() => router.push('/adressform')}
+            >
               <Ionicons name="create-outline" size={20} color="#FF5500" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -50,8 +54,9 @@ export default function AddressScreen() {
           </View>
         )}
       />
-      <TouchableOpacity style={styles.addButton}
-                                onPress={() => router.push('/adressform')}
+      <TouchableOpacity 
+        style={styles.addButton}
+        onPress={() => router.push('/adressform')}
       >
         <Text style={styles.addButtonText}>PŘIDAT NOVOU ADRESU</Text>
       </TouchableOpacity>

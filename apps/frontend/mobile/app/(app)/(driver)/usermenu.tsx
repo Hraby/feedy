@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, Animated, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, Alert, Animated } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '@/context/AuthContext';
-import { BACKEND_URL } from '@/lib/constants';
 
-const UserMenuScreen = () => {
-  const [isCourier, setIsCourier] = useState(false);
-  const { user, logout, accessToken } = useAuth();
+const DriverMenuScreen = () => {
+  const { user, logout } = useAuth();
+  const [isCourier, setIsCourier] = useState(true);
 
-  const toggleMode = async () => {
+  const toggleMode = () => {
     if (!user?.role.includes('Courier')) {
       Alert.alert(
         "Nepřístupné",
@@ -19,35 +18,13 @@ const UserMenuScreen = () => {
       return;
     }
 
-    try {
-      if (!isCourier) {
-        const response = await fetch(`${BACKEND_URL}/courier/${user.id}/status`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
-          },
-          body: JSON.stringify({ status: 'Available' })
-        });
-
-        if (!response.ok) {
-          throw new Error('Nepodařilo se aktualizovat stav kurýra');
-        }
-
-        router.push('/(app)/(driver)');
-      } else {
-        router.push('/(app)/(user)');
-      }
-    } catch (error) {
-      console.log('Error updating courier status:', error);
-      Alert.alert(
-        "Chyba",
-        "Nepodařilo se aktualizovat stav kurýra. Zkuste to prosím znovu.",
-        [{ text: "OK" }]
-      );
+    if (isCourier) {
+      router.push('/(app)/(user)');
+    } else {
+      router.push('/(app)/(driver)');
     }
   };
-  
+
   const handleLogout = () => {
     Alert.alert(
       "Odhlášení",
@@ -70,55 +47,19 @@ const UserMenuScreen = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
         <View style={styles.container}>
-
-        <TouchableOpacity onPress={() => router.push('/(app)/(user)/personalinfo')}>
-          <View style={styles.profileSection}>
-            <View style={styles.profileText}>
-              <Text style={styles.subtitle}>Uživatelský profil</Text>
-              <Text style={styles.name}>{user?.firstName}</Text>
+          <TouchableOpacity onPress={() => router.push('/(app)/(driver)/personalinfo')}>
+            <View style={styles.profileSection}>
+              <View style={styles.profileText}>
+                <Text style={styles.subtitle}>Kurýrský profil</Text>
+                <Text style={styles.name}>{user?.firstName}</Text>
+              </View>
+              <Image source={require('@/assets/images/avatar.png')} style={styles.icon} />
             </View>
-            <Image source={require('@/assets/images/avatar.png')} style={styles.icon} />
-          </View>
           </TouchableOpacity>
-
-          <View style={styles.grid}>
-
-            <View style={styles.card}>
-            <TouchableOpacity onPress={() => router.push(("/(app)/(user)/adress"))}>
-              <Text style={styles.cardTitle}>Adresa</Text>
-              <Text style={styles.cardText}>Upravte nebo změňte svou adresu</Text>
-              <Image source={require('@/assets/images/Location.png')} style={styles.smallIcon} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.card}>
-            <TouchableOpacity onPress={() => router.push('/(app)/(user)/ordersummary')}>
-              <Text style={styles.cardTitle}>Objednávky</Text>
-              <Text style={styles.cardText}>Podívejte se na všechny Vaše objednávky</Text>
-              <Image source={require('@/assets/images/Bill.png')} style={styles.smallIcon} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.card}>
-            <TouchableOpacity onPress={() => router.push('/(app)/(user)/balance')}>
-              <Text style={styles.cardTitle}>Útraty</Text>
-              <Text style={styles.cardText}>Podívejte se na své dosavadní útraty</Text>
-              <Image source={require('@/assets/images/Transaction.png')} style={styles.smallIcon} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.card}>
-            <TouchableOpacity onPress={() => router.push('/(app)/(user)/info')}>
-              <Text style={styles.cardTitle}>Informace</Text>
-              <Text style={styles.cardText}>Zjistěte si něco o Nás a naší apce</Text>
-              <Image source={require('@/assets/images/Info.png')} style={styles.smallIcon} />
-              </TouchableOpacity>
-            </View>
-          </View>
 
           <View style={styles.largeCard}>
             <Text style={styles.cardTitle}>Režim kurýra</Text>
-            <Text style={styles.cardText}>Přepněte do režimu kurýra a začněte vydělávat ještě dnes</Text>
+            <Text style={styles.cardText}>Přepněte zpět do režimu zákazníka</Text>
             <View style={styles.courierMode}>
               <TouchableOpacity style={[styles.toggleContainer, isCourier && styles.toggleContainerActive]} onPress={toggleMode}>
                 <Animated.View style={[styles.toggleButton, isCourier && styles.toggleButtonActive]} />
@@ -127,7 +68,7 @@ const UserMenuScreen = () => {
               <Image source={require('@/assets/images/Supplier.png')} style={styles.supplierIcon} />
             </View>
           </View>
-          
+
           <TouchableOpacity onPress={handleLogout}>
             <View style={styles.logoutCard}>
               <View style={styles.logoutContent}>
@@ -142,7 +83,6 @@ const UserMenuScreen = () => {
               </View>
             </View>
           </TouchableOpacity>
-          
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -152,14 +92,6 @@ const UserMenuScreen = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20
-  },
-  header: {
-    textAlign: "right",
-    fontSize: 16,
-    color: "#000000",
-    fontWeight: "400",
-    marginTop: 40,
-    marginBottom: 16
   },
   profileSection: {
     flexDirection: 'row',
@@ -286,4 +218,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default UserMenuScreen;
+export default DriverMenuScreen;

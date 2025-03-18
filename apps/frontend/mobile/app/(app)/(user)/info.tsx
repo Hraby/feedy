@@ -46,9 +46,6 @@ const InfoMenuPage = () => {
           ))}
         </View>
       ))}
-      <TouchableOpacity style={styles.logoutButton}>
-        <Text style={styles.logoutButtonText}>Odhlásit se</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -95,19 +92,7 @@ const styles = StyleSheet.create({
     color: "black",
     marginLeft: 10,
     marginBottom: 15,
-  },
-  logoutButton: {
-    backgroundColor: "#FF5500",
-    paddingVertical: 15,
-    borderRadius: 14,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  logoutButtonText: {
-    color: "#FFF",
-    fontSize: 16,
-    fontWeight: "light",
-  },
+  }
 });
 
 export default InfoMenuPage;

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 
 interface Address {
   id: string;
@@ -32,8 +32,9 @@ interface DeliveryAddress {
 const MAPY_API_KEY = process.env.EXPO_PUBLIC_MAPY_API_KEY;
 
 const ALLOWED_CITIES = ['Brno', 'Praha', 'Zlín'];
+const DEFAULT_ADDRESS = { city: "Zlín", zipCode: "760 01", street: "náměstí Míru 12", country: "Czechia" };
 
-const AddressSelect = () => {
+const AddressSelect = ({ onAddressChange }: { onAddressChange: (address: DeliveryAddress) => void }) => {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -41,16 +42,24 @@ const AddressSelect = () => {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [address, setAddress] = useState<DeliveryAddress | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const loadAddress = async () => {
       try {
         const savedAddress = await AsyncStorage.getItem('deliveryAddress');
         if (savedAddress) {
-          setAddress(JSON.parse(savedAddress));
+          const parsedAddress = JSON.parse(savedAddress);
+          setAddress(parsedAddress);
+          onAddressChange(parsedAddress);
+        } else {
+          setAddress(DEFAULT_ADDRESS);
+          onAddressChange(DEFAULT_ADDRESS);
         }
       } catch (error) {
-        console.error('Chyba při načítání adresy:', error);
+        console.log('Chyba při načítání adresy:', error);
+        setAddress(DEFAULT_ADDRESS);
+        onAddressChange(DEFAULT_ADDRESS);
       }
     };
 
@@ -64,16 +73,6 @@ const AddressSelect = () => {
           id: 'home', 
           label: 'Domov', 
           details: `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`, 
-          type: 'home', 
-          active: true
-        }
-      ]);
-    } else {
-      setAddresses([
-        {
-          id: 'home', 
-          label: 'Domov', 
-          details: 'náměstí Míru 12, 760 01, Zlín, Czechia', 
           type: 'home', 
           active: true
         }
@@ -120,7 +119,7 @@ const AddressSelect = () => {
 
       setSuggestions(filteredSuggestions);
     } catch (error) {
-      console.error('Chyba při vyhledávání adres:', error);
+      console.log('Chyba při vyhledávání adres:', error);
     } finally {
       setIsLoading(false);
     }
@@ -137,7 +136,7 @@ const AddressSelect = () => {
 
   const handleSelectAddress = async (item: any) => {
     if (!item.data) {
-      console.error('Neplatná data pro adresu:', item);
+      console.log('Neplatná data pro adresu:', item);
       return;
     }
 
@@ -149,7 +148,7 @@ const AddressSelect = () => {
     )?.name || '';
 
     if (!municipality) {
-      console.error('Nepodařilo se získat město:', selectedItem);
+      console.log('Nepodařilo se získat město:', selectedItem);
       return;
     }
 
@@ -166,9 +165,10 @@ const AddressSelect = () => {
       setIsEditing(false);
       setIsDropdownVisible(false);
       Keyboard.dismiss();
-      router.push("/(app)/(user)")
+
+      onAddressChange(addressData);
     } catch (error) {
-      console.error('Chyba při ukládání adresy', error);
+      console.log('Chyba při ukládání adresy', error);
     }
   };
 
@@ -194,7 +194,7 @@ const AddressSelect = () => {
     try {
       await AsyncStorage.setItem('userAddresses', JSON.stringify(newAddresses));
     } catch (error) {
-      console.error('Chyba při ukládání adres:', error);
+      console.log('Chyba při ukládání adres:', error);
     }
   };
 

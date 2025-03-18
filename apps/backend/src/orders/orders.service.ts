@@ -1,33 +1,50 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrderStatus } from '@prisma/client';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { City, Country, OrderStatus } from '@prisma/client';
 
 @Injectable()
 export class OrdersService {
     constructor(
         private readonly prisma: PrismaService,
-        private readonly configService: ConfigService,
-        private readonly eventEmitter: EventEmitter2,
       ) {}
 
     async getOrders(status?: string) {
         const statusArray = status ? status.split(',') as OrderStatus[] : undefined;
 
-        return this.prisma.order.findMany({
+        const data = this.prisma.order.findMany({
             where: {
                 status: statusArray ? { in: statusArray } : undefined,
             },
             orderBy: { updatedAt: "desc" },
+            include: { user: true, restaurant: true, CourierProfile: true, orderItems: {
+                include: {
+                    menuItem: true
+                }
+            }
+        } 
         });
+
+        return data
     }
 
     async getOrderById(id: string) {
         const order = await this.prisma.order.findUnique({
             where: { id },
-            include: { user: true, restaurant: true, CourierProfile: true }
+            include: { user: {
+                include: {
+                    address: true,
+                },
+            }, restaurant: {
+                include: {
+                    address: true,
+                },
+            }, CourierProfile: true, orderItems: {
+                include: {
+                    menuItem: true
+                }
+            } 
+            }
         });
         if (!order) throw new NotFoundException("Order not found");
         return order;
@@ -44,6 +61,22 @@ export class OrdersService {
     }
 
     async createOrder(dto: CreateOrderDto, user) {
+        let address = await this.prisma.address.findUnique({
+            where: { userId: user.id }
+        });
+    
+        if (!address) {
+            address = await this.prisma.address.create({
+                data: {
+                    userId: user.id,
+                    street: dto.address.street,
+                    city: dto.address.city as City,
+                    zipCode: dto.address.zipCode,
+                    country: dto.address.country || Country.Czechia,
+                }
+            });
+        }
+    
         return this.prisma.order.create({
             data: {
                 userId: user.id,
@@ -58,11 +91,16 @@ export class OrdersService {
                 },
             },
             include: {
-                user: true,
-                restaurant: true
+                user: {
+                    include: {
+                        address: true,
+                    }
+                },
+                restaurant: true,
             }
         });
     }
+    
 
     async updateOrderStatus(orderId: string, status: OrderStatus) {
         const updatedOrder = await this.prisma.order.update({
@@ -90,11 +128,23 @@ export class OrdersService {
         });
     }
 
-    async claimOrder(id: string, courierId: string) {
+    async claimOrder(orderId: string, userId: string) {
+        const courierProfile = await this.prisma.courierProfile.findUnique({
+            where: { userId }
+        });
+    
+        if (!courierProfile) {
+            throw new Error("Courier profile not found");
+        }
+    
         return this.prisma.order.update({
-            where: { id },
-            data: { courierProfileId: courierId, status: OrderStatus.OutForDelivery },
+            where: { id: orderId },
+            data: { 
+                courierProfileId: courierProfile.id, 
+                status: OrderStatus.CourierPickup
+            },
         });
     }
+    
 
 }

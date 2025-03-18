@@ -1,47 +1,102 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, StyleSheet, FlatList, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from 'expo-router';
-
-const products = [
-  { id: 1, name: "Makalu", description: "Zlín 123" },
-  { id: 2, name: "McDonalds", description: "Zlín 123" }
-];
+import { BACKEND_URL } from "@/lib/constants";
+import { useAuth } from "@/context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const SearchScreen = () => {
+  const { accessToken, address } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [restaurants, setRestaurants] = useState([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
-  const foundProduct = products.find((product) =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const defaultAddress = {
+    city: "Zlín",
+    zipCode: "760 01",
+    street: "náměstí Míru 12",
+    country: "Czechia",
+  };
+
+  const fetchRestaurants = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/restaurant`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+      
+      if (!response.ok) throw new Error("Restaurants fetch failed");
+
+      const data = await response.json();
+      setRestaurants(data);
+
+      const userCity = (address?.city || defaultAddress.city).toLowerCase();
+      
+      const filtered = data.filter((restaurant: any) => {
+        const restaurantCity = restaurant.address?.city?.toLowerCase();
+        return restaurantCity == userCity;
+      });
+
+      setFilteredRestaurants(filtered);
+
+    } catch (error: any) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (accessToken) {
+      fetchRestaurants();
+    }
+  }, [address, accessToken]);
+
+  const searchResults = filteredRestaurants.filter((restaurant: any) =>
+    restaurant.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}
-              onPress={() => router.push("/(app)/(user)")}
-              >
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => router.push("/(app)/(user)")}
+        >
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <TextInput
           style={styles.searchInput}
-          placeholder="Hledat..."
+          placeholder="Hledat restauraci..."
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
       </View>
 
-      {searchQuery === "" || !foundProduct ? (
+      {searchQuery === "" || searchResults.length === 0 ? (
         <View style={styles.notFoundContainer}>
           <Ionicons name="search" size={80} color="#ccc" />
           <Text style={styles.notFoundText}>Restaurace nenalezena</Text>
           <Text style={styles.subText}>Zkuste něco jiného</Text>
         </View>
       ) : (
-        <View style={styles.productContainer}>
-          <Text style={styles.productName}>{foundProduct.name}</Text>
-          <Text style={styles.productDescription}>{foundProduct.description}</Text>
-        </View>
+        <FlatList
+          data={searchResults}
+          keyExtractor={(item: any) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity 
+              style={styles.restaurantItem} 
+              onPress={() => router.push(`/(app)/(user)/${item.id}`)}
+            >
+              <View style={styles.restaurantInfo}>
+                <Text style={styles.restaurantName}>{item.name}</Text>
+                <Text style={styles.restaurantDescription}>{item.description}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
       )}
     </View>
   );
@@ -56,7 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 20,
-},
+  },
   backButton: {
     position: 'absolute',
     top: 50,
@@ -84,16 +139,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#888",
   },
-  productContainer: {
-    padding: 40,
+  restaurantItem: {
+    flexDirection: "row",
+    padding: 15,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#DDD",
   },
-  productName: {
-    fontSize: 24,
+  restaurantInfo: {
+    flex: 1,
+    justifyContent: "center",
+  },
+  restaurantName: {
+    fontSize: 18,
     fontWeight: "bold",
   },
-  productDescription: {
-    fontSize: 18,
+  restaurantDescription: {
+    fontSize: 14,
     color: "#555",
+  },
+  restaurantImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 10,
+    marginLeft: 10,
   },
 });
 

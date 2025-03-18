@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import Link from "next/link";
@@ -22,6 +22,12 @@ type Address = {
 };
 
 type OrderDTO = {
+  address: {
+    city: string;
+    zipCode: string;
+    street: string;
+    country: string;
+  };
   restaurantId: string;
   items: {
     menuItemId: string;
@@ -52,6 +58,19 @@ const Checkout = () => {
     clearOrder
   } = useShoppingCart();
 
+  
+  const defaultAddress = {
+    id: "home",
+    label: "Domov",
+    details: "náměstí Míru 12, 760 01, Zlín, Czechia",
+    type: "home",
+    active: true,
+    city: "Zlín",
+    zipCode: "760 01",
+    street: "náměstí Míru 12",
+    country: "Czechia"
+  };
+
   const [addresses, setAddresses] = useState<Address[]>([]);
 
   useState(() => {
@@ -73,6 +92,18 @@ const Checkout = () => {
       }]);
     }
   });
+  
+  useEffect(() => {
+    setAddresses([{
+      id: "home",
+      label: "Domov",
+      details: address 
+        ? `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`
+        : defaultAddress.details,
+      type: "home",
+      active: true
+    }]);
+  }, [address]);
 
   useState(() => {
     const active = addresses.find((address) => address.active);
@@ -137,6 +168,12 @@ const Checkout = () => {
       const restaurantId = cartItems[0]?.restaurantId || "";
 
       const orderDto: OrderDTO = {
+        address: {
+          city: address?.city || defaultAddress.city,
+          zipCode: address?.zipCode || defaultAddress.zipCode,
+          street: address?.street || defaultAddress.street,
+          country: address?.country || defaultAddress.country
+        },
         restaurantId,
         items: cartItems.map((item: any) => ({
           menuItemId: item.id,

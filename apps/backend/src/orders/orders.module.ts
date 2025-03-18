@@ -4,16 +4,15 @@ import { OrdersController } from './orders.controller';
 import { AuthModule } from 'src/auth/auth.module';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
-import { OrdersGateway } from './orders.gateway';
 
 @Module({
-  providers: [OrdersService, OrdersGateway],
+  providers: [OrdersService],
   controllers: [OrdersController],
   imports: [
     AuthModule,
     PrismaModule,
     EventEmitterModule.forRoot(),
   ],
-  exports: [OrdersService, OrdersGateway],
+  exports: [OrdersService],
 })
 export class OrdersModule {}
