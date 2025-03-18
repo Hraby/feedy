@@ -98,16 +98,21 @@ const Profile = () => {
                         <div className="text-center sm:text-left">
                             <h1 className="text-3xl sm:text-4xl font-bold flex flex-wrap justify-center sm:justify-start">
                                 {user.name}
-                                <div className="flex space-x-2 ml-4">
+                                <div className="flex space-x-2 ml-4 items-center">
                                     {user.role.map((role) => (
                                         <span
                                             key={role}
-                                            className={`px-3 rounded-full text-base text-white flex items-center justify-center ${role === 'Admin' ? 'bg-red-500' : role === 'Courier' ? 'bg-green-500' : role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}
+                                            className={`px-3 py-1 rounded-full text-base text-white flex items-center justify-center leading-none ${role === 'Admin' ? 'bg-red-500' :
+                                                role === 'Courier' ? 'bg-green-500' :
+                                                    role === 'Restaurant' ? 'bg-purple-500' :
+                                                        'bg-gray-500'
+                                                }`}
                                         >
                                             {role}
                                         </span>
                                     ))}
                                 </div>
+
                             </h1>
                             <p className="text-gray-600 mt-1">{user.email}</p>
                         </div>
@@ -309,13 +314,43 @@ const Profile = () => {
 
             <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
                 <h2 className="text-xl font-bold mb-4">Informace</h2>
+                <p>Feedy je online platforma pro objednávání a doručování jídel.</p>
+                <p>Můžete zde objednávat jídlo, přidat vlastní podnik, nebo se stát partnerským kurýrem.</p>
+                <p>Více informací naleznete na stránce o nás.</p>
+
+                <Link href="/about">
+                    <button
+                        className="mt-5 w-full font-bold text-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-full"
+                    >O nás</button>
+                </Link>
             </Modal>
 
             <Modal isOpen={openModal === "courier"} onClose={() => setOpenModal(null)}>
                 {user.role.includes("Courier") ? (
                     <div>
                         <h2 className="text-xl font-bold mb-4">Dokončené objednávky</h2>
-                        <p>Zde budou zobrazeny objednávky, které jste již rozvezli.</p>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="sticky top-0 bg-white z-20">
+                                    <tr className="border-b">
+                                        <th className="p-4">Položky</th>
+                                        <th className="p-4">Datum</th>
+                                        <th className="p-4">Restaurace</th>
+                                        <th className="p-4">Cena</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {mockOrders.map((order) => (
+                                        <tr key={order.id} className="border-b hover:bg-gray-100">
+                                            <td className="p-4">{order.items}</td>
+                                            <td className="p-4">{order.date}</td>
+                                            <td className="p-4">{order.restaurant}</td>
+                                            <td className="p-4">{order.price} Kč</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 ) : (
                     <CourierForm />
