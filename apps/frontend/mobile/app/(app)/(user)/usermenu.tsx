@@ -101,8 +101,8 @@ const UserMenuScreen = () => {
 
             <View style={styles.card}>
             <TouchableOpacity onPress={() => router.push('/(app)/(user)/balance')}>
-              <Text style={styles.cardTitle}>Zůstatek</Text>
-              <Text style={styles.cardText}>Dobijte si kredit pro objednávání</Text>
+              <Text style={styles.cardTitle}>Útraty</Text>
+              <Text style={styles.cardText}>Podívejte se na své dosavadní útraty</Text>
               <Image source={require('@/assets/images/Transaction.png')} style={styles.smallIcon} />
               </TouchableOpacity>
             </View>
