@@ -12,6 +12,7 @@ export default function Navbar() {
   const {address} = useAuth()
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const [addresses, setAddresses] = useState([
     { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },

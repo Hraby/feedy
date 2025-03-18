@@ -7,8 +7,9 @@ import Modal from "@/components/Modal";
 import Link from "next/link";
 import CourierForm from "@/components/CourierForm";
 import RestaurantForm from "@/components/RestaurantForm";
-import { FaMapMarkerAlt, FaListAlt, FaWallet, FaCog, FaTruck, FaStore, FaHome, FaBuilding, FaTrash } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaListAlt, FaWallet, FaInfoCircle, FaTruck, FaStore, FaHome, FaBuilding, FaTrash, FaCalendar, FaClock } from 'react-icons/fa';
 import AdminRestaurants from "@/app/admin/restaurants/page";
+import { BACKEND_URL } from "@/lib/constants";
 
 const Profile = () => {
     const { user } = useAuth();
@@ -97,16 +98,21 @@ const Profile = () => {
                         <div className="text-center sm:text-left">
                             <h1 className="text-3xl sm:text-4xl font-bold flex flex-wrap justify-center sm:justify-start">
                                 {user.name}
-                                <div className="flex space-x-2 ml-4">
+                                <div className="flex space-x-2 ml-4 items-center">
                                     {user.role.map((role) => (
                                         <span
                                             key={role}
-                                            className={`px-3 rounded-full text-base text-white flex items-center justify-center ${role === 'Admin' ? 'bg-red-500' : role === 'Courier' ? 'bg-green-500' : role === 'Restaurant' ? 'bg-purple-500' : 'bg-gray-500'}`}
+                                            className={`px-3 py-1 rounded-full text-base text-white flex items-center justify-center leading-none ${role === 'Admin' ? 'bg-red-500' :
+                                                role === 'Courier' ? 'bg-green-500' :
+                                                    role === 'Restaurant' ? 'bg-purple-500' :
+                                                        'bg-gray-500'
+                                                }`}
                                         >
                                             {role}
                                         </span>
                                     ))}
                                 </div>
+
                             </h1>
                             <p className="text-gray-600 mt-1">{user.email}</p>
                         </div>
@@ -119,9 +125,9 @@ const Profile = () => {
                     }, {
                         label: "Objednávky", desc: "Podívejte se na vaše objednávky", icon: FaListAlt, action: () => setIsOrdersOpen(true)
                     }, {
-                        label: "Zůstatek", desc: "Dobijte si kredit pro objednávky", icon: FaWallet, action: () => setIsBalanceOpen(true)
+                        label: "Útraty", desc: "Zjištěte vaše poslední útraty", icon: FaWallet, action: () => setIsBalanceOpen(true)
                     }, {
-                        label: "Nastavení", desc: "Upravte si profil, jak jen chcete", icon: FaCog, action: () => setIsSettingsOpen(true)
+                        label: "Informace", desc: "Zjistěte něco o naší službě", icon: FaInfoCircle, action: () => setIsSettingsOpen(true)
                     }].map(({ label, desc, icon: Icon, action }, idx) => (
                         <div key={idx} className="bg-white rounded-2xl p-6 cursor-pointer flex justify-between items-center" onClick={action}>
                             <div>
@@ -198,7 +204,7 @@ const Profile = () => {
                                 className="text-gray-700 group"
                             >
                                 <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-blue-600">
-                                    <FaCog size={15} className="text-gray-700 group-hover:text-white" />
+                                    <FaInfoCircle size={15} className="text-gray-700 group-hover:text-white" />
                                 </div>
                             </button>
                             <button
@@ -274,18 +280,77 @@ const Profile = () => {
                     </table>
                 </div>
             </Modal>
+
             <Modal isOpen={isBalanceOpen} onClose={() => setIsBalanceOpen(false)}>
-                <h2 className="text-xl font-bold mb-4">Zůstatek</h2>
+                <h2 className="text-xl font-bold mb-4">Útraty</h2>
+                <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
+                    <div className="text-center">
+                        <p className="text-sm mb-2">Celkové útraty</p>
+                        <h2 className="text-4xl font-semibold">250.00 Kč</h2>
+                    </div>
+                </div>
+                <div className="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
+                        <div className="text-center">
+                            <div className="flex justify-center">
+                                <FaCalendar className="text-[var(--primary)] text-3xl" />
+                            </div>
+                            <p className="text-sm mt-3 mb-1">Tento měsíc</p>
+                            <h2 className="text-2xl font-semibold">150.00 Kč</h2>
+                        </div>
+                    </div>
+                    <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
+                        <div className="text-center">
+                            <div className="flex justify-center">
+                                <FaClock className="text-[var(--primary)] text-3xl" />
+                            </div>
+                            <p className="text-sm mt-3 mb-1">Průměrná objednávka</p>
+                            <h2 className="text-2xl font-semibold">150.00 Kč</h2>
+                        </div>
+                    </div>
+                </div>
             </Modal>
+
+
             <Modal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)}>
-                <h2 className="text-xl font-bold mb-4">Nastavení</h2>
+                <h2 className="text-xl font-bold mb-4">Informace</h2>
+                <p>Feedy je online platforma pro objednávání a doručování jídel.</p>
+                <p>Můžete zde objednávat jídlo, přidat vlastní podnik, nebo se stát partnerským kurýrem.</p>
+                <p>Více informací naleznete na stránce o nás.</p>
+
+                <Link href="/about">
+                    <button
+                        className="mt-5 w-full font-bold text-lg bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white py-3 rounded-full"
+                    >O nás</button>
+                </Link>
             </Modal>
 
             <Modal isOpen={openModal === "courier"} onClose={() => setOpenModal(null)}>
                 {user.role.includes("Courier") ? (
                     <div>
                         <h2 className="text-xl font-bold mb-4">Dokončené objednávky</h2>
-                        <p>Zde budou zobrazeny objednávky, které jste již rozvezli.</p>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left">
+                                <thead className="sticky top-0 bg-white z-20">
+                                    <tr className="border-b">
+                                        <th className="p-4">Položky</th>
+                                        <th className="p-4">Datum</th>
+                                        <th className="p-4">Restaurace</th>
+                                        <th className="p-4">Cena</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {mockOrders.map((order) => (
+                                        <tr key={order.id} className="border-b hover:bg-gray-100">
+                                            <td className="p-4">{order.items}</td>
+                                            <td className="p-4">{order.date}</td>
+                                            <td className="p-4">{order.restaurant}</td>
+                                            <td className="p-4">{order.price} Kč</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 ) : (
                     <CourierForm />

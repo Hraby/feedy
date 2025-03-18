@@ -128,7 +128,7 @@ export default function RestaurantDetail() {
                           className={`bg-white rounded-3xl shadow-lg overflow-hidden ${item.available ? 'cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl' : 'opacity-70'} flex flex-col relative`}
                         >
                           {!item.available && (
-                            <div className="absolute inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center z-10">
+                            <div className="absolute inset-0 bg-gray-200 bg-opacity-50 flex items-center justify-center z-10 cursor-not-allowed">
                               <div className="bg-red-500 text-white py-1 px-4 rounded-full font-medium transform -rotate-12">
                                 Momentálně nedostupné
                               </div>
