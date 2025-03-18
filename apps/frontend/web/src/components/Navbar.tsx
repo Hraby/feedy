@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {FaBell, FaMapMarkerAlt, FaShoppingCart, FaCircle, FaHome, FaBuilding, FaPlus, FaMinus, FaSearch } from "react-icons/fa";
+import { FaBell, FaMapMarkerAlt, FaShoppingCart, FaCircle, FaHome, FaBuilding, FaPlus, FaMinus, FaSearch } from "react-icons/fa";
 import Link from "next/link";
 import { signOut } from "@/app/actions/auth";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -9,7 +9,7 @@ import AutoComplete from "./autoComplete";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 
 export default function Navbar() {
-  const {address} = useAuth()
+  const { address } = useAuth()
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -21,9 +21,9 @@ export default function Navbar() {
 
   useEffect(() => {
     if (address) {
-      setAddresses([{id: "home", label: "Domov", details: `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`, type: "home", active: true}])
-    }else{
-      setAddresses([{id: "home", label: "Domov", details: `náměstí Míru 12, 760 01, Zlín, Czechia`, type: "home", active: true}])
+      setAddresses([{ id: "home", label: "Domov", details: `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`, type: "home", active: true }])
+    } else {
+      setAddresses([{ id: "home", label: "Domov", details: `náměstí Míru 12, 760 01, Zlín, Czechia`, type: "home", active: true }])
     }
   }, [address]);
 
@@ -120,72 +120,70 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-                <div className="relative">
-                  <button
-                    className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 flex items-center gap-2 transition-all duration-300 hover:scale-105"
-                    onClick={() => {
-                      toggleDropdown("locations");
-                      setIsEditing(false);
-                    }}
-                  >
-                    <FaMapMarkerAlt className="text-gray-600 text-lg" />
-                    <span className="text-gray-700 font-medium">{address?.city || "Zlín"}</span>
-                  </button>
+              <div className="relative">
+                <button
+                  className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 flex items-center gap-2 transition-all duration-300 hover:scale-105"
+                  onClick={() => {
+                    toggleDropdown("locations");
+                    setIsEditing(false);
+                  }}
+                >
+                  <FaMapMarkerAlt className="text-gray-600 text-lg" />
+                  <span className="text-gray-700 font-medium">{address?.city || "Zlín"}</span>
+                </button>
 
-                  {activeDropdown === "locations" && (
-                    <div
-                      className="absolute right-0 mt-2 w-80 bg-white shadow-2xl rounded-2xl p-4 z-40 transition-all duration-500 ease-in-out dropdown"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {isEditing ? (
-                        <AutoComplete onClose={() => setIsEditing(false)} />
-                      ) : (
-                        <div className="flex flex-col gap-2">
-                          {addresses.map((address) => (
-                            <div
-                              key={address.id}
-                              className={`flex items-center justify-between gap-2 p-2 rounded-xl cursor-pointer transition-all duration-300 ease-in-out ${
-                                address.active ? "bg-[var(--primary-light)]" : "hover:bg-gray-100"
+                {activeDropdown === "locations" && (
+                  <div
+                    className="absolute right-0 mt-2 w-80 bg-white shadow-2xl rounded-2xl p-4 z-40 transition-all duration-500 ease-in-out dropdown"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {isEditing ? (
+                      <AutoComplete onClose={() => setIsEditing(false)} />
+                    ) : (
+                      <div className="flex flex-col gap-2">
+                        {addresses.map((address) => (
+                          <div
+                            key={address.id}
+                            className={`flex items-center justify-between gap-2 p-2 rounded-xl cursor-pointer transition-all duration-300 ease-in-out ${address.active ? "bg-[var(--primary-light)]" : "hover:bg-gray-100"
                               }`}
-                              onClick={() => handleSetActiveAddress(address.id)}
-                            >
-                              <span
-                                className={`rounded-full p-2 transition-all duration-300 ease-in-out ${
-                                  address.active ? "bg-[var(--primary)]" : "bg-[#EFEFEF]"
-                                }`}
-                              >
-                                {address.type === "home" ? (
-                                  <FaHome className={address.active ? "text-white" : "text-[var(--font)]"} />
-                                ) : (
-                                  <FaBuilding className={address.active ? "text-white" : "text-[var(--font)]"} />
-                                )}
-                              </span>
-                              <div className="flex flex-col">
-                                <span className={`${address.active ? "text-[var(--primary)] font-bold" : ""}`}>
-                                  {address.label}
-                                </span>
-                                <p className="text-sm text-gray-600">{address.details}</p>
-                              </div>
-                            </div>
-                          ))}
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIsEditing(true);
-                            }}
-                            className="w-full mt-2 p-2 text-center text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-300"
+                            onClick={() => handleSetActiveAddress(address.id)}
                           >
-                            Změnit adresu
+                            <span
+                              className={`rounded-full p-2 transition-all duration-300 ease-in-out ${address.active ? "bg-[var(--primary)]" : "bg-[#EFEFEF]"
+                                }`}
+                            >
+                              {address.type === "home" ? (
+                                <FaHome className={address.active ? "text-white" : "text-[var(--font)]"} />
+                              ) : (
+                                <FaBuilding className={address.active ? "text-white" : "text-[var(--font)]"} />
+                              )}
+                            </span>
+                            <div className="flex flex-col">
+                              <span className={`${address.active ? "text-[var(--primary)] font-bold" : ""}`}>
+                                {address.label}
+                              </span>
+                              <p className="text-sm text-gray-600">{address.details}</p>
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setIsEditing(true);
+                          }}
+                          className="w-full mt-2 p-2 text-center text-gray-600 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-300"
+                        >
+                          Změnit adresu
+                        </button>
+                        <Link href={`/profile/${user.id}`}>
+                          <button className="items-center font-bold transition mt-2 p-2 w-full rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white">
+                            Přidat další adresu
                           </button>
-                          <Link href={`/profile/${user.id}`}>
-                            <button className="items-center font-bold transition mt-2 p-2 w-full rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white">
-                              Přidat další adresu
-                            </button>
-                          </Link>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="relative">
@@ -194,6 +192,11 @@ export default function Navbar() {
                   onClick={() => toggleDropdown("cart")}
                 >
                   <FaShoppingCart className="text-gray-600 text-lg" />
+                  {cartQuantity > 0 && (
+                    <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {cartQuantity}
+                    </span>
+                  )}
                 </button>
                 {activeDropdown === "cart" && (
                   <div className="absolute right-0 mt-2 w-72 bg-white shadow-2xl rounded-2xl p-2 z-40 dropdown">
@@ -239,7 +242,6 @@ export default function Navbar() {
                   </div>
                 )}
               </div>
-
 
               <div className="relative flex items-center gap-2 cursor-pointer hover:bg-[#ffff] p-2 rounded-2xl transition-all duration-300" onClick={() => toggleDropdown("user")}>
                 <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center shadow-md text-xl text-[var(--font)]">
