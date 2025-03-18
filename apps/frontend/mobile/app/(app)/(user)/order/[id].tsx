@@ -75,7 +75,7 @@ const TrackOrder = () => {
           setOrderStep(statusToStepMap[status]);
         }
       } catch (error) {
-        console.error("Error fetching order status:", error);
+        console.log("Error fetching order status:", error);
       }
     };
 

@@ -39,7 +39,7 @@ const UserMenuScreen = () => {
         router.push('/(app)/(user)');
       }
     } catch (error) {
-      console.error('Error updating courier status:', error);
+      console.log('Error updating courier status:', error);
       Alert.alert(
         "Chyba",
         "Nepodařilo se aktualizovat stav kurýra. Zkuste to prosím znovu.",

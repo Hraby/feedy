@@ -57,7 +57,7 @@ const AddressSelect = ({ onAddressChange }: { onAddressChange: (address: Deliver
           onAddressChange(DEFAULT_ADDRESS);
         }
       } catch (error) {
-        console.error('Chyba při načítání adresy:', error);
+        console.log('Chyba při načítání adresy:', error);
         setAddress(DEFAULT_ADDRESS);
         onAddressChange(DEFAULT_ADDRESS);
       }
@@ -136,7 +136,7 @@ const AddressSelect = ({ onAddressChange }: { onAddressChange: (address: Deliver
 
   const handleSelectAddress = async (item: any) => {
     if (!item.data) {
-      console.error('Neplatná data pro adresu:', item);
+      console.log('Neplatná data pro adresu:', item);
       return;
     }
 
@@ -148,7 +148,7 @@ const AddressSelect = ({ onAddressChange }: { onAddressChange: (address: Deliver
     )?.name || '';
 
     if (!municipality) {
-      console.error('Nepodařilo se získat město:', selectedItem);
+      console.log('Nepodařilo se získat město:', selectedItem);
       return;
     }
 
@@ -168,7 +168,7 @@ const AddressSelect = ({ onAddressChange }: { onAddressChange: (address: Deliver
 
       onAddressChange(addressData);
     } catch (error) {
-      console.error('Chyba při ukládání adresy', error);
+      console.log('Chyba při ukládání adresy', error);
     }
   };
 
@@ -194,7 +194,7 @@ const AddressSelect = ({ onAddressChange }: { onAddressChange: (address: Deliver
     try {
       await AsyncStorage.setItem('userAddresses', JSON.stringify(newAddresses));
     } catch (error) {
-      console.error('Chyba při ukládání adres:', error);
+      console.log('Chyba při ukládání adres:', error);
     }
   };
 

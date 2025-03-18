@@ -74,7 +74,7 @@ async function getSessionData() {
       address: addressDataStr ? JSON.parse(addressDataStr) : null
     };
   } catch (error) {
-    console.error("Error getting session:", error);
+    console.log("Error getting session:", error);
     return null;
   }
 }
@@ -85,7 +85,7 @@ function isTokenExpired(token: string): boolean {
     const currentTime = Date.now() / 1000;
     return decoded.exp < currentTime;
   } catch (error) {
-    console.error("Error decoding token:", error);
+    console.log("Error decoding token:", error);
     return true;
   }
 }
@@ -130,7 +130,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       return data.accessToken;
     } catch (error) {
-      console.error("Token refresh error:", error);
+      console.log("Token refresh error:", error);
       await logout();
       return null;
     }
@@ -161,7 +161,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setAddress(null);
       }
     } catch (error) {
-      console.error("Failed to load user data:", error);
+      console.log("Failed to load user data:", error);
       await logout();
     } finally {
       setLoading(false);
