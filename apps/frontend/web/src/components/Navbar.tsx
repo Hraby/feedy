@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaBell, FaMapMarkerAlt, FaShoppingCart, FaCircle, FaHome, FaBuilding, FaPlus, FaMinus, FaSearch } from "react-icons/fa";
+import { FaBell, FaMapMarkerAlt, FaShoppingCart, FaCircle, FaHome, FaBuilding, FaPlus, FaMinus, FaSearch, FaBars, FaTimes } from "react-icons/fa";
 import Link from "next/link";
 import { signOut } from "@/app/actions/auth";
 import { useAuth } from "@/contexts/AuthProvider";
@@ -13,6 +13,11 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+    document.body.classList.toggle("overflow-hidden", isMobileMenuOpen);
+  };
 
   const [addresses, setAddresses] = useState([
     { id: 'home', label: 'Domov', details: 'Ulice 123, Praha', type: 'home', active: true },
@@ -82,7 +87,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <nav className="flex flex-1 items-center backdrop-blur-[8px] backdrop-saturate-[100%] bg-[#EFEFEF] bg-opacity-80 p-3 rounded-3xl relative h-[calc(50px+1rem)]">
+          <nav className="hidden md:flex flex-1 items-center backdrop-blur-[8px] backdrop-saturate-[100%] bg-[#EFEFEF] bg-opacity-80 p-3 rounded-3xl relative h-[calc(50px+1rem)]">
             <div className="flex items-center bg-white rounded-full px-4 py-2 w-1/3">
               <FaSearch className="text-gray-400" />
               <input
@@ -269,8 +274,36 @@ export default function Navbar() {
               </div>
             </div>
           </nav>
+          <button onClick={toggleMobileMenu} className="md:hidden p-2 bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white rounded-full shadow-md flex items-center gap-2 transition-all duration-300 hover:scale-105 ml-auto">
+            {isMobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+          </button>
+
         </div>
       </div>
+      {isMobileMenuOpen && (
+        <div className="fixed top-0 left-0 w-full h-fit bg-white z-40 flex flex-col p-6 rounded-2xl md:hidden pt-20">
+          <div className="space-y-4 text-center">
+            <Link href="/menu" className="flex items-center justify-center h-14 text-xl font-bold text-gray-800 border-b w-full">
+              Menu
+            </Link>
+            <Link href={`/profile/${user.id}`} className="flex items-center justify-center h-14 text-xl font-bold text-gray-800 border-b w-full">
+              Profil
+            </Link>
+            <Link href="/checkout" className="flex items-center justify-center h-14 text-xl font-bold text-gray-800 border-b w-full">
+              Košík ({cartQuantity})
+            </Link>
+            <button
+              onClick={handleSignOut}
+              className="flex items-center justify-center h-14 text-xl font-bold text-red-500 w-full"
+            >
+              Odhlásit se
+            </button>
+          </div>
+        </div>
+      )}
+
+
+
     </div>
   );
 }

@@ -44,6 +44,7 @@ const stats = [
 const teamMembers = [
     {
         name: "Ondřej Masný",
+        academic_degree: "Ing.",
         role: "motivator",
         image: "/img/ondrej-masny.jpg",
     },
@@ -69,7 +70,7 @@ export default function About() {
     return (
         <div className="flex flex-col min-h-screen bg-gray-50">
             <NavbarSwitcher />
-            
+
             <div className="container mx-auto px-4 flex-grow">
                 <div className="relative h-[250px] sm:h-[250px] lg:h-[350px] overflow-hidden rounded-3xl">
                     <Image
@@ -123,20 +124,12 @@ export default function About() {
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6 py-2 pb-20">
                     {stats.map((stat, index) => (
-                        <motion.div
-                            key={index}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={fadeInUp}
-                        >
-                            <div className="bg-white p-6 sm:p-12 rounded-3xl shadow-md text-center">
-                                <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--primary)] pb-1">
-                                    {stat.value}
-                                </h3>
-                                <p className="text-gray-500">{stat.label}</p>
-                            </div>
-                        </motion.div>
+                        <div key={index} className="bg-white p-6 sm:p-12 rounded-3xl shadow-md text-center">
+                            <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--primary)] pb-1">
+                                {stat.value}
+                            </h3>
+                            <p className="text-gray-500">{stat.label}</p>
+                        </div>
                     ))}
                 </div>
             </div>
@@ -159,7 +152,7 @@ export default function About() {
                                 <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center text-4xl text-gray-600 mb-4">
                                     {member.name[0]}
                                 </div>
-                                <h3 className="text-xl font-bold">{member.name}</h3>
+                                <h3 className="text-xl font-bold">{member.academic_degree} {member.name}</h3>
                                 <p className="text-[var(--primary)]">{member.role}</p>
                             </div>
                         </motion.div>
