@@ -90,7 +90,7 @@ export function DriverProvider({ children }: { children: ReactNode }) {
       const order = await response.json();
       setActiveOrder(order);
     } catch (error) {
-      console.error('Error fetching active order:', error);
+      console.log('Error fetching active order:', error);
       setActiveOrder(null);
     }
   };
@@ -112,7 +112,7 @@ export function DriverProvider({ children }: { children: ReactNode }) {
 
       await fetchActiveOrder();
     } catch (error) {
-      console.error('Error picking up order:', error);
+      console.log('Error picking up order:', error);
     }
   };
 
@@ -134,7 +134,7 @@ export function DriverProvider({ children }: { children: ReactNode }) {
       setActiveOrder(null);
       setActiveOrderId(null);
     } catch (error) {
-      console.error('Error completing delivery:', error);
+      console.log('Error completing delivery:', error);
     }
   };
 

@@ -58,7 +58,7 @@ const AddressForm = () => {
       await refresh(); // Refresh auth context to update the address
       router.push('/adress');
     } catch (error) {
-      console.error('Error saving address:', error);
+      console.log('Error saving address:', error);
       Alert.alert("Chyba", "Nepodařilo se uložit adresu");
     }
   };

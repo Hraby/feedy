@@ -42,7 +42,7 @@ const OrderScreen = () => {
           }
         );
       } catch (error) {
-        console.error('Error watching location:', error);
+        console.log('Error watching location:', error);
       }
     };
 
@@ -67,7 +67,7 @@ const OrderScreen = () => {
         });
       }
     } catch (error) {
-      console.error('Error requesting location permission:', error);
+      console.log('Error requesting location permission:', error);
     }
   };
 
@@ -86,7 +86,7 @@ const OrderScreen = () => {
           });
         }
       } catch (error) {
-        console.error('Error geocoding restaurant address:', error);
+        console.log('Error geocoding restaurant address:', error);
       }
     };
 
@@ -104,7 +104,7 @@ const OrderScreen = () => {
           });
         }
       } catch (error) {
-        console.error('Error geocoding delivery address:', error);
+        console.log('Error geocoding delivery address:', error);
       }
     };
 
@@ -123,7 +123,7 @@ const OrderScreen = () => {
       await pickupOrder();
       await fetchActiveOrder();
     } catch (error) {
-      console.error('Error picking up order:', error);
+      console.log('Error picking up order:', error);
     } finally {
       setIsLoading(false);
     }
@@ -140,12 +140,11 @@ const OrderScreen = () => {
         useNativeDriver: true,
       }).start();
       
-      // Wait for animation and then redirect
       setTimeout(() => {
         router.replace('/(app)/(driver)');
       }, 2000);
     } catch (error) {
-      console.error('Error completing delivery:', error);
+      console.log('Error completing delivery:', error);
     } finally {
       setIsLoading(false);
     }

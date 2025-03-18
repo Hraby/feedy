@@ -31,7 +31,7 @@ export const fetchRestaurants = async (address: any, accessToken: any) => {
                 deliveryTime: `${Math.floor(Math.random() * 20) + 20} min`
             }));
     } catch (error) {
-        console.error("Error fetching restaurants:", error);
+        console.log("Error fetching restaurants:", error);
         return [];
     }
 };

@@ -63,7 +63,7 @@ const TakeOrderScreen = () => {
       const data = await response.json();
       setOrders(data);
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.log('Error fetching orders:', error);
       setError('Nepodařilo se načíst objednávky. Zkuste to prosím znovu.');
     } finally {
       setIsLoading(false);
@@ -91,7 +91,7 @@ const TakeOrderScreen = () => {
       setActiveOrderId(orderId);
       router.push('/(app)/(driver)/driverdelivery');
     } catch (error) {
-      console.error('Error claiming order:', error);
+      console.log('Error claiming order:', error);
       setError('Nepodařilo se přijmout objednávku. Zkuste to prosím znovu.');
     }
   };

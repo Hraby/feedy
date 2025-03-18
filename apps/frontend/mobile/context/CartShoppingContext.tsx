@@ -122,7 +122,7 @@ export const ShoppingCartProvider = ({ children }: { children: ReactNode }) => {
       console.log("Order status response:", data);
       setOrderStatus(data.status);
     } catch (error) {
-      console.error("Error checking order status:", error);
+      console.log("Error checking order status:", error);
       setOrderStatus("Chyba");
     }
   };
