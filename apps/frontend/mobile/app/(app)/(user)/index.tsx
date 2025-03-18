@@ -242,24 +242,24 @@ export default function IndexScreen() {
 
   return (
     <ScrollView contentContainerStyle={{ paddingBottom: 100 }} style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <View style={styles.leftContainer}>
-            <AddressSelect onAddressChange={handleAddressChange} />
-          </View>
-          <View style={styles.rightContainer}>
-            <TouchableOpacity onPress={() => router.push("/(app)/(user)/usermenu")}>
-              <Ionicons name="person-circle-outline" size={20} color="#fff" />
-            </TouchableOpacity>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <View style={styles.leftContainer}>
+          <AddressSelect onAddressChange={() => {}} />
         </View>
+        <View style={styles.rightContainer}>
+          <TouchableOpacity onPress={() => router.push("/(app)/(user)/usermenu")}>
+            <Ionicons name="person-circle-outline" size={20} color="#fff" />
+          </TouchableOpacity>
+        </View>
+      </View>
 
         <View style={styles.rectangle}>
-          <TouchableOpacity 
-            style={styles.searchBar}
-            onPress={() => router.push('/(app)/(user)/search')}>
-            <Text style={styles.rectangleText}>Na co máte chuť?</Text>
-          </TouchableOpacity>
+        <TouchableOpacity 
+          style={styles.searchBar}
+          onPress={() => router.push('/(app)/(user)/search')}>
+          <Text style={styles.searchBarText}>Na co máte chuť?</Text>
+        </TouchableOpacity>
         </View>
         
         <View style={styles.secondRectangle}>
@@ -352,14 +352,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 20,
   },
-  icon: {
-    marginRight: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: 'light',
-    color: '#252B33',
-  },
   rightContainer: {
     backgroundColor: '#FF5500',
     width: 40,
@@ -369,9 +361,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 20,
   },
+  icon: {
+    marginRight: 8,
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'light',
+    color: '#252B33',
+  },
   rectangle: {
     backgroundColor: 'rgba(255, 85, 0, 0.3)',
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 15,
     marginHorizontal: 15,
     marginTop: 10,
@@ -550,14 +550,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#EAEAEA',
-    paddingVertical: 10,
+    paddingVertical: 5,
     paddingHorizontal: 15,
-    borderRadius: 25,
     marginHorizontal: 15,
     marginTop: 10,
+    borderRadius: 15,
+  },
+  searchBarText: {
+    color: '#252B33',
+    fontSize: 18,
+    fontWeight: 'light',
+    marginLeft: 0,
+    marginBottom: 7,
+    letterSpacing: 0.5,
   },
   emptyStateContainer: {
     padding: 20,
