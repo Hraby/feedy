@@ -20,6 +20,8 @@ export const fetchRestaurants = async (address: any, accessToken: any) => {
             restaurant.address?.city == address.city
         );
 
+        console.log(formattedData)
+
         return formattedData
             .sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
             .slice(0, 10)

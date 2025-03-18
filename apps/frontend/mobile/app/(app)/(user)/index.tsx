@@ -68,12 +68,11 @@ export default function IndexScreen() {
     if (!accessToken) return;
 
     const savedAddress = await AsyncStorage.getItem('deliveryAddress');
-    const currentAddress = savedAddress || defaultAddress;
+    const currentAddress = JSON.parse(savedAddress!) || defaultAddress;
     setRestaurantsData((prevState) => ({ ...prevState, loading: true, newLoading: true }));
 
     try{
       const allRestaurants = await fetchRestaurants(currentAddress, accessToken);
-
       setRestaurantsData({
         all: allRestaurants,
         filtered: allRestaurants,
