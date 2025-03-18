@@ -86,4 +86,25 @@ export class OrdersController {
     async cancelOrder(@Param("id") id: string) {
         return this.ordersService.updateOrderStatus(id, OrderStatus.Cancelled);
     }
+
+    @Get("user/history")
+    @ApiOperation({ summary: "Get order history for current user" })
+    @Auth(Role.Customer, Role.Restaurant, Role.Courier, Role.Admin)
+    async getUserOrderHistory(@GetUser() user: User, @Query("status") status?: string) {
+        return this.ordersService.getUserOrderHistory(user.id, status as OrderStatus);
+    }
+
+    @Get("restaurant/orders")
+    @ApiOperation({ summary: "Get orders for restaurant" })
+    @Auth(Role.Restaurant)
+    async getRestaurantOrders(@GetUser() user: User, @Query("status") status?: string) {
+        return this.ordersService.getRestaurantOrders(user.id, status);
+    }
+
+    @Get("courier/deliveries")
+    @ApiOperation({ summary: "Get courier delivery history" })
+    @Auth(Role.Courier)
+    async getCourierDeliveries(@GetUser() user: User, @Query("status") status?: string) {
+        return this.ordersService.getCourierDeliveries(user.id, status);
+    }
 }

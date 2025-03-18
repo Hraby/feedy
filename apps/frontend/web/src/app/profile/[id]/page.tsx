@@ -10,6 +10,62 @@ import RestaurantForm from "@/components/RestaurantForm";
 import { FaMapMarkerAlt, FaListAlt, FaWallet, FaInfoCircle, FaTruck, FaStore, FaHome, FaBuilding, FaTrash, FaCalendar, FaClock } from 'react-icons/fa';
 import AdminRestaurants from "@/app/admin/restaurants/page";
 import { BACKEND_URL } from "@/lib/constants";
+import OrdersModal from "@/components/OrdersModal";
+import BalanceModal from "@/components/BalanceModal";
+import CourierDeliveriesModal from "@/components/CourierDeliveriesModal";
+
+interface MenuItem {
+    id: string;
+    name: string;
+    description: string;
+    price: number;
+    available: boolean;
+    imageUrl: string;
+    category: string;
+    restaurantId: string;
+}
+
+interface OrderItem {
+    id: string;
+    quantity: number;
+    price: number;
+    orderId: string;
+    menuItemId: string;
+    menuItem: MenuItem;
+}
+
+interface Restaurant {
+    id: string;
+    name: string;
+    description: string;
+    phone: string;
+    ownerId: string;
+    status: string;
+    category: string[];
+    imageUrl: string;
+}
+
+interface User {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: string[];
+}
+
+interface Order {
+    id: string;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    restaurantId: string;
+    courierProfileId: string | null;
+    userId: string;
+    user: User;
+    restaurant: Restaurant;
+    CourierProfile: any | null;
+    orderItems: OrderItem[];
+}
 
 const Profile = () => {
     const { user } = useAuth();
@@ -256,59 +312,11 @@ const Profile = () => {
             </Modal>
 
             <Modal isOpen={isOrdersOpen} onClose={() => setIsOrdersOpen(false)}>
-                <h2 className="text-xl font-bold mb-4">Objednávky</h2>
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead className="sticky top-0 bg-white z-20">
-                            <tr className="border-b">
-                                <th className="p-4">Položky</th>
-                                <th className="p-4">Datum</th>
-                                <th className="p-4">Restaurace</th>
-                                <th className="p-4">Cena</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {mockOrders.map((order) => (
-                                <tr key={order.id} className="border-b hover:bg-gray-100">
-                                    <td className="p-4">{order.items}</td>
-                                    <td className="p-4">{order.date}</td>
-                                    <td className="p-4">{order.restaurant}</td>
-                                    <td className="p-4">{order.price} Kč</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                <OrdersModal isOpen={isOrdersOpen} onClose={() => setIsOrdersOpen(false)} />
             </Modal>
 
             <Modal isOpen={isBalanceOpen} onClose={() => setIsBalanceOpen(false)}>
-                <h2 className="text-xl font-bold mb-4">Útraty</h2>
-                <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
-                    <div className="text-center">
-                        <p className="text-sm mb-2">Celkové útraty</p>
-                        <h2 className="text-4xl font-semibold">250.00 Kč</h2>
-                    </div>
-                </div>
-                <div className="max-w-6xl w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6">
-                    <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
-                        <div className="text-center">
-                            <div className="flex justify-center">
-                                <FaCalendar className="text-[var(--primary)] text-3xl" />
-                            </div>
-                            <p className="text-sm mt-3 mb-1">Tento měsíc</p>
-                            <h2 className="text-2xl font-semibold">150.00 Kč</h2>
-                        </div>
-                    </div>
-                    <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
-                        <div className="text-center">
-                            <div className="flex justify-center">
-                                <FaClock className="text-[var(--primary)] text-3xl" />
-                            </div>
-                            <p className="text-sm mt-3 mb-1">Průměrná objednávka</p>
-                            <h2 className="text-2xl font-semibold">150.00 Kč</h2>
-                        </div>
-                    </div>
-                </div>
+                <BalanceModal isOpen={isBalanceOpen} onClose={() => setIsBalanceOpen(false)} />
             </Modal>
 
 
@@ -327,31 +335,7 @@ const Profile = () => {
 
             <Modal isOpen={openModal === "courier"} onClose={() => setOpenModal(null)}>
                 {user.role.includes("Courier") ? (
-                    <div>
-                        <h2 className="text-xl font-bold mb-4">Dokončené objednávky</h2>
-                        <div className="overflow-x-auto">
-                            <table className="w-full text-left">
-                                <thead className="sticky top-0 bg-white z-20">
-                                    <tr className="border-b">
-                                        <th className="p-4">Položky</th>
-                                        <th className="p-4">Datum</th>
-                                        <th className="p-4">Restaurace</th>
-                                        <th className="p-4">Cena</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {mockOrders.map((order) => (
-                                        <tr key={order.id} className="border-b hover:bg-gray-100">
-                                            <td className="p-4">{order.items}</td>
-                                            <td className="p-4">{order.date}</td>
-                                            <td className="p-4">{order.restaurant}</td>
-                                            <td className="p-4">{order.price} Kč</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    <CourierDeliveriesModal isOpen={openModal === "courier"} onClose={() => setOpenModal(null)} />
                 ) : (
                     <CourierForm />
                 )}
