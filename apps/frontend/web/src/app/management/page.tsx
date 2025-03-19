@@ -174,9 +174,7 @@ const ManagementDashboard = () => {
       } catch (error) {
         console.log(error);
       } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
+        setIsLoading(false);
       }
     };
 
