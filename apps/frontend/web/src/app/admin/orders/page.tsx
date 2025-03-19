@@ -426,7 +426,7 @@ const AdminOrders = () => {
                                                 <button
                                                     type="button"
                                                     onClick={() => handleDeleteOrder(order.id)}
-                                                    className="text-gray-700 group"
+                                                    className="text-gray-700 group pt-2"
                                                 >
                                                     <div className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-red-600">
                                                         <FaTrash size={20} className="text-gray-700 group-hover:text-white" />

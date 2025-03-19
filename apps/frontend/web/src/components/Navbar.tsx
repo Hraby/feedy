@@ -190,13 +190,13 @@ export default function Navbar() {
 
               <div className="relative">
                 <button
-                  className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 w-10 h-10 flex items-center justify-center"
+                  className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 w-10 h-10 flex items-center justify-center relative"
                   onClick={() => toggleDropdown("cart")}
                 >
                   <FaShoppingCart className="text-gray-600 text-lg" />
                   {cartQuantity > 0 && (
-                    <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                      {cartQuantity}
+                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {cartQuantity > 9 ? "9+" : cartQuantity}
                     </span>
                   )}
                 </button>
