@@ -117,6 +117,16 @@ const UserMenuScreen = () => {
           </View>
 
           <View style={styles.largeCard}>
+          <TouchableOpacity onPress={() => router.push('/(app)/(user)/rating')}>
+            <Text style={styles.cardTitle}>Napište recenzi</Text>
+            <Text style={styles.cardText}>Chcete některou restauraci nebo kurýra pochválit? Sem s tím!</Text>
+            <View style={styles.courierMode}>
+              <Image source={require('@/assets/images/Rating.png')} style={styles.supplierIcon} />
+            </View>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.largeCard}>
             <Text style={styles.cardTitle}>Režim kurýra</Text>
             <Text style={styles.cardText}>Přepněte do režimu kurýra a začněte vydělávat ještě dnes</Text>
             <View style={styles.courierMode}>

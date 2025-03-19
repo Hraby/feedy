@@ -216,6 +216,16 @@ export default function TabLayout() {
           ),
         }}
       />
+       <Tabs.Screen
+        name="rating"
+        options={{
+          title: 'Rating',
+          href: null,
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+          ),
+        }}
+      />
     </Tabs>    
   );
 }
