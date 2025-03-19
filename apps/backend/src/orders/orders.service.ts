@@ -193,6 +193,16 @@ export class OrdersService {
         return updatedOrder;
     }
 
+    async deleteOrder(id: string){
+        await this.prisma.orderItem.deleteMany({
+            where: { orderId: id }
+        });
+
+        return await this.prisma.order.delete({
+            where: {id}
+        })
+    }
+
     async assignCourier(id: string) {
         const availableCourier = await this.prisma.user.findFirst({
             where: { 

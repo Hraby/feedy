@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
 import { OrdersService } from './orders.service';
@@ -17,6 +17,13 @@ export class OrdersController {
         return this.ordersService.getOrders(status);
     }
 
+    @Post()
+    @ApiOperation({ summary: "Create new order" })
+    @Auth(Role.Customer, Role.Admin)
+    async createOrder(@Body() dto: CreateOrderDto, @GetUser() user: User) {
+        return this.ordersService.createOrder(dto, user);
+    }
+
     @Get(":id")
     @ApiOperation({ summary: "Get specific order" }) 
     @Auth(Role.Customer, Role.Restaurant, Role.Courier, Role.Admin)
@@ -24,18 +31,18 @@ export class OrdersController {
         return this.ordersService.getOrderById(id);
     }
 
+    @Delete(":id")
+    @ApiOperation({ summary: "Delete order" }) 
+    @Auth(Role.Admin)
+    async deleteOrder(@Param("id") id: string) {
+        return this.ordersService.deleteOrder(id);
+    }
+
     @Get(":id/status")
     @ApiOperation({ summary: "Get specific order status" }) 
     @Auth(Role.Customer, Role.Restaurant, Role.Courier, Role.Admin)
     async getOrderStatus(@Param("id") id: string) {
         return this.ordersService.getOrderStatusById(id);
-    }
-
-    @Post()
-    @ApiOperation({ summary: "Create new order" })
-    @Auth(Role.Customer, Role.Admin)
-    async createOrder(@Body() dto: CreateOrderDto, @GetUser() user: User) {
-        return this.ordersService.createOrder(dto, user);
     }
 
     @Patch(":id/prepare")
