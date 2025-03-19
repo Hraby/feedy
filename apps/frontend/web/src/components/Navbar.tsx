@@ -124,7 +124,7 @@ export default function Navbar() {
               </div>
               <div className="relative">
                 <button
-                  className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 flex items-center gap-2 transition-all duration-300 hover:scale-105"
+                  className="bg-white p-2 rounded-full shadow-md hover:bg-gray-200 flex items-center gap-2 transition-all duration-300"
                   onClick={() => {
                     toggleDropdown("locations");
                     setIsEditing(false);
@@ -278,7 +278,7 @@ export default function Navbar() {
         </div>
       </div>
       {isMobileMenuOpen && (
-        <div className="fixed top-0 left-0 w-full h-fit bg-white z-40 flex flex-col p-6 rounded-2xl md:hidden pt-20">
+        <div className="fixed top-0 left-0 w-full h-fit bg-white z-40 shadow-2xl flex flex-col p-6 rounded-2xl md:hidden pt-20">
           <div className="space-y-4 text-center">
             <Link href="/menu" className="flex items-center justify-center h-14 text-xl font-bold text-gray-800 border-b w-full">
               Menu

@@ -10,6 +10,7 @@ import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthProvider";
 import { BACKEND_URL } from "@/lib/constants";
+import { useRouter } from "next/navigation";
 
 const Order = () => {
     const { id } = useParams();
@@ -17,6 +18,8 @@ const Order = () => {
     const [deliveryTime] = useState("20 minut");
     const { orderStatus, setOrderStatus } = useShoppingCart();
     const {accessToken} = useAuth();
+    
+    const router = useRouter();
 
     type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'OutForDelivery' | 'Delivered' | 'Cancelled';
 
@@ -40,6 +43,11 @@ const Order = () => {
                         'Authorization': `Bearer ${accessToken}`
                     },
                 });
+
+                if (response.status === 404) {
+                    router.replace("/404");
+                    return;
+                }
 
                 if (!response.ok) throw new Error("Failed to fetch order status");
                 

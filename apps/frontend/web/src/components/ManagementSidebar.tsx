@@ -49,7 +49,7 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
             <h1 className="text-xl font-bold text-white text-center bg-gradient-to-r from-[var(--gradient-purple-start)] to-[var(--gradient-purple-end)] p-4 rounded-3xl mb-8">feedy manage</h1>
 
             <div className="mb-6">
-                <label className="block text-gray-500 text-sm font-semibold mb-2">Vyberte restauraci:</label>
+                <label className="text-gray-400 uppercase text-sm mb-4">Vyberte restauraci</label>
                 <select 
                     className="w-full p-2 border rounded-lg bg-gray-100 focus:outline-[var(--gradient-purple-end)]" 
                     value={restaurantId || ""}

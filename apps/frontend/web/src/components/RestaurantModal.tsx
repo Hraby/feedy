@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthProvider";
 import { useEffect, useState } from "react";
-import { FaBuilding, FaHome, FaInfoCircle, FaMapMarkerAlt, FaTimes, FaTrash } from "react-icons/fa";
+import { FaBuilding, FaHome, FaInfoCircle, FaMapMarkerAlt, FaCog, FaTimes, FaTrash } from "react-icons/fa";
 import AutoComplete from "./autoComplete";
 
 export default function RestaurantModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -97,7 +97,7 @@ export default function RestaurantModal({ isOpen, onClose }: { isOpen: boolean; 
                             className="text-gray-700 group"
                         >
                             <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 transition-colors group-hover:bg-blue-600">
-                                <FaInfoCircle size={15} className="text-gray-700 group-hover:text-white" />
+                                <FaCog size={15} className="text-gray-700 group-hover:text-white" />
                             </div>
                         </button>
                         <button
@@ -114,7 +114,7 @@ export default function RestaurantModal({ isOpen, onClose }: { isOpen: boolean; 
                 </div>
             ))}
 
-            <div className="mt-6 bg-gray-50 p-6 rounded-2xl shadow-md space-y-4">
+            <div className="mt-6 bg-gray-50 p-6 rounded-2xl space-y-4">
                 {isEditing ? (
                     <>
                         <label className="block">
@@ -123,6 +123,7 @@ export default function RestaurantModal({ isOpen, onClose }: { isOpen: boolean; 
                                 onClose={() => setIsEditing(false)}
                                 onSelect={handleAddressSelect}
                                 existingAddress={editingAddressId}
+                                className="z-40"
                             />
                         </label>
                         <button
