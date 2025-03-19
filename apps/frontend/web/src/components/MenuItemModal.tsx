@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import Modal from "@/components/Modal";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { toast, Slide } from 'react-toastify';
@@ -22,6 +23,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
   const { cartItems, addToCart, clearOrder } = useShoppingCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [flyToCart, setFlyToCart] = useState(false);
 
   const isDifferentRestaurant =
     cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId;
@@ -32,27 +34,29 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
       return;
     }
 
-    addToCart({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: 1,
-      restaurantId: item.restaurantId,
-    });
-
-    toast.success(`Položka ${item.name} byla přidána do košíku!`, {
-      position: "bottom-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "colored",
-      transition: Slide,
-    });
-
-    onClose();
+    setFlyToCart(true);
+    setTimeout(() => {
+      addToCart({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: 1,
+        restaurantId: item.restaurantId,
+      });
+      toast.success(`Položka ${item.name} byla přidána do košíku!`, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Slide,
+      });
+      setFlyToCart(false);
+      onClose();
+    }, 600);
   };
 
   const confirmChangeRestaurant = () => {
@@ -71,10 +75,12 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
     <>
       <Modal isOpen={true} onClose={handleMainModalClose}>
         <h2 className="text-2xl font-bold mb-4">{item.name}</h2>
-        <img
+        <motion.img
           src="/img/burger.png"
           alt={item.name}
           className="w-full h-60 object-cover rounded-lg mb-4"
+          animate={flyToCart ? { x: 450, y: -300, scale: 0.5, opacity: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
         />
         <p className="text-gray-700 mb-4">{item.description}</p>
         <span className="block text-xl font-bold mb-6">Cena: {item.price} Kč</span>

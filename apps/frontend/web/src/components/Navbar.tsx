@@ -9,6 +9,8 @@ import AutoComplete from "./autoComplete";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 
 export default function Navbar() {
+  const serviceFee = 8.25;
+  const deliveryFee = 34;
   const { address } = useAuth()
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -32,7 +34,8 @@ export default function Navbar() {
   const { cartItems, increaseCartQuantity, decreaseCartQuantity, cartQuantity } = useShoppingCart();
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return subtotal + serviceFee + deliveryFee;
   };
 
   type Notification = {
@@ -102,7 +105,7 @@ export default function Navbar() {
                 >
                   <FaBell className="text-gray-600 text-lg" />
                   {unreadNotifications > 0 && (
-                    <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{unreadNotifications}</span>
+                    <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">{unreadNotifications}</span>
                   )}
                 </button>
                 {activeDropdown === "notifications" && (
@@ -229,6 +232,15 @@ export default function Navbar() {
                             </div>
                           </div>
                         ))}
+                        <hr className="my-2 border-t border-gray-100 shadow-md" />
+                        <div className="flex justify-between text-gray-600 text-sm">
+                          <div>Poplatek za službu:</div>
+                          <div className="text-[var(--primary)]">{serviceFee} Kč</div>
+                        </div>
+                        <div className="flex justify-between text-gray-600 text-sm">
+                          <div>Poplatek za dopravu:</div>
+                          <div className="text-[var(--primary)]">{deliveryFee} Kč</div>
+                        </div>
                         <hr className="my-2 border-t border-gray-100 shadow-md" />
                         <div className="flex justify-between text-[var(--primary)] text-lg font-bold mb-2">
                           <div>Celkem:</div>
