@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
     fontWeight: "400",
+    fontFamily: "Montserrat", 
     marginTop: 65,
     marginRight: 20,
   },
@@ -205,11 +206,13 @@ const styles = StyleSheet.create({
     fontSize: 34,
     fontWeight: "bold",
     color: "#333",
+    fontFamily: "Montserrat", 
   },
   subText: {
     fontSize: 14,
     marginTop: 5,
     marginBottom: 20,
+    fontFamily: "Montserrat", 
     color: "#999",
   },
   statusContainer: {
@@ -231,10 +234,12 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#999",
   },
   activeText: {
     color: "#FF5500",
+    fontFamily: "Montserrat", 
     fontWeight: "bold",
   },
 });

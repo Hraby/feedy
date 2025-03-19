@@ -171,14 +171,17 @@ const styles = StyleSheet.create({
   },
   profileText: {
     flex: 1,
+    fontFamily: "Montserrat", 
   },
   name: {
     fontSize: 32,
+    fontFamily: "Montserrat", 
     fontWeight: 'bold'
   },
   subtitle: {
     color: 'gray',
     fontSize: 16,
+    fontFamily: "Montserrat", 
   },
   icon: {
     width: 70,
@@ -208,10 +211,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
     marginBottom: 10,
+    fontFamily: "Montserrat", 
   },
   cardText: {
     color: 'gray',
     fontSize: 16,
+    fontFamily: "Montserrat", 
     marginBottom: 10,
   },
   smallIcon: {
@@ -249,6 +254,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     fontSize: 16,
     fontWeight: 'light',
+    fontFamily: "Montserrat", 
   },
   supplierIcon: {
     width: 45,
@@ -279,10 +285,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#FF3B30',
     marginBottom: 5,
+    fontFamily: "Montserrat", 
   },
   logoutText: {
     color: 'gray',
     fontSize: 16,
+    fontFamily: "Montserrat", 
   }
 });
 

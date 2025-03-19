@@ -202,7 +202,7 @@ const OrderScreen = () => {
               <Marker
                 coordinate={deliveryCoordinates}
                 title="Dodací adresa"
-                pinColor="#4CAF50"
+                pinColor="#FF5500"
               />
             )}
           </MapView>
@@ -265,7 +265,7 @@ const OrderScreen = () => {
         <View style={styles.modalOverlay}>
           <Animated.View style={[styles.modalContent, { opacity: fadeAnim }]}>
             <View style={styles.successIconContainer}>
-              <Ionicons name="checkmark-circle" size={80} color="#4CAF50" />
+              <Ionicons name="checkmark-circle" size={80} color="#FF5500" />
             </View>
             <Text style={styles.successTitle}>Objednávka doručena!</Text>
             <Text style={styles.successText}>Děkujeme za vaši službu</Text>
@@ -296,6 +296,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     flex: 1,
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#000000",
     fontWeight: "400",
   },
@@ -325,7 +326,8 @@ const styles = StyleSheet.create({
   },
   deliveryTimeLabel: {
     fontWeight: "bold",
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: "Montserrat", 
   },
   deliveryTimeWrapper: {
     flexDirection: "row",
@@ -333,6 +335,7 @@ const styles = StyleSheet.create({
   },
   deliveryTime: {
     marginLeft: 5,
+    fontFamily: "Montserrat", 
     color: "#E85527",
     fontSize: 16
   },
@@ -345,6 +348,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontWeight: "bold",
     fontSize: 18,
+    fontFamily: "Montserrat", 
     textAlign: "center",
     marginVertical: 10
   },
@@ -356,17 +360,21 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#333"
   },
   itemInfo: {
     fontSize: 16,
-    color: "#333"
+    color: "#333",
+    fontFamily: "Montserrat", 
   },
   itemQuantity: {
-    fontWeight: "300"
+    fontWeight: "300",
+    fontFamily: "Montserrat", 
   },
   itemPrice: {
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: "Montserrat", 
   },
   totalContainer: {
     flexDirection: "row",
@@ -377,11 +385,13 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontWeight: "bold",
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#333"
   },
   totalPrice: {
     fontWeight: "bold",
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#333"
   },
   pickupButton: {
@@ -395,6 +405,7 @@ const styles = StyleSheet.create({
   pickupButtonText: {
     color: "#FFF",
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
     fontSize: 16
   },
   deliveryButton: {
@@ -408,6 +419,7 @@ const styles = StyleSheet.create({
   deliveryButtonText: {
     color: "#FFF",
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
     fontSize: 16
   },
   disabledButton: {
@@ -431,11 +443,13 @@ const styles = StyleSheet.create({
   },
   successTitle: {
     fontSize: 24,
+    fontFamily: "Montserrat", 
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 10,
   },
   successText: {
+    fontFamily: "Montserrat", 
     fontSize: 16,
     color: '#666',
     textAlign: 'center',

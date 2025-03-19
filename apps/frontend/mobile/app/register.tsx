@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
+import { useFonts, Montserrat_400Regular, Montserrat_500Medium } from '@expo-google-fonts/montserrat';
 
 export default function RegistrationScreen() {
   const [firstName, setFirstName] = useState('');
@@ -51,37 +52,45 @@ export default function RegistrationScreen() {
 
   const isLoading = localLoading || authLoading;
 
+  const [fontsLoaded] = useFonts({
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+  });
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" color="#FF5500" />;
+  }
+
   return (
     <ImageBackground source={require('@/assets/images/bg-register.png')} style={styles.container}>
       <View style={styles.headerBackground}>
         <Image source={require('@/assets/images/Logos/feedyLogoWhite.png')} style={styles.logo} />
       </View>
       
-      
       <View style={styles.tabs}>
-        <Text style={styles.activeTab}>Registrace</Text>
+        <Text style={[styles.activeTab, { fontFamily: 'Montserrat_500Medium' }]}>Registrace</Text>
         <TouchableOpacity onPress={() => router.push('/login')}>
-          <Text style={styles.inactiveTab}>Přihlásit se</Text>
+          <Text style={[styles.inactiveTab, { fontFamily: 'Montserrat_400Regular' }]}>Přihlásit se</Text>
         </TouchableOpacity>
       </View>
       
       <TextInput 
         placeholder="Jméno" 
-        style={styles.input} 
+        style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]} 
         value={firstName}
         onChangeText={setFirstName}
       />
       
       <TextInput 
         placeholder="Přijmení" 
-        style={styles.input} 
+        style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]} 
         value={lastName}
         onChangeText={setLastName}
       />
       
       <TextInput 
         placeholder="E-mail" 
-        style={styles.input} 
+        style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]} 
         keyboardType="email-address"
         autoCapitalize="none"
         value={email}
@@ -90,7 +99,7 @@ export default function RegistrationScreen() {
       
       <TextInput 
         placeholder="Heslo" 
-        style={styles.input} 
+        style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]} 
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -104,7 +113,7 @@ export default function RegistrationScreen() {
         {isLoading ? (
           <ActivityIndicator color="#fff" testID="loading-indicator"/>
         ) : (
-          <Text style={styles.buttonText}>Zaregistrovat se</Text>
+          <Text style={[styles.buttonText, { fontFamily: 'Montserrat_500Medium' }]}>Zaregistrovat se</Text>
         )}
       </TouchableOpacity>
     </ImageBackground>

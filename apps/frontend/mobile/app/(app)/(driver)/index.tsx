@@ -203,6 +203,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     color: '#FF3B30',
+    fontFamily: "Montserrat", 
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: '#FFF',
     fontSize: 16,
+    fontFamily: "Montserrat", 
     fontWeight: 'bold',
   },
   headerContainer: {
@@ -227,6 +229,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     flex: 1,
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#000000",
     fontWeight: "400",
     marginTop: 10,
@@ -236,6 +239,7 @@ const styles = StyleSheet.create({
   },
   distance: {
     fontSize: 16,
+    fontFamily: "Montserrat", 
     fontWeight: "light",
     marginLeft: 30,
     marginBottom: 5,
@@ -255,12 +259,13 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     backgroundColor: "",
-    borderRadius: 10,
+    borderRadius: 1,
     marginRight: 10,
   },
   restaurantImage: {
     width: "100%",
-    height: "100%"
+    height: "100%",
+    borderRadius: 10,
   },
   orderDetails: {
     flex: 1,
@@ -268,6 +273,7 @@ const styles = StyleSheet.create({
   orderName: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
   },
   priceItemsContainer: {
     flexDirection: "row",
@@ -276,10 +282,12 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
     color: "#333",
   },
   items: {
     fontSize: 14,
+    fontFamily: "Montserrat", 
     color: "#888",
   },
   buttonsBackground: {
@@ -301,6 +309,7 @@ const styles = StyleSheet.create({
   },
   acceptText: {
     color: "#FFF",
+    fontFamily: "Montserrat", 
     fontWeight: "bold",
   },
   cancelButton: {
@@ -313,6 +322,7 @@ const styles = StyleSheet.create({
   cancelText: {
     color: "#FF5500",
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
   },
   orderId: {
     position: "absolute",
@@ -330,6 +340,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: '#666',
+    fontFamily: "Montserrat", 
     textAlign: 'center',
   },
 });

@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     marginLeft: 60,
     fontSize: 18,
     marginTop: 40,
+    fontFamily: "Montserrat", 
   },
   notFoundContainer: {
     alignItems: "center",
@@ -134,10 +135,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginTop: 10,
+    fontFamily: "Montserrat", 
   },
   subText: {
     fontSize: 16,
     color: "#888",
+    fontFamily: "Montserrat", 
   },
   restaurantItem: {
     flexDirection: "row",
@@ -145,6 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#DDD",
+    fontFamily: "Montserrat", 
   },
   restaurantInfo: {
     flex: 1,
@@ -153,10 +157,12 @@ const styles = StyleSheet.create({
   restaurantName: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
   },
   restaurantDescription: {
     fontSize: 14,
     color: "#555",
+    fontFamily: "Montserrat", 
   },
   restaurantImage: {
     width: 60,

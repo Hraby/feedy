@@ -2,9 +2,15 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ImageBackground } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
+import { useFonts, Montserrat_400Regular, Montserrat_500Medium } from '@expo-google-fonts/montserrat';
 
 export default function AuthIndex() {
   const { user, loading } = useAuth();
+  
+  const [fontsLoaded] = useFonts({
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+  });
 
   useEffect(() => {
     if (!loading && user) {
@@ -12,8 +18,8 @@ export default function AuthIndex() {
     }
   }, [user, loading]);
 
-  if (loading) {
-    return null;
+  if (loading || !fontsLoaded) {
+    return null; // Počkej, až se fonty načtou
   }
 
   return (
@@ -24,20 +30,20 @@ export default function AuthIndex() {
         resizeMode="cover"
       >
         <View style={styles.content}>
-          <Text style={styles.title}>feedy.</Text>
+          <Text style={[styles.title, { fontFamily: 'Montserrat_500Medium' }]}>feedy.</Text>
 
           <TouchableOpacity 
             style={styles.loginButton}
             onPress={() => router.push('/login')}
           >
-            <Text style={styles.loginButtonText}>Přihlásit se</Text>
+            <Text style={[styles.loginButtonText, { fontFamily: 'Montserrat_500Medium' }]}>Přihlásit se</Text>
           </TouchableOpacity>
 
           <TouchableOpacity 
             style={styles.registerButton}
             onPress={() => router.push('/register')}
           >
-            <Text style={styles.registerButtonText}>Registrace</Text>
+            <Text style={[styles.registerButtonText, { fontFamily: 'Montserrat_500Medium' }]}>Registrace</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

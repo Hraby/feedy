@@ -368,6 +368,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'light',
     color: '#252B33',
+    fontFamily: 'Montserrat_400Regular',
   },
   rectangle: {
     backgroundColor: 'rgba(255, 85, 0, 0.3)',
@@ -383,6 +384,7 @@ const styles = StyleSheet.create({
     fontWeight: 'light',
     marginLeft: 10,
     letterSpacing: 0.5,
+    fontFamily: 'Montserrat_400Regular',
   },
   secondRectangle: {
     backgroundColor: '#FF5500',
@@ -400,6 +402,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 20,
     marginLeft: 20,
+    fontFamily: 'Montserrat_400Regular',
   },
   secondRectangleSubText: {
     color: '#fff',
@@ -409,6 +412,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 55,
     marginLeft: 20,
+    fontFamily: 'Montserrat_400Regular',
   },
   secondRectangleBoldText: {
     color: '#fff',
@@ -418,6 +422,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginTop: 90,
     marginLeft: 20,
+    fontFamily: 'Montserrat_700Bold',
   },
   secondRectangleImage: {
     width: 180,
@@ -441,6 +446,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'light',
     textAlign: 'center',
+    fontFamily: 'Montserrat_400Regular',
   },
   menuScrollContainer: {
     marginTop: 25,
@@ -468,6 +474,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#252B33',
     fontWeight: 'light',
+    fontFamily: 'Montserrat_400Regular',
   },
   menuTextActive: {
     color: '#fff',
@@ -509,6 +516,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#252B33',
     flex: 1,
+    fontFamily: 'Montserrat_400Regular',
   },
   ratingContainer: {
     flexDirection: 'row',
@@ -519,12 +527,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#252B33',
     marginRight: 5,
+    fontFamily: 'Montserrat_400Regular',
   },
   restaurantDescription: {
     fontSize: 12,
     color: '#252B33',
     marginTop: 5,
     flex: 1,
+    fontFamily: 'Montserrat_400Regular',
   },
   restaurantTags: {
     flexDirection: 'row',
@@ -541,6 +551,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#252B33',
     marginLeft: 5,
+    fontFamily: 'Montserrat_400Regular',
   },
   sectionTitle: {
     fontSize: 20,
@@ -548,6 +559,7 @@ const styles = StyleSheet.create({
     color: '#252B33',
     marginLeft: 15,
     marginTop: 20,
+    fontFamily: 'Montserrat_400Regular',
   },
   searchBar: {
     paddingVertical: 5,
@@ -563,6 +575,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginBottom: 7,
     letterSpacing: 0.5,
+    fontFamily: 'Montserrat_400Regular',
   },
   emptyStateContainer: {
     padding: 20,
@@ -575,6 +588,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#888',
     textAlign: 'center',
+    fontFamily: 'Montserrat_400Regular',
   },
   skeletonImage: {
     width: '100%',

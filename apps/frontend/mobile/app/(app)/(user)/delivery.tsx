@@ -203,14 +203,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 40,
     color: "#000000",
-    marginLeft: 240,
+    marginLeft: 230,
     fontWeight: "400",
+    fontFamily: "Montserrat", 
   },
   title: {
     fontSize: 32,
     fontWeight: "bold",
     marginTop: 45,
     letterSpacing: 0.4,
+    fontFamily: "Montserrat", 
   },
   section: {
     marginTop: 15,
@@ -221,6 +223,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: 10,
     marginTop: 10,
+    fontFamily: "Montserrat", 
     letterSpacing: 0.4,
   },
   addressBox: {
@@ -228,15 +231,18 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     marginRight: 10,
+    fontFamily: "Montserrat", 
   },
   name: {
     fontSize: 18,
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
     letterSpacing: 0.4,
   },
   address: {
     fontSize: 16,
     color: "#000",
+    fontFamily: "Montserrat", 
     marginVertical: 5,
     paddingTop: 5,
     letterSpacing: 0.3,
@@ -244,6 +250,7 @@ const styles = StyleSheet.create({
   phone: {
     fontSize: 16,
     color: "#000",
+    fontFamily: "Montserrat", 
     paddingTop: 5,
   },
   option: {
@@ -255,6 +262,7 @@ const styles = StyleSheet.create({
   optionText: {
     fontSize: 18,
     marginLeft: 10,
+    fontFamily: "Montserrat", 
   },
   rowBetween: {
     flexDirection: "row",
@@ -265,11 +273,13 @@ const styles = StyleSheet.create({
   totalText: {
     fontSize: 20,
     fontWeight: "400",
+    fontFamily: "Montserrat", 
     marginTop: 10,
   },
   totalPrice: {
     fontSize: 24,
     fontWeight: "700",
+    fontFamily: "Montserrat", 
     marginTop: 10,
     marginRight: 15,
   },
@@ -290,6 +300,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 18,
     fontWeight: "light",
+    fontFamily: "Montserrat", 
   },
   separator: {
     width: "100%",
@@ -322,16 +333,19 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: "#333",
   },
   itemPrice: {
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: "Montserrat", 
     color: "#FF5500",
   },
   errorText: {
     color: '#FF3B30',
     textAlign: 'center',
+    fontFamily: "Montserrat", 
     marginBottom: 10,
     position: 'absolute',
     bottom: 140,

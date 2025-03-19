@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     color: "#000000",
     marginLeft: 290,
     fontWeight: "400",
+    fontFamily: "Montserrat", 
     marginBottom: 30,
   },
   addressItem: {
@@ -105,15 +106,18 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
+    fontFamily: "Montserrat", 
   },
   addressType: {
     fontWeight: "500",
     fontSize: 14,
+    fontFamily: "Montserrat", 
     marginBottom: 5,
   },
   addressText: {
     color: "#777",
     fontSize: 14,
+    fontFamily: "Montserrat", 
   },
   addButton: {
     backgroundColor: "#FF5500",
@@ -127,5 +131,6 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 16,
     fontWeight: "light",
+    fontFamily: "Montserrat", 
   },
 });

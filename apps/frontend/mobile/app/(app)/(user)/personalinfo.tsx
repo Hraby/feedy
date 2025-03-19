@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
     fontWeight: "500",
     marginBottom: 40,
+    fontFamily: "Montserrat", 
   },
   profileContainer: {
     flexDirection: 'row',
@@ -116,11 +117,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#212529',
     marginBottom: 4,
+    fontFamily: "Montserrat", 
   },
   emailText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#6c757d',
     marginBottom: 12,
+    fontFamily: "Montserrat", 
   },
   rolesContainer: {
     flexDirection: 'row',
@@ -138,6 +141,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '500',
     fontSize: 14,
+    fontFamily: "Montserrat", 
   },
   editButton: {
     backgroundColor: "#FF5500",
@@ -148,6 +152,7 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     color: '#FFF',
+    fontFamily: "Montserrat", 
     fontSize: 16,
     fontWeight: '500'
   }

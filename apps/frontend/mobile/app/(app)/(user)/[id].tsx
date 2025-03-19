@@ -239,6 +239,7 @@ const FoodCard = ({ item, onAddToCart, restaurantName, getDefaultImage }: {
   </TouchableOpacity>
 );
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -286,6 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     marginTop: 8,
+    fontFamily: "Montserrat", 
   },
   detailsRow: {
     flexDirection: "row",
@@ -300,6 +302,7 @@ const styles = StyleSheet.create({
   badgeText: {
     fontSize: 14,
     marginLeft: 5,
+    fontFamily: "Montserrat", 
   },
   ratingContainer: {
     flexDirection: "row",
@@ -308,11 +311,13 @@ const styles = StyleSheet.create({
   ratingText: {
     fontSize: 16,
     marginRight: 2,
+    fontFamily: "Montserrat", 
   },
   description: {
     fontSize: 16,
     marginTop: 15,
     color: "#252B33",
+    fontFamily: "Montserrat", 
   },
   sectionBlock: {
     padding: 20,
@@ -321,6 +326,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 20,
+    fontFamily: "Montserrat", 
   },
   cardRow: {
     justifyContent: "space-between",
@@ -343,11 +349,13 @@ const styles = StyleSheet.create({
   foodTitle: {
     fontSize: 16,
     fontWeight: "600",
+    fontFamily: "Montserrat", 
   },
   foodDescription: {
     fontSize: 12,
     color: "#666666",
     marginTop: 5,
+    fontFamily: "Montserrat", 
   },
   bottomContainer: {
     marginTop: 10,
@@ -359,6 +367,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#FF5500",
+    fontFamily: "Montserrat", 
   },
   foodImage: {
     width: "100%",

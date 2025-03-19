@@ -106,9 +106,11 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 32,
+    fontFamily: "Montserrat", 
     fontWeight: 'bold'
   },
   subtitle: {
+    fontFamily: "Montserrat", 
     color: 'gray',
     fontSize: 16,
   },
@@ -138,11 +140,13 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontWeight: 'bold',
+    fontFamily: "Montserrat", 
     fontSize: 20,
     marginBottom: 10,
   },
   cardText: {
     color: 'gray',
+    fontFamily: "Montserrat", 
     fontSize: 16,
     marginBottom: 10,
   },
@@ -180,6 +184,7 @@ const styles = StyleSheet.create({
   toggleText: {
     marginLeft: 10,
     fontSize: 16,
+    fontFamily: "Montserrat", 
     fontWeight: 'light',
   },
   supplierIcon: {
@@ -209,12 +214,14 @@ const styles = StyleSheet.create({
   logoutTitle: {
     fontWeight: 'bold',
     fontSize: 20,
+    fontFamily: "Montserrat", 
     color: '#FF3B30',
     marginBottom: 5,
   },
   logoutText: {
     color: 'gray',
     fontSize: 16,
+    fontFamily: "Montserrat", 
   }
 });
 

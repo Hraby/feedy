@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     marginLeft: 320,
     fontWeight: "400",
     marginBottom: 30,
+    fontFamily: "Montserrat", 
   },
   content: {
     flex: 1,
@@ -180,11 +181,13 @@ const styles = StyleSheet.create({
   totalExpensesLabel: {
     fontSize: 18,
     color: '#666',
+    fontFamily: "Montserrat", 
     marginBottom: 8,
   },
   totalExpensesValue: {
     fontSize: 36,
     fontWeight: 'bold',
+    fontFamily: "Montserrat", 
     color: '#000',
   },
   statsContainer: {
@@ -202,6 +205,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 14,
+    fontFamily: "Montserrat", 
     color: '#666',
     marginTop: 8,
   },
@@ -210,6 +214,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#000',
     marginTop: 4,
+    fontFamily: "Montserrat", 
   },
   loadingContainer: {
     flex: 1,

@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 16,
+    fontFamily: "Montserrat", 
     marginTop: 40,
     color: "#000000",
     marginLeft: 300,
@@ -78,18 +79,21 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
+    fontFamily: "Montserrat", 
     marginTop: 30,
     marginBottom: 10,
   },
   itemText: {
     fontSize: 18,
     paddingVertical: 10,
+    fontFamily: "Montserrat", 
     color: "black",
     fontWeight: "400",
   },
   dropdownText: {
     fontSize: 16,
     color: "black",
+    fontFamily: "Montserrat", 
     marginLeft: 10,
     marginBottom: 15,
   }

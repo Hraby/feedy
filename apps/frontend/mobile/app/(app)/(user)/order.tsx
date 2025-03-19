@@ -147,16 +147,19 @@ const styles = StyleSheet.create({
   foodTitle: {
     fontSize: 28,
     fontWeight: 'bold',
+    fontFamily: "Montserrat", 
   },
   restaurant: {
     color: '#252B33',
     marginTop: 10,
     fontSize: 16,
+    fontFamily: "Montserrat", 
   },
   description: {
     fontSize: 16,
     fontWeight: 'light',
     marginBottom: 10,
+    fontFamily: "Montserrat", 
     marginTop: 5,
   },
   boxContainer: {
@@ -164,6 +167,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 20,
     marginHorizontal: 20,
+    fontFamily: "Montserrat", 
   },
   priceQuantityContainer: {
     flexDirection: 'row', 
@@ -175,6 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'light',
     color: '#1A1A1A',
+    fontFamily: "Montserrat", 
   },
   quantityBox: {
     flexDirection: 'row',
@@ -192,11 +197,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFF',
     marginHorizontal: 12,
+    fontFamily: "Montserrat", 
   },
   addButton: {
     backgroundColor: '#FF5500',
     borderRadius: 10,
     paddingVertical: 5,
+    fontFamily: "Montserrat", 
   },
   restaurantContainer: {
     flexDirection: 'row',

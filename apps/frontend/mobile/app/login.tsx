@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { router } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
+import { useFonts, Montserrat_400Regular, Montserrat_500Medium } from '@expo-google-fonts/montserrat';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -43,6 +44,16 @@ export default function LoginScreen() {
 
   const isLoading = localLoading || authLoading;
 
+  // Načti fonty
+  const [fontsLoaded] = useFonts({
+    Montserrat_400Regular,
+    Montserrat_500Medium,
+  });
+
+  if (!fontsLoaded) {
+    return null; // Počkej, než se fonty načtou
+  }
+
   return (
     <ImageBackground 
       source={require('@/assets/images/bg-login.png')}
@@ -57,14 +68,14 @@ export default function LoginScreen() {
       
       <View style={styles.tabs}>
         <TouchableOpacity onPress={() => router.push('/register')}>
-          <Text style={styles.inactiveTab}>Registrace</Text>
+          <Text style={[styles.inactiveTab, { fontFamily: 'Montserrat_400Regular' }]}>Registrace</Text>
         </TouchableOpacity>
-        <Text style={styles.activeTab}>Přihlásit se</Text>
+        <Text style={[styles.activeTab, { fontFamily: 'Montserrat_500Medium' }]}>Přihlásit se</Text>
       </View>
       
       <TextInput 
         placeholder="E-mail" 
-        style={styles.input}
+        style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -73,7 +84,7 @@ export default function LoginScreen() {
       
       <TextInput 
         placeholder="Heslo" 
-        style={styles.input}
+        style={[styles.input, { fontFamily: 'Montserrat_400Regular' }]}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
@@ -88,7 +99,7 @@ export default function LoginScreen() {
         {isLoading ? (
           <ActivityIndicator color="#252B33" testID="activity-indicator"/>
         ) : (
-          <Text style={styles.buttonText}>Přihlásit se</Text>
+          <Text style={[styles.buttonText, { fontFamily: 'Montserrat_500Medium' }]}>Přihlásit se</Text>
         )}
       </TouchableOpacity>
       
@@ -96,7 +107,7 @@ export default function LoginScreen() {
         style={styles.forgotPassword}
         //onPress={() => router.push('/(auth)/forgot-password')}
       >
-        <Text style={styles.forgotPasswordText}>Zapomenuté heslo?</Text>
+        <Text style={[styles.forgotPasswordText, { fontFamily: 'Montserrat_400Regular' }]}>Zapomenuté heslo?</Text>
       </TouchableOpacity>
     </ImageBackground>
   );

@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
     marginTop: 10,
+    fontFamily: "Montserrat", 
   },
   separator: {
     width: "35%",
@@ -241,6 +242,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#666",
     marginLeft: 8,
+    fontFamily: "Montserrat", 
   },
   listContainer: {
     paddingHorizontal: 20,
@@ -272,16 +274,19 @@ const styles = StyleSheet.create({
   itemInfo: {
     flex: 1,
     marginLeft: 16,
+    fontFamily: "Montserrat", 
   },
   itemName: {
     fontSize: 17,
     fontWeight: "600",
     color: "#333",
     marginBottom: 4,
+    fontFamily: "Montserrat", 
   },
   itemPrice: {
     fontSize: 15,
     color: "#666",
+    fontFamily: "Montserrat", 
   },
   quantityRow: {
     flexDirection: "row",
@@ -318,11 +323,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     width: 25,
     textAlign: "center",
+    fontFamily: "Montserrat", 
   },
   itemTotalPrice: {
     fontSize: 17,
     fontWeight: "bold",
     color: "#FF5500",
+    fontFamily: "Montserrat", 
   },
   deleteButton: {
     backgroundColor: "#FF3B30",
@@ -358,16 +365,19 @@ const styles = StyleSheet.create({
   summaryLabel: {
     fontSize: 16,
     color: "#666",
+    fontFamily: "Montserrat", 
   },
   summaryValue: {
     fontSize: 16,
     fontWeight: "500",
     color: "#333",
+    fontFamily: "Montserrat", 
   },
   summaryTotal: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#333",
+    fontFamily: "Montserrat", 
   },
   checkoutButton: {
     backgroundColor: "#FF5500",
@@ -384,9 +394,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
     textAlign: "center",
+    fontFamily: "Montserrat", 
   },
   disabledButton: {
     backgroundColor: "#CCCCCC",
+    fontFamily: "Montserrat", 
   },
   emptyCartContainer: {
     flex: 1,
@@ -399,5 +411,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#999",
     fontWeight: "500",
+    fontFamily: "Montserrat", 
   },
 });

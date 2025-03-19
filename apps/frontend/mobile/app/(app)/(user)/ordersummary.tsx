@@ -203,13 +203,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 40,
     color: "#000000",
-    marginLeft: 300,
+    marginLeft: 290,
     fontWeight: "400",
+    fontFamily: "Montserrat", 
   },
   subHeader: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    fontFamily: "Montserrat", 
     marginTop: 40
   },
   orderItem: {
@@ -223,16 +225,19 @@ const styles = StyleSheet.create({
   },
   place: {
     fontWeight: 'bold',
-    fontSize: 16
+    fontSize: 16,
+    fontFamily: "Montserrat", 
   },
   details: {
     color: 'gray',
     fontSize: 14,
-    marginTop: 4
+    marginTop: 4,
+    fontFamily: "Montserrat", 
   },
   price: {
     fontWeight: 'bold',
     fontSize: 16,
+    fontFamily: "Montserrat", 
     color: '#FF5500'
   },
   loadingContainer: {
@@ -248,6 +253,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: '#666',
+    fontFamily: "Montserrat", 
     textAlign: 'center'
   },
   listContainer: {
@@ -266,6 +272,7 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
+    fontFamily: "Montserrat", 
     fontWeight: '500'
   }
 });

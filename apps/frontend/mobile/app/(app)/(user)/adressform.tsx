@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: "600",
+    fontFamily: "Montserrat", 
     color: "#333",
     marginBottom: 5,
   },
@@ -178,6 +179,7 @@ const styles = StyleSheet.create({
   saveButtonText: {
     fontSize: 16,
     color: "#FFF",
+    fontFamily: "Montserrat", 
   },
   backButton: {
     position: "absolute",
