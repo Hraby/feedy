@@ -20,7 +20,7 @@ export default function RegistrationScreen() {
   const [password, setPassword] = useState('');
   const [localLoading, setLocalLoading] = useState(false);
   
-  const { register, loading: authLoading, error } = useAuth();
+  const { register, loading: authLoading, error } = useAuth() || {};
 
   const handleRegistration = async () => {
     if (!firstName || !lastName || !email || !password) {
@@ -54,8 +54,9 @@ export default function RegistrationScreen() {
   return (
     <ImageBackground source={require('@/assets/images/bg-register.png')} style={styles.container}>
       <View style={styles.headerBackground}>
-        <Image source={require('@/assets/images//Logos/feedyLogoWhite.png')} style={styles.logo} />
+        <Image source={require('@/assets/images/Logos/feedyLogoWhite.png')} style={styles.logo} />
       </View>
+      
       
       <View style={styles.tabs}>
         <Text style={styles.activeTab}>Registrace</Text>
@@ -101,7 +102,7 @@ export default function RegistrationScreen() {
         disabled={isLoading}
       >
         {isLoading ? (
-          <ActivityIndicator color="#fff" />
+          <ActivityIndicator color="#fff" testID="loading-indicator"/>
         ) : (
           <Text style={styles.buttonText}>Zaregistrovat se</Text>
         )}
