@@ -221,7 +221,7 @@ const Checkout = () => {
         ></iframe>
       </div>
 
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense flex-grow mb-10 sm:text-center">
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense flex-grow mb-10">
         <div>
           <h1 className="text-3xl font-bold mb-6">Dokončení objednávky</h1>
 
