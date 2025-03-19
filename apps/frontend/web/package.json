@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.1",
     "framer-motion": "^12.4.11",
     "jose": "^5.10.0",
     "next": "^15.2.2",
@@ -17,7 +19,8 @@
     "react-icons": "^5.4.0",
     "react-lazy-load-image-component": "^1.6.3",
     "react-search-autocomplete": "^8.5.2",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",

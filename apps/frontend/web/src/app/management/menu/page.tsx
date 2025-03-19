@@ -16,8 +16,8 @@ interface MenuItem {
     description: string;
     price: number;
     category: string;
-    image: string;
     available: boolean;
+    imageUrl: string;
 }
 
 const ManagementMenu = () => {
@@ -105,6 +105,7 @@ const ManagementMenu = () => {
                 });
             }
         } catch (error) {
+            
             toast.error('Chyba při ukládání položky.', {
                 position: "bottom-right",
                 autoClose: 5000,
@@ -186,7 +187,7 @@ const ManagementMenu = () => {
                                 </span>
                                 <div className="w-24 h-24 sm:w-32 sm:h-32 flex justify-center items-center mb-4">
                                     <img
-                                        src="/img/burger.png"
+                                        src={item.imageUrl ? item.imageUrl : "/img/burger.png"}
                                         alt={item.name}
                                         className="max-w-full max-h-full object-contain rounded-lg"
                                     />

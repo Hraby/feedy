@@ -131,7 +131,7 @@ export async function getMenu(accessToken: string, restaurantId: string){
         description: item.description,
         price: item.price,
         category: item.category,
-        image: "/img/default.png",
+        imageUrl: item.imageUrl,
         available: item.available,
     }));
 }
@@ -146,7 +146,8 @@ export async function createMenuItem(accessToken: string, restaurantId: string, 
         description: data.description,
         price: data.price,
         category: data.category,
-        available: data.available
+        available: data.available,
+        imageUrl: data.imageUrl,
     }
 
     const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/menu`, {
@@ -176,7 +177,8 @@ export async function updateMenuItem(accessToken: string, restaurantId: string, 
         description: data.description,
         price: data.price,
         category: data.category,
-        available: data.available
+        available: data.available,
+        imageUrl: data.imageUrl,
     }
 
     const response = await fetch(`${BACKEND_URL}/restaurant/${restaurantId}/menu/${menuItemId}`, {
