@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity, ScrollView, FlatList, ActivityIndicator, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, router } from "expo-router";
+import { useLocalSearchParams, router, useFocusEffect } from "expo-router";
 import { BACKEND_URL } from "@/lib/constants";
 import { useAuth } from "@/context/AuthContext";
 import { useShoppingCart } from "@/context/CartShoppingContext";
@@ -140,7 +140,8 @@ export default function RestaurantScreen() {
     <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={{ uri: restaurant.imageUrl }} style={styles.topImage} />
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton}
+        onPress={() => router.push("/(app)/(user)/")}>
           <Ionicons name="arrow-back" size={24} color="#000" />
         </TouchableOpacity>
       </View>

@@ -194,8 +194,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
   },
   addButton: {
-    backgroundColor: '#F56A00',
+    backgroundColor: '#FF5500',
     borderRadius: 10,
+    paddingVertical: 5,
   },
   restaurantContainer: {
     flexDirection: 'row',
