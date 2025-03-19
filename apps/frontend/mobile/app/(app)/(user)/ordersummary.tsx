@@ -104,7 +104,7 @@ const OrdersScreen = () => {
       validOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       setOrders(validOrders);
     } catch (error) {
-      console.error('Error loading orders:', error);
+      console.log("Error loading orders:", error);
       setOrders([]);
     } finally {
       setLoading(false);

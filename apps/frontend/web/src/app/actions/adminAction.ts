@@ -284,7 +284,7 @@ export async function fetchDashboardData(accessToken: string): Promise<Dashboard
             totalUsers: usersData.length || 0
         };
     } catch (err) {
-        console.error("Data fetch failed:", err);
+        console.log("Data fetch failed:", err);
         throw err instanceof Error ? err : new Error("Unknown error");
     }
 }

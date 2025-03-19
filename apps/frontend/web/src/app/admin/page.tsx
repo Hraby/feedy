@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import AdminSidebar from "@/components/AdminSidebar";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Line, Bar } from 'react-chartjs-2';
 import {
     Chart as ChartJS,
@@ -13,9 +13,10 @@ import {
     BarElement,
     Title,
     Tooltip,
-    TooltipItem,
     Legend
 } from 'chart.js';
+import { useAuth } from '@/contexts/AuthProvider';
+import { fetchDashboardData, fetchOrders, fetchUsers } from '../actions/adminAction';
 
 ChartJS.register(
     CategoryScale,
@@ -30,34 +31,120 @@ ChartJS.register(
 
 export default function AdminDashboard() {
     const pathname = usePathname();
-
-    const [data] = useState({
-        activeOrders: 125,
-        activeCouriers: 34,
-        totalRestaurants: 18,
-        totalUsers: 2350,
-        newUsers: [
-            { date: '01.03.', count: 10 },
-            { date: '02.03.', count: 15 },
-            { date: '03.03.', count: 8 },
-            { date: '04.03.', count: 12 },
-            { date: '05.03.', count: 20 }
-        ],
-        revenue: [
-            { date: '01.03.', amount: 50000 },
-            { date: '02.03.', amount: 72000 },
-            { date: '03.03.', amount: 45000 },
-            { date: '04.03.', amount: 61000 },
-            { date: '05.03.', amount: 87000 }
-        ],
+    const { accessToken } = useAuth();
+    
+    const [dashboardData, setDashboardData] = useState({
+        activeOrders: 0,
+        activeCouriers: 0,
+        totalRestaurants: 0,
+        totalUsers: 0
     });
+    
+    const [users, setUsers] = useState([]);
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
+    const processUsersByDate = (userData: any) => {
+        if (!userData.length) return [];
+        
+        const today = new Date();
+        const lastWeek = new Date(today);
+        lastWeek.setDate(lastWeek.getDate() - 7);
+        
+        const days: { [key: string]: number } = {};
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            const formattedDate = `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.`;
+            days[formattedDate] = 0;
+        }
+        
+        userData.forEach((user: any) => {
+            const createdAt = new Date(user.createdAt);
+            if (createdAt >= lastWeek) {
+                const formattedDate = `${String(createdAt.getDate()).padStart(2, '0')}.${String(createdAt.getMonth() + 1).padStart(2, '0')}.`;
+                if (days[formattedDate] !== undefined) {
+                    days[formattedDate]++;
+                }
+            }
+        });
+        
+        return Object.entries(days)
+            .map(([date, count]) => ({ date, count }))
+            .reverse();
+    };
+    
+    const calculateRevenue = (ordersData: any) => {
+        if (!ordersData.length) return [];
+        
+        const today = new Date();
+        const lastWeek = new Date(today);
+        lastWeek.setDate(lastWeek.getDate() - 7);
+        
+        const days: { [key: string]: number } = {};
+        for (let i = 0; i < 7; i++) {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i);
+            const formattedDate = `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.`;
+            days[formattedDate] = 0;
+        }
+        
+        ordersData.forEach((order: any) => {
+            const createdAt = new Date(order.createdAt);
+            if (createdAt >= lastWeek) {
+                const formattedDate = `${String(createdAt.getDate()).padStart(2, '0')}.${String(createdAt.getMonth() + 1).padStart(2, '0')}.`;
+                if (days[formattedDate] !== undefined) {
+                    const orderTotal = order.orderItems?.reduce((sum: any, item: any) => {
+                        return sum + (item.price * item.quantity);
+                    }, 0) || 0;
+                    days[formattedDate] += orderTotal;
+                }
+            }
+        });
+        
+        return Object.entries(days)
+            .map(([date, amount]) => ({ date, amount }))
+            .reverse();
+    };
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (!accessToken) {
+                return;
+            }
+            
+            setLoading(true);
+            try {
+                const [dashboard, usersData, ordersData] = await Promise.all([
+                    fetchDashboardData(accessToken),
+                    fetchUsers(accessToken),
+                    fetchOrders(accessToken)
+                ]);
+                
+                setDashboardData(dashboard);
+                setUsers(usersData);
+                setOrders(ordersData);
+            } catch (err: any) {
+                console.log(err);
+                setError(err.message || "Nastala chyba při načítání dat");
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        loadData();
+    }, [accessToken]);
+
+    const newUsersData = processUsersByDate(users);
+    const revenueData = calculateRevenue(orders);
+    
     const newUsersChartData = {
-        labels: data.newUsers.map((entry) => entry.date),
+        labels: newUsersData.map(entry => entry.date),
         datasets: [
             {
                 label: 'Noví uživatelé',
-                data: data.newUsers.map((entry) => entry.count),
+                data: newUsersData.map(entry => entry.count),
                 borderColor: 'rgb(255, 85, 0)',
                 backgroundColor: 'rgb(255, 85, 0, 0.5)',
                 pointStyle: 'circle',
@@ -68,15 +155,76 @@ export default function AdminDashboard() {
     };
 
     const revenueChartData = {
-        labels: data.revenue.map((entry) => entry.date),
+        labels: revenueData.map(entry => entry.date),
         datasets: [
             {
                 label: 'Finanční obrat (Kč)',
-                data: data.revenue.map((entry) => entry.amount),
+                data: revenueData.map(entry => entry.amount),
                 backgroundColor: 'rgb(255, 85, 0, 0.5)'
             }
         ]
     };
+
+    const StatCardSkeleton = () => (
+        <div className="bg-white p-6 rounded-2xl shadow-sm">
+            <div className="h-4 w-2/3 bg-gray-200 rounded animate-pulse mb-4"></div>
+            <div className="h-8 w-1/3 bg-gray-300 rounded animate-pulse"></div>
+        </div>
+    );
+
+    const ChartSkeleton = () => (
+        <div className="bg-white p-6 rounded-2xl col-span-2 shadow-sm w-full h-96 flex flex-col">
+            <div className="h-6 w-1/3 bg-gray-200 rounded animate-pulse mb-6"></div>
+            <div className="flex-1 bg-gray-100 rounded animate-pulse"></div>
+        </div>
+    );
+
+    if (loading) {
+        return (
+            <div className="flex h-screen bg-gray-100">
+                <AdminSidebar activePath={pathname} />
+                <main className="flex-1 p-8">
+                    <div className="h-10 w-1/4 bg-gray-300 rounded animate-pulse mb-2"></div>
+                    <div className="h-5 w-2/3 bg-gray-200 rounded animate-pulse mb-8"></div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+                        <div className="bg-gradient-to-r from-orange-300 to-orange-200 p-6 rounded-2xl animate-pulse">
+                            <div className="h-4 w-2/3 bg-white bg-opacity-30 rounded mb-4"></div>
+                            <div className="h-8 w-1/3 bg-white bg-opacity-40 rounded"></div>
+                        </div>
+
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+
+                        <ChartSkeleton />
+                        <ChartSkeleton />
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="flex h-screen bg-gray-100">
+                <AdminSidebar activePath={pathname} />
+                <main className="flex-1 p-8">
+                    <h2 className="text-4xl font-bold mb-2">Dashboard</h2>
+                    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8" role="alert">
+                        <p className="font-bold">Chyba</p>
+                        <p>{error}</p>
+                    </div>
+                    <button 
+                        onClick={() => window.location.reload()} 
+                        className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                    >
+                        Zkusit znovu
+                    </button>
+                </main>
+            </div>
+        );
+    }
 
     return (
         <div className="flex h-screen bg-gray-100">
@@ -89,22 +237,22 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
                     <div className="bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] p-6 rounded-2xl text-white">
                         <p>Celkový počet objednávek:</p>
-                        <h3 className="text-4xl font-bold">{data.activeOrders}</h3>
+                        <h3 className="text-4xl font-bold">{dashboardData.activeOrders}</h3>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
                         <p>Celkový počet uživatelů:</p>
-                        <h3 className="text-4xl font-bold">{data.totalUsers}</h3>
+                        <h3 className="text-4xl font-bold">{dashboardData.totalUsers}</h3>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
                         <p>Celkový počet kurýrů:</p>
-                        <h3 className="text-4xl font-bold">{data.activeCouriers}</h3>
+                        <h3 className="text-4xl font-bold">{dashboardData.activeCouriers}</h3>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm">
                         <p>Celkový počet restaurací:</p>
-                        <h3 className="text-4xl font-bold">{data.totalRestaurants}</h3>
+                        <h3 className="text-4xl font-bold">{dashboardData.totalRestaurants}</h3>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl col-span-2 shadow-sm w-full h-96 flex items-center">

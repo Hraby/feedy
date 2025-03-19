@@ -36,7 +36,7 @@ const AdminUsers = () => {
                 setUsers(data);
                 setError(null);
             } catch (err) {
-                console.error('Failed to load users:', err);
+                console.log(err);
                 setError('Nepodařilo se načíst uživatele');
             } finally {
                 setLoading(false);
@@ -65,7 +65,7 @@ const AdminUsers = () => {
                 const results = await searchUsers(searchQuery, accessToken);
                 setUsers(results);
             } catch (err) {
-                console.error('Search failed:', err);
+                console.log(err);
             }
         };
 
@@ -117,7 +117,7 @@ const AdminUsers = () => {
         try {
             await updateUserRole(id, updatedRoles, accessToken);
         } catch (err) {
-            console.error('Role update failed:', err);
+            console.log(err);
             alert('Nepodařilo se aktualizovat roli uživatele.');
         }
     };
@@ -152,7 +152,7 @@ const AdminUsers = () => {
                 transition: Slide,
             });
         } catch (err) {
-            console.error('User deletion failed:', err);
+            console.log(err);
             const loadUsers = async () => {
                 try {
                     const data = await fetchUsers(accessToken);
@@ -191,24 +191,28 @@ const AdminUsers = () => {
                 <h2 className="text-4xl font-bold mb-2">Správa uživatelů</h2>
                 <p className="text-gray-600 mb-8">Spravujte uživatele z jednoho místa.</p>
 
-                <input
-                    type="text"
-                    placeholder="Hledat uživatele..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="p-4 mb-6 w-full rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
-                />
-
                 <div className="bg-white p-6 rounded-3xl shadow-sm">
                     {loading ? (
-                        <div className="text-center py-8">
-                            <p>Načítání uživatelů...</p>
+                        <div className="flex justify-center items-center py-12">
+                            <svg className="animate-spin h-8 w-8 text-[var(--primary)]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span className="ml-3 text-gray-600">Načítání uživatelů...</span>
                         </div>
                     ) : error ? (
                         <div className="text-center py-8 text-red-500">
                             <p>{error}</p>
                         </div>
                     ) : (
+                        <>
+                        <input
+                            type="text"
+                            placeholder="Hledat uživatele..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="p-4 mb-6 w-full rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                        />
                         <table className="w-full text-left">
                             <thead className="sticky top-0 bg-white z-20">
                                 <tr className="border-b">
@@ -279,6 +283,7 @@ const AdminUsers = () => {
                                 ))}
                             </tbody>
                         </table>
+                    </>
                     )}
                 </div>
             </main>
