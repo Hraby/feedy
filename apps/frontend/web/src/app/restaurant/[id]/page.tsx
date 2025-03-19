@@ -136,7 +136,7 @@ export default function RestaurantDetail() {
                               </div>
                             </div>
                           )}
-                          <img src={item.imageUrl || "/img/burger.png"} alt={item.name} className="w-full h-48 object-cover" />
+                          <img src={item.imageUrl || "/img/placeholder.png"} alt={item.name} className="w-full h-48 object-cover" />
                           <div className="flex flex-col justify-between p-4 flex-grow">
                             <div>
                               <h3 className="text-lg font-semibold">{item.name}</h3>
