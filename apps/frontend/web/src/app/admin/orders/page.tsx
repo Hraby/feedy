@@ -13,7 +13,7 @@ export interface AdminSidebarProps {
     activePath: string;
 }
 
-export enum OrderStatus {
+enum OrderStatus {
     Pending = "Pending",
     Preparing = "Preparing",
     Ready = "Ready",
