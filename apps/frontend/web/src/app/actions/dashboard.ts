@@ -24,7 +24,7 @@ export async function fetchDashboardStats() {
             totalRestaurants: restaurants.length
         };
     } catch (error) {
-        console.error("Chyba při získávání statistik:", error);
+        console.log(error);
         return null;
     }
 }
