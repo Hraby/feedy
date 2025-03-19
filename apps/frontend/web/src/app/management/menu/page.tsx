@@ -6,7 +6,7 @@ import { FaPlus } from 'react-icons/fa';
 import ManagementSidebar from '@/components/ManagementSidebar';
 import Modal from '@/components/Modal';
 import ItemForm from '@/components/ItemForm';
-import { toast, Slide } from 'react-toastify';
+import { toast, Slide, ToastContainer } from 'react-toastify';
 import { useAuth } from '@/contexts/AuthProvider';
 import { createMenuItem, deleteMenuItem, getMenu, updateMenuItem } from '@/app/actions/adminAction';
 
@@ -191,12 +191,17 @@ const ManagementMenu = () => {
                                         className="max-w-full max-h-full object-contain rounded-lg"
                                     />
                                 </div>
-                                <div className="h-[28px] flex items-center">
-                                    <h3 className="text-xl font-semibold truncate text-center">{item.name}</h3>
+                                <div className="h-[28px] flex items-center w-full">
+                                    <h3 className="text-xl font-semibold truncate text-center w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                                        {item.name}
+                                    </h3>
                                 </div>
-                                <div className="h-[56px] flex items-center">
-                                    <p className="text-gray-500 text-sm line-clamp-2 text-center">{item.description}</p>
+                                <div className="h-[56px] flex items-center w-full">
+                                    <p className="text-gray-500 text-sm text-center w-full overflow-hidden line-clamp-2">
+                                        {item.description}
+                                    </p>
                                 </div>
+
                                 <div className="flex flex-col 2xl:flex-row justify-between items-center w-full mt-3 space-y-2 md:space-y-1 xl:text-center">
                                     <span className={item.available ? "bg-green-100 text-green-600 text-sm font-semibold px-3 py-1 rounded-full max-w-max" : "bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded-full"}>
                                         {item.available ? 'Dostupné' : 'Nedostupné'}
@@ -232,6 +237,7 @@ const ManagementMenu = () => {
                     </div>
                 )}
 
+                <ToastContainer/>
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                     <ItemForm item={selectedItem} onSave={handleSaveItem} onDelete={handleDeleteItem} />
                 </Modal>

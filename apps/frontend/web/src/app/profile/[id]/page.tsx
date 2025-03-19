@@ -7,7 +7,7 @@ import Modal from "@/components/Modal";
 import Link from "next/link";
 import CourierForm from "@/components/CourierForm";
 import RestaurantForm from "@/components/RestaurantForm";
-import { FaMapMarkerAlt, FaListAlt, FaWallet, FaInfoCircle, FaTruck, FaStore, FaHome, FaBuilding, FaTrash, FaCalendar, FaClock } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaListAlt, FaWallet, FaInfoCircle, FaTruck, FaStore, FaCog, FaHome, FaBuilding, FaTrash, FaCalendar, FaClock } from 'react-icons/fa';
 import AdminRestaurants from "@/app/admin/restaurants/page";
 import { BACKEND_URL } from "@/lib/constants";
 import OrdersModal from "@/components/OrdersModal";

@@ -10,7 +10,7 @@ import Modal from "@/components/Modal";
 import { useAuth } from "@/contexts/AuthProvider";
 import { useShoppingCart } from "@/contexts/ShoppingCartContext";
 import { BACKEND_URL } from "@/lib/constants";
-import { toast, Slide } from 'react-toastify';
+import { toast, Slide, ToastContainer } from 'react-toastify';
 
 type Address = {
   id: string;
@@ -136,6 +136,7 @@ const Checkout = () => {
 
   const confirmRemoveItem = () => {
     if (itemToRemove) {
+      removeFromCart(itemToRemove);
       toast.success(`Položka byla odebrána z košíku!`, {
         position: "bottom-right",
         autoClose: 5000,
@@ -147,7 +148,6 @@ const Checkout = () => {
         theme: "colored",
         transition: Slide,
       });
-      removeFromCart(itemToRemove);
     }
     setIsModalOpen(false);
   };
@@ -221,7 +221,7 @@ const Checkout = () => {
         ></iframe>
       </div>
 
-      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense flex-grow">
+      <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense flex-grow mb-10 sm:text-center">
         <div>
           <h1 className="text-3xl font-bold mb-6">Dokončení objednávky</h1>
 
@@ -365,6 +365,8 @@ const Checkout = () => {
       </div>
 
       <Footer />
+
+      <ToastContainer/>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h2 className="text-xl font-bold mb-4">Odebrat položku</h2>

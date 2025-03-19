@@ -82,7 +82,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
         <button
           onClick={handleAddToCart}
           disabled={isSubmitting}
-          className="w-full py-3 rounded-xl bg-[var(--primary)] text-white font-semibold hover:bg-orange-600 transition-all duration-300 active:scale-95"
+          className="w-full py-3 rounded-full bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white font-semibold transition-all"
         >
           {isSubmitting ? "Přidávám..." : "Přidat do košíku"}
         </button>
