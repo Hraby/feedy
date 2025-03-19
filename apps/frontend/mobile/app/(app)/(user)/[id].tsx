@@ -214,7 +214,12 @@ const FoodCard = ({ item, onAddToCart, restaurantName, getDefaultImage }: {
       }
     })}
   >
-    <Image source={item.imageUrl ? { uri: item.imageUrl } : getDefaultImage(item.category)} style={styles.foodImage} />
+    <Image 
+      source={{uri: item.imageUrl}} 
+      style={styles.foodImage} 
+      resizeMode="cover"
+      defaultSource={require('@/assets/images/placeholder.png')}
+    />
     <View style={styles.textContainer}>
       <Text style={styles.foodTitle}>{item.name}</Text>
       <Text style={styles.foodDescription}>{item.description}</Text>
@@ -356,7 +361,7 @@ const styles = StyleSheet.create({
     color: "#FF5500",
   },
   foodImage: {
-    width: 100,
+    width: "100%",
     height: 80,
     borderRadius: 5,
   },
