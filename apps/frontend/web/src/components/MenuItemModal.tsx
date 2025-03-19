@@ -12,6 +12,7 @@ interface MenuItem {
   price: number;
   description: string;
   restaurantId: string;
+  imageUrl: string;
 }
 
 interface MenuItemModalProps {
@@ -76,7 +77,7 @@ export default function MenuItemModal({ item, onClose }: MenuItemModalProps) {
       <Modal isOpen={true} onClose={handleMainModalClose}>
         <h2 className="text-2xl font-bold mb-4">{item.name}</h2>
         <motion.img
-          src="/img/burger.png"
+          src={item.imageUrl ? item.imageUrl : "/img/placeholder.png"}
           alt={item.name}
           className="w-full h-60 object-cover rounded-lg mb-4"
           animate={flyToCart ? { x: 450, y: -300, scale: 0.5, opacity: 0 } : {}}
