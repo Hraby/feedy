@@ -215,7 +215,7 @@ const FoodCard = ({ item, onAddToCart, restaurantName, getDefaultImage }: {
     })}
   >
     <Image 
-      source={{uri: item.imageUrl}} 
+      source={item.imageUrl ? {uri: item.imageUrl} : require('@/assets/images/placeholder.png')} 
       style={styles.foodImage} 
       resizeMode="cover"
       defaultSource={require('@/assets/images/placeholder.png')}
