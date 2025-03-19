@@ -100,6 +100,88 @@ export class OrdersService {
             }
         });
     }
+
+    async getUserOrderHistory(userId: string, status?: OrderStatus){
+        const statusArray = status ? status.split(',') as OrderStatus[] : undefined;
+
+        const data = this.prisma.order.findMany({
+            where: {
+                status: statusArray ? { in: statusArray } : undefined,
+                userId: userId,
+            },
+            orderBy: { updatedAt: "desc" },
+            include: { user: true, restaurant: true, CourierProfile: true, orderItems: {
+                include: {
+                    menuItem: true
+                }
+            }
+        } 
+        });
+
+        return data
+    }
+
+    async getRestaurantOrders(userId: string, status?: string) {
+        const statusArray = status ? status.split(',') as OrderStatus[] : undefined;
+
+        const restaurants = await this.prisma.restaurant.findMany({
+            where: { ownerId: userId }
+        });
+        
+        const restaurantIds = restaurants.map(restaurant => restaurant.id);
+    
+        const data = await this.prisma.order.findMany({
+            where: {
+                status: statusArray ? { in: statusArray } : undefined,
+                restaurantId: { in: restaurantIds }
+            },
+            orderBy: { updatedAt: "desc" },
+            include: { 
+                user: true, 
+                restaurant: true, 
+                CourierProfile: true, 
+                orderItems: {
+                    include: {
+                        menuItem: true
+                    }
+                }
+            }
+        });
+    
+        return data;
+    }
+
+    async getCourierDeliveries(userId: string, status?: string) {
+        const courierProfile = await this.prisma.courierProfile.findUnique({
+            where: { userId: userId }
+        });
+        
+        if (!courierProfile) {
+            throw new NotFoundException('Courier profile not found for this user');
+        }
+        
+        const statusArray = status ? status.split(',') as OrderStatus[] : undefined;
+        
+        const data = await this.prisma.order.findMany({
+            where: {
+                status: statusArray ? { in: statusArray } : undefined,
+                courierProfileId: courierProfile.id,
+            },
+            orderBy: { updatedAt: "desc" },
+            include: { 
+                user: true, 
+                restaurant: true, 
+                CourierProfile: true, 
+                orderItems: {
+                    include: {
+                        menuItem: true
+                    }
+                }
+            }
+        });
+    
+        return data;
+    }
     
 
     async updateOrderStatus(orderId: string, status: OrderStatus) {
@@ -109,6 +191,16 @@ export class OrdersService {
         });
 
         return updatedOrder;
+    }
+
+    async deleteOrder(id: string){
+        await this.prisma.orderItem.deleteMany({
+            where: { orderId: id }
+        });
+
+        return await this.prisma.order.delete({
+            where: {id}
+        })
     }
 
     async assignCourier(id: string) {

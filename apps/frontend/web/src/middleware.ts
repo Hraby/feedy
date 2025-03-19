@@ -13,6 +13,11 @@ export default async function middleware(req: NextRequest) {
     }
   }
 
+  if(req.nextUrl.pathname.startsWith("/checkout") || req.nextUrl.pathname.startsWith("/menu") || req.nextUrl.pathname.startsWith("/order")){
+    if (!session)
+      return NextResponse.redirect(new URL("/login", req.nextUrl));
+  }
+
   if(req.nextUrl.pathname.startsWith("/management")){
     if (!session)
       return NextResponse.redirect(new URL("/login", req.nextUrl));
