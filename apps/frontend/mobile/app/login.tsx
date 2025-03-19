@@ -83,9 +83,10 @@ export default function LoginScreen() {
         style={[styles.button, isLoading && styles.buttonDisabled]}
         onPress={handleLogin}
         disabled={isLoading}
+        testID="login-button"
       >
         {isLoading ? (
-          <ActivityIndicator color="#252B33" />
+          <ActivityIndicator color="#252B33" testID="activity-indicator"/>
         ) : (
           <Text style={styles.buttonText}>Přihlásit se</Text>
         )}
