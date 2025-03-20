@@ -214,8 +214,8 @@ export default function CourierForm() {
             <div className="px-4 mt-4">
                 <button
                     type="submit"
-                    className={`w-full py-3 rounded-xl font-semibold transition 
-                    ${agreement ? "bg-[var(--primary)] hover:bg-orange-600 text-white" : "bg-gray-600 text-white cursor-not-allowed"}`}
+                    className={`w-full py-3 rounded-full font-semibold transition 
+                    ${agreement ? "bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white" : "bg-gray-600 text-white cursor-not-allowed"}`}
                     disabled={!agreement}
                 >
                     Odeslat

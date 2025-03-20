@@ -38,18 +38,18 @@ export default function RestaurantForm() {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, multiple, selectedOptions } = e.target as HTMLSelectElement;
-    
+
         setFormData({
             ...formData,
             [name]: multiple ? Array.from(selectedOptions, option => option.value) : value,
         });
 
     };
-    
+
 
     const isFieldDisabled = (fieldName: string) => {
         if (!user || !user.name || !user.email) return false;
-        
+
         switch (fieldName) {
             case "courierFirstName": return true;
             case "courierLastName": return true;
@@ -57,7 +57,7 @@ export default function RestaurantForm() {
             default: return false;
         }
     };
-    
+
     const validatePhoneInput = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value.replace(/[^\d+() -]/g, '');
         const trimmedValue = value.slice(0, 20);
@@ -92,35 +92,35 @@ export default function RestaurantForm() {
     }
 
     return (
-            <form action={formAction} className="max-w-lg mx-auto bg-white py-4 rounded-2xl space-y-2 my-6 max-h-[80vh] overflow-y-auto">
-                <h2 className="text-3xl font-bold text-center text-gray-800">Staňte se partnerským podnikem</h2>
-                <p className="text-center text-gray-600 max-w-md">
-                    Pro přístup k formuláři pro restaurace se prosím nejprve přihlaste ke svému účtu.
-                </p>
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+        <form action={formAction} className="max-w-lg mx-auto bg-white py-4 rounded-2xl space-y-2 my-6 max-h-[80vh] overflow-y-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-800">Staňte se partnerským podnikem</h2>
+            <p className="text-center text-gray-600 max-w-md">
+                Pro přístup k formuláři pro restaurace se prosím nejprve přihlaste ke svému účtu.
+            </p>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
-                <div className="space-y-4 px-4">
+            <div className="space-y-4 px-4">
 
-                    <input type="text" name="restaurantName" placeholder="Název podniku" className="input-field" onChange={handleChange} defaultValue={formData.restaurantName} required />
-                    <input type="text" name="restaurantDescription" placeholder="Popis podniku" className="input-field" onChange={handleChange} defaultValue={formData.restaurantDescription} required />
+                <input type="text" name="restaurantName" placeholder="Název podniku" className="input-field" onChange={handleChange} defaultValue={formData.restaurantName} required />
+                <input type="text" name="restaurantDescription" placeholder="Popis podniku" className="input-field" onChange={handleChange} defaultValue={formData.restaurantDescription} required />
 
-                    <select name="restaurantType" className="input-field" onChange={handleChange} defaultValue={formData.restaurantType} required>
-                        <option value="" disabled>Vyberte typ</option>
-                        <option value="restaurant">Restaurace</option>
-                        <option value="cafe">Kavárna</option>
-                        <option value="grocery">Potraviny</option>
-                    </select>
+                <select name="restaurantType" className="input-field" onChange={handleChange} defaultValue={formData.restaurantType} required>
+                    <option value="" disabled>Vyberte typ</option>
+                    <option value="restaurant">Restaurace</option>
+                    <option value="cafe">Kavárna</option>
+                    <option value="grocery">Potraviny</option>
+                </select>
 
-                    <input type="text" name="restaurantAddress" placeholder="Adresa" className="input-field" onChange={handleChange} defaultValue={formData.restaurantAddress} required />
-                    
-                    <select name="restaurantCity" className="input-field" onChange={handleChange} required value={formData.restaurantCity}>
-                        <option value="" disabled>Vyberte město</option>
-                        <option value="Praha">Praha</option>
-                        <option value="Brno">Brno</option>
-                        <option value="Zlín">Zlín</option>
-                    </select>
+                <input type="text" name="restaurantAddress" placeholder="Adresa" className="input-field" onChange={handleChange} defaultValue={formData.restaurantAddress} required />
 
-                    <div className="flex flex-wrap gap-2">
+                <select name="restaurantCity" className="input-field" onChange={handleChange} required value={formData.restaurantCity}>
+                    <option value="" disabled>Vyberte město</option>
+                    <option value="Praha">Praha</option>
+                    <option value="Brno">Brno</option>
+                    <option value="Zlín">Zlín</option>
+                </select>
+
+                <div className="flex flex-wrap gap-2">
                     {["Burger", "Kuřecí", "Pizza", "Čína", "Snídaně", "Sushi", "Salát", "Sladké", "Slané"].map((category) => (
                         <label key={category} className="flex items-center space-x-2 cursor-pointer">
                             <input
@@ -129,13 +129,13 @@ export default function RestaurantForm() {
                                 value={category}
                                 checked={formData.restaurantCategory.includes(category)}
                                 onChange={(e) => {
-                                const { value, checked } = e.target;
-                                setFormData((prevData) => ({
-                                    ...prevData,
-                                    restaurantCategory: checked
-                                    ? [...prevData.restaurantCategory, value]
-                                    : prevData.restaurantCategory.filter((c) => c !== value),
-                                }));
+                                    const { value, checked } = e.target;
+                                    setFormData((prevData) => ({
+                                        ...prevData,
+                                        restaurantCategory: checked
+                                            ? [...prevData.restaurantCategory, value]
+                                            : prevData.restaurantCategory.filter((c) => c !== value),
+                                    }));
                                 }}
                                 className="hidden"
                             />
@@ -144,47 +144,47 @@ export default function RestaurantForm() {
                             </div>
                         </label>
                     ))}
-                    </div>
-
-                    <input type="text" name="restaurantOwnerName" placeholder="Jméno" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerName")} defaultValue={formData.restaurantOwnerName} required />
-                    <input type="text" name="restaurantOwnerSurname" placeholder="Příjmení" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerSurname")} defaultValue={formData.restaurantOwnerSurname} required />
-                    <input type="email" name="restaurantOwnerEmail" placeholder="Email" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerEmail")} defaultValue={formData.restaurantOwnerEmail} required />
-                    <input 
-                        type="tel" 
-                        name="restaurantOwnerPhone" 
-                        placeholder="Telefonní číslo (vč. předvolby)" 
-                        className="input-field" 
-                        required 
-                        value={formData.restaurantOwnerPhone || ''}
-                        onChange={validatePhoneInput}
-                        inputMode="tel"
-                    />
                 </div>
 
-                <div className="flex items-center space-x-2 mt-4 px-4">
-                    <input type="checkbox" id="agreement" className="w-5 h-5 text-[var(--primary)] border-gray-300 rounded cursor-pointer" onChange={(e) => setAgreement(e.target.checked)} checked={agreement} required />
-                    <label htmlFor="agreement" className="text-sm text-gray-600">
-                        Souhlasím se{" "}
-                        <a href="#" className="text-[var(--primary)] underline">
-                            smluvními podmínkami
-                        </a>{" "}
-                        a beru na vědomí zpracování mých osobních údajů.
-                    </label>
-                </div>
+                <input type="text" name="restaurantOwnerName" placeholder="Jméno" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerName")} defaultValue={formData.restaurantOwnerName} required />
+                <input type="text" name="restaurantOwnerSurname" placeholder="Příjmení" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerSurname")} defaultValue={formData.restaurantOwnerSurname} required />
+                <input type="email" name="restaurantOwnerEmail" placeholder="Email" className={`input-field ${isFieldDisabled("courierFirstName") ? "bg-gray-100" : ""}`} disabled={isFieldDisabled("restaurantOwnerEmail")} defaultValue={formData.restaurantOwnerEmail} required />
+                <input
+                    type="tel"
+                    name="restaurantOwnerPhone"
+                    placeholder="Telefonní číslo (vč. předvolby)"
+                    className="input-field"
+                    required
+                    value={formData.restaurantOwnerPhone || ''}
+                    onChange={validatePhoneInput}
+                    inputMode="tel"
+                />
+            </div>
 
-                <div className="px-4 mt-4">
-                    <button
-                        type="submit"
-                        className={`w-full py-3 rounded-xl font-semibold transition 
-                        ${agreement ? "bg-[var(--primary)] hover:bg-orange-600 text-white" : "bg-gray-600 text-white cursor-not-allowed"}`}
-                        disabled={!agreement}
-                    >
-                        Odeslat
-                    </button>
-                </div>
+            <div className="flex items-center space-x-2 mt-4 px-4">
+                <input type="checkbox" id="agreement" className="w-5 h-5 text-[var(--primary)] border-gray-300 rounded cursor-pointer" onChange={(e) => setAgreement(e.target.checked)} checked={agreement} required />
+                <label htmlFor="agreement" className="text-sm text-gray-600">
+                    Souhlasím se{" "}
+                    <a href="#" className="text-[var(--primary)] underline">
+                        smluvními podmínkami
+                    </a>{" "}
+                    a beru na vědomí zpracování mých osobních údajů.
+                </label>
+            </div>
+
+            <div className="px-4 mt-4">
+                <button
+                    type="submit"
+                    className={`w-full py-3 rounded-full font-semibold transition 
+                        ${agreement ? "bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white" : "bg-gray-600 text-white cursor-not-allowed"}`}
+                    disabled={!agreement}
+                >
+                    Odeslat
+                </button>
+            </div>
 
 
-                <style jsx>{`
+            <style jsx>{`
                     .input-field {
                     width: 100%;
                     padding: 12px;
@@ -199,6 +199,6 @@ export default function RestaurantForm() {
                     outline: none;
                     }
                 `}</style>
-            </form>
+        </form>
     );
 }

@@ -2,7 +2,7 @@
 import NavbarSwitcher from "@/components/NavbarSwitch";
 import { useEffect, useState } from "react";
 import { FiCheckCircle } from "react-icons/fi";
-import { FaPizzaSlice, FaTruck, FaCheckCircle } from "react-icons/fa";
+import { FaPizzaSlice, FaTruck, FaCheckCircle, FaComment } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { MdDoneAll, MdRestaurant } from "react-icons/md";
 import { GiCook } from "react-icons/gi";
@@ -11,14 +11,17 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthProvider";
 import { BACKEND_URL } from "@/lib/constants";
 import { useRouter } from "next/navigation";
+import Modal from "@/components/Modal";
+import FeedbackForm from "@/components/FeedbackForm";
 
 const Order = () => {
     const { id } = useParams();
     const [orderStep, setOrderStep] = useState(1);
     const [deliveryTime] = useState("20 minut");
     const { orderStatus, setOrderStatus } = useShoppingCart();
-    const {accessToken} = useAuth();
-    
+    const { accessToken } = useAuth();
+    const [openModal, setOpenModal] = useState<"feedback" | null>(null);
+
     const router = useRouter();
 
     type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'OutForDelivery' | 'Delivered' | 'Cancelled';
@@ -50,11 +53,11 @@ const Order = () => {
                 }
 
                 if (!response.ok) throw new Error("Failed to fetch order status");
-                
+
                 const data = await response.json();
                 const status = data.status as OrderStatus;
                 setOrderStatus(status);
-                
+
                 if (status && status in statusToStepMap) {
                     setOrderStep(statusToStepMap[status]);
                 }
@@ -64,13 +67,13 @@ const Order = () => {
         };
 
         fetchOrderStatus();
-        
+
         const intervalId = setInterval(fetchOrderStatus, 5000);
-        
+
         return () => clearInterval(intervalId);
     }, [id, setOrderStatus, accessToken]);
 
-    const isOrderComplete = orderStep === 6;
+    const isOrderComplete = orderStep === 5;
 
     const steps = [
         { id: 1, label: "Čeká se na restauraci", icon: <FiCheckCircle /> },
@@ -98,25 +101,28 @@ const Order = () => {
                     {steps.map((step, index) => (
                         <div key={step.id} className={`flex items-center ${index < steps.length - 1 ? 'w-full' : ''}`}>
                             <div
-                                className={`p-3 rounded-full z-10 ${
-                                    orderStep === step.id 
-                                        ? `${isOrderComplete ? 'bg-green-500' : 'bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)]'} text-white`
+                                className={`p-3 rounded-full z-10 ${isOrderComplete
+                                        ? 'bg-green-500 text-white'
                                         : orderStep > step.id
-                                            ? 'bg-gray-400 text-white'
-                                            : "bg-gray-200 text-gray-400"
-                                }`}
+                                            ? 'bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white'
+                                            : orderStep === step.id
+                                                ? 'bg-gradient-to-r from-[var(--gradient-start)] to-[var(--gradient-end)] text-white'
+                                                : 'bg-gray-200 text-gray-400'
+                                    }`}
                             >
                                 {step.icon}
                             </div>
+
                             {index < steps.length - 1 && (
                                 <div className="h-1.5 flex-grow relative overflow-hidden bg-gray-200">
                                     {orderStep > step.id && (
                                         <div
-                                        className="absolute inset-0"
-                                        style={{background: isOrderComplete ? "#22c55e" : "linear-gradient(to right, var(--gradient-end), var(--gradient-start))",
-                                          width: "100%",
-                                        }}
-                                      />                                      
+                                            className="absolute inset-0"
+                                            style={{
+                                                background: isOrderComplete ? "#22c55e" : "linear-gradient(to right, var(--gradient-end), var(--gradient-start))",
+                                                width: "100%",
+                                            }}
+                                        />
                                     )}
                                     {orderStep === step.id && index < steps.length - 1 && (
                                         <motion.div
@@ -135,7 +141,7 @@ const Order = () => {
                 <div className="auto-cols-fr grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div className="col-span-2">
                         <h2 className={`text-4xl font-bold mb-4 ${isOrderComplete ? "text-green-500" : "text-[var(--primary)]"}`}>
-                        {isOrderComplete ? (
+                            {isOrderComplete ? (
                                 <div>
                                     {steps[orderStep - 1].label}
                                 </div>
@@ -145,24 +151,45 @@ const Order = () => {
                                 </div>
                             )}
                         </h2>
-
                         {isOrderComplete && (
-                            <p className="text-lg text-gray-600 mt-4">Děkujeme za vaši objednávku!<br></br>Doufáme, že vám chutnalo a těšíme se na vaši příští návštěvu.</p>
+                            <div className="mt-3 bg-green-50 border-l-4 border-green-400 text-gray-700 p-5 rounded-lg shadow-sm">
+                                <div className="flex items-center">
+                                    <div className="mr-4 mb-5 text-green-500">
+                                        <FaComment className="h-6 w-6" />
+                                    </div>
+
+                                    <div className="flex-1">
+                                        <h3 className="text-xl font-semibold pb-1">Jak jste byli spokojeni?</h3>
+                                        <p className="text-base text-gray-600">
+                                            Vaše zpětná vazba nám pomůže zlepšit služby. Budeme rádi za jakýkoliv nápad nebo připomínku!
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    onClick={() => setOpenModal("feedback")}
+                                    className="mt-3 ml-9 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold px-4 py-2 rounded-full shadow-md hover:scale-105 transition-transform"
+                                >
+                                    Odeslat zpětnou vazbu
+                                </button>
+                            </div>
                         )}
 
-                        <ul className="space-y-2 text-2xl text-gray-500">
-                            {steps.slice(0, orderStep - 1).map((step) => (
-                                <li key={`previous-${step.id}`} className="text-gray-400">
-                                    {step.id}. {step.label}
-                                </li>
-                            ))}
-                            
-                            {steps.slice(orderStep).map((step) => (
-                                <li key={step.id}>
-                                    {step.id}. {step.label}
-                                </li>
-                            ))}
-                        </ul>
+                        {!isOrderComplete && (
+                            <ul className="space-y-2 text-2xl text-gray-500">
+                                {steps.slice(0, orderStep - 1).map((step) => (
+                                    <li key={`previous-${step.id}`} className="text-gray-400">
+                                        {step.id}. {step.label}
+                                    </li>
+                                ))}
+
+                                {steps.slice(orderStep).map((step) => (
+                                    <li key={step.id}>
+                                        {step.id}. {step.label}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
                     </div>
 
                     <div className="flex justify-end">
@@ -183,6 +210,9 @@ const Order = () => {
                     </div>
                 </div>
             </div>
+            <Modal isOpen={openModal === "feedback"} onClose={() => setOpenModal(null)}>
+                <FeedbackForm />
+            </Modal>
         </div>
     );
 };
