@@ -13,7 +13,8 @@ import {
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartOptions
 } from 'chart.js';
 import { useAuth } from '@/contexts/AuthProvider';
 import { fetchRestaurantId } from '../actions/adminAction';
@@ -62,12 +63,12 @@ const processOrdersData = (orders: any): any => {
     let orderRevenue = 0;
     order.orderItems.forEach((item: any) => {
       orderRevenue += item.price * item.quantity;
-      
+
       const itemName = item.menuItem.name;
       if (!itemPopularity[itemName]) {
         itemPopularity[itemName] = 0;
       }
-      
+
       itemPopularity[itemName] += item.quantity;
     });
 
@@ -161,11 +162,11 @@ const ManagementDashboard = () => {
   useEffect(() => {
     const loadRestaurantData = async () => {
       if (!accessToken || !restaurantId) return;
-      
+
       try {
         setIsLoading(true);
         const data = await fetchRestaurantId(restaurantId, accessToken);
-        
+
         if (data) {
           setRestaurantData(data);
           const processed = processOrdersData(data.orders);
@@ -196,6 +197,21 @@ const ManagementDashboard = () => {
     ],
   };
 
+  const ordersChartOptions: ChartOptions<"line"> = {
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
+    plugins: {
+      tooltip: {
+        enabled: true,
+        mode: 'index',
+        intersect: false,
+      },
+    },
+  };
+
   const revenueChartData = {
     labels: processedData.revenueByDate.map((entry: any) => entry.date),
     datasets: [
@@ -206,6 +222,21 @@ const ManagementDashboard = () => {
       }
     ]
   };
+
+  const revenueChartOptions: ChartOptions<"bar"> = {
+    maintainAspectRatio: false,
+    interaction: {
+        mode: 'index',
+        intersect: false,
+    },
+    plugins: {
+        tooltip: {
+            enabled: true,
+            mode: 'index',
+            intersect: false,
+        },
+    },
+};
 
   const renderSkeletons = () => (
     <div className="grid grid-cols-4 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -223,25 +254,25 @@ const ManagementDashboard = () => {
         <p>Počet aktuálních objednávek:</p>
         <h3 className="text-4xl font-bold">{processedData.pendingOrders}</h3>
       </div>
-      
+
       <div className="bg-white p-6 rounded-2xl shadow-sm">
         <p>Celkový počet objednávek:</p>
         <h3 className="text-4xl font-bold">{processedData.totalOrders}</h3>
       </div>
-      
+
       <div className="bg-white p-6 rounded-2xl shadow-sm col-span-2">
         <p>Nejoblíbenější produkt:</p>
         <h3 className="text-4xl font-bold">{processedData.mostPopularItem || 'Žádná data'}</h3>
       </div>
-      
+
       <div className="bg-white p-6 rounded-2xl col-span-2 shadow-sm w-full h-96 flex items-center">
         <div className="w-full h-full">
           <h3 className="text-xl font-semibold">Graf objednávek</h3>
           {processedData.ordersByDate.length > 0 ? (
-            <Line 
-              className="pb-3" 
-              data={ordersChartData} 
-              options={{ maintainAspectRatio: false }}
+            <Line
+              className="pb-3"
+              data={ordersChartData}
+              options={ordersChartOptions}
             />
           ) : (
             <div className="flex items-center justify-center h-3/4">
@@ -250,15 +281,15 @@ const ManagementDashboard = () => {
           )}
         </div>
       </div>
-      
+
       <div className="bg-white p-6 rounded-2xl col-span-2 shadow-sm w-full h-96 flex items-center">
         <div className="w-full h-full">
           <h3 className="text-xl font-semibold mb-4">Finanční obrat</h3>
           {processedData.revenueByDate.length > 0 ? (
-            <Bar 
-              className="pb-6" 
-              data={revenueChartData} 
-              options={{ maintainAspectRatio: false }}
+            <Bar
+              className="pb-6"
+              data={revenueChartData}
+              options={revenueChartOptions}
             />
           ) : (
             <div className="flex items-center justify-center h-3/4">
@@ -276,7 +307,7 @@ const ManagementDashboard = () => {
       <main className="flex-1 p-8">
         <h2 className="text-4xl font-bold mb-2">Dashboard</h2>
         <p className="text-gray-600 mb-8">Spravujte váš podnik z jednoho místa.</p>
-        
+
         {isLoading ? renderSkeletons() : renderData()}
       </main>
     </div>

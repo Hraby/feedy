@@ -13,7 +13,8 @@ import {
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ChartOptions
 } from 'chart.js';
 import { useAuth } from '@/contexts/AuthProvider';
 import { fetchDashboardData, fetchOrders, fetchUsers } from '../actions/adminAction';
@@ -154,6 +155,21 @@ export default function AdminDashboard() {
         ],
     };
 
+    const newUsersChartOptions: ChartOptions<"line"> = {
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+            },
+        },
+    };
+
     const revenueChartData = {
         labels: revenueData.map(entry => entry.date),
         datasets: [
@@ -163,6 +179,21 @@ export default function AdminDashboard() {
                 backgroundColor: 'rgb(255, 85, 0, 0.5)'
             }
         ]
+    };
+
+    const revenueChartOptions: ChartOptions<"bar"> = {
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            tooltip: {
+                enabled: true,
+                mode: 'index',
+                intersect: false,
+            },
+        },
     };
 
     const StatCardSkeleton = () => (
@@ -258,14 +289,14 @@ export default function AdminDashboard() {
                     <div className="bg-white p-6 rounded-2xl col-span-2 shadow-sm w-full h-96 flex items-center">
                         <div className="w-full h-full">
                             <h3 className="text-xl font-semibold">Graf registrovaných uživatelů</h3>
-                            <Line className="pb-3" data={newUsersChartData} options={{ maintainAspectRatio: false }} />
+                            <Line className="pb-3" data={newUsersChartData} options={newUsersChartOptions} />
                         </div>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl col-span-2 shadow-sm w-full h-96 flex items-center">
                         <div className="w-full h-full">
                             <h3 className="text-xl font-semibold mb-4">Finanční obrat Feedy</h3>
-                            <Bar className="pb-6" data={revenueChartData} options={{ maintainAspectRatio: false }} />
+                            <Bar className="pb-6" data={revenueChartData} options={revenueChartOptions} />
                         </div>
                     </div>
                 </div>

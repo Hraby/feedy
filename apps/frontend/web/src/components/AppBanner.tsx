@@ -23,11 +23,12 @@ export default function AppBanner() {
         <div className="absolute right-20">
           <div className="relative xl:block hidden">
             <Image
-              src="/img/landing-widget-mobile.png"
+              src="/img/banner-phone.png"
               alt="Mobilní aplikace"
               width={225}
               height={575}
               className="z-20 -top-24 md:-top-32 md:right-10"
+              style={{ transform: 'rotate(6deg)' }}
             />
           </div>
         </div>
