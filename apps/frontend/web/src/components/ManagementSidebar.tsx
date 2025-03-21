@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthProvider";
 import { fetchRestaurants } from "@/app/actions/adminAction";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FaChartBar, FaUser, FaShoppingCart, FaUtensils, FaClipboardList, FaCog, FaHome, FaSignOutAlt } from 'react-icons/fa';
+import { FaChartBar, FaUser, FaShoppingCart, FaUtensils, FaClipboardList, FaCog, FaHome, FaSignOutAlt, FaStar } from 'react-icons/fa';
 import { signOut } from "@/app/actions/auth";
 
 interface ManagementSidebarProps {
@@ -82,6 +82,11 @@ export default function ManagementSidebar({ activePath }: ManagementSidebarProps
                     <li className={`flex items-center ${isActive('/management/menu')}`}>
                         <Link href={`/management/menu?restaurantId=${restaurantId}`} className="flex items-center">
                             <FaUtensils className="mr-3" /> Menu
+                        </Link>
+                    </li>
+                    <li className={`flex items-center ${isActive('/management/reviews')}`}>
+                        <Link href={`/management/reviews?restaurantId=${restaurantId}`} className="flex items-center">
+                            <FaStar className="mr-3" /> Recenze
                         </Link>
                     </li>
                 </ul>
