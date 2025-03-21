@@ -17,14 +17,13 @@ import FeedbackForm from "@/components/FeedbackForm";
 const Order = () => {
     const { id } = useParams();
     const [orderStep, setOrderStep] = useState(1);
-    const [deliveryTime] = useState("20 minut");
     const { orderStatus, setOrderStatus } = useShoppingCart();
     const { accessToken } = useAuth();
     const [openModal, setOpenModal] = useState<"feedback" | null>(null);
 
     const router = useRouter();
 
-    type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'OutForDelivery' | 'Delivered' | 'Cancelled';
+    type OrderStatus = 'Pending' | 'Preparing' | 'Ready' | 'OutForDelivery' | 'CourierPickup' | 'Delivered' | 'Cancelled';
 
     const statusToStepMap: Record<OrderStatus, number> = {
         "Pending": 1,
@@ -32,9 +31,30 @@ const Order = () => {
         "Ready": 3,
         "OutForDelivery": 4,
         "Delivered": 5,
-        "Cancelled": 1
+        "Cancelled": 1,
+        "CourierPickup": 4
     };
 
+    const estimatedDurations: Record<OrderStatus, number> = {
+        Pending: 5,
+        Preparing: 8,
+        Ready: 2,
+        CourierPickup: 5,
+        OutForDelivery: 10,
+        Delivered: 0,
+        Cancelled: 0
+    };
+
+    const initialTimestamps: Record<OrderStatus, number> = {
+        Pending: 0,
+        Preparing: 0,
+        Ready: 0,
+        CourierPickup: 0,
+        OutForDelivery: 0,
+        Delivered: 0,
+        Cancelled: 0
+    };
+    
     useEffect(() => {
         if (!accessToken) return;
         const fetchOrderStatus = async () => {
@@ -73,6 +93,33 @@ const Order = () => {
         return () => clearInterval(intervalId);
     }, [id, setOrderStatus, accessToken]);
 
+    useEffect(() => {
+        if (orderStatus) {
+            setStatusTimestamps((prev) => ({
+                ...prev,
+                [orderStatus]: Date.now(),
+            }));       
+    
+            if (orderStatus !== "Delivered" && orderStatus !== "Cancelled") {
+                let remainingTime = 0;
+                let statusReached = false;
+    
+                for (const status of Object.keys(estimatedDurations) as OrderStatus[]) {
+                    if (status === orderStatus) {
+                        statusReached = true;
+                    }
+                    if (statusReached) {
+                        remainingTime += estimatedDurations[status];
+                    }
+                }
+    
+                setDeliveryTime(`${remainingTime} minut`);
+            }
+        }
+    }, [orderStatus]);
+
+    const [deliveryTime, setDeliveryTime] = useState("20 minut");
+    const [statusTimestamps, setStatusTimestamps] = useState<Record<OrderStatus, number>>(initialTimestamps);
     const isOrderComplete = orderStep === 5;
 
     const steps = [
