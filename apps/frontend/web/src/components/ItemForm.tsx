@@ -78,7 +78,7 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
 
   const handleSubmit = async () => {
     try {
-      let imageUrl = item?.imageUrl || '';
+      let imageUrl = item?.imageUrl || "/img/placeholder.png";
       
       if (image) {
         imageUrl = await uploadImageToSupabase(image);
@@ -93,6 +93,7 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
         imageUrl: imageUrl,
         available
       });
+      console.log(imageUrl)
     } catch (error) {
       console.error('Chyba při ukládání položky:', error);
     }

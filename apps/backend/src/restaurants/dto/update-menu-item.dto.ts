@@ -24,6 +24,6 @@ export class UpdateMenuItemDto {
   available: boolean;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   imageUrl?: string;
 }

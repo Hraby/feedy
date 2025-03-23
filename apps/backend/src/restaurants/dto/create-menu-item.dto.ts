@@ -21,6 +21,6 @@ export class CreateMenuItemDto {
     available: boolean;
   
     @IsOptional()
-    @IsUrl()
+    @IsString()
     imageUrl?: string;
 }

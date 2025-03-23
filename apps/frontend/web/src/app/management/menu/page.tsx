@@ -152,7 +152,7 @@ const ManagementMenu = () => {
             });
         }
         setIsModalOpen(false);
-    };
+    };   
 
     return (
         <div className="flex bg-gray-100 min-h-screen">
@@ -187,7 +187,7 @@ const ManagementMenu = () => {
                                 </span>
                                 <div className="w-24 h-24 sm:w-32 sm:h-32 flex justify-center items-center mb-4">
                                     <img
-                                        src={item.imageUrl ? item.imageUrl : "/img/burger.png"}
+                                        src={item.imageUrl ? item.imageUrl : "/img/placeholder.png"}
                                         alt={item.name}
                                         className="max-w-full max-h-full object-contain rounded-lg"
                                     />
