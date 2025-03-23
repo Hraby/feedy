@@ -33,10 +33,10 @@ export default function CourierForm() {
             }));
         }
     }, [user]);
-    
+
     const isFieldDisabled = (fieldName: string) => {
         if (!user || !user.name || !user.email) return false;
-        
+
         switch (fieldName) {
             case "courierFirstName": return true;
             case "courierLastName": return true;
@@ -59,12 +59,12 @@ export default function CourierForm() {
         e: React.ChangeEvent<HTMLInputElement>,
         maxLength: number,
         maxValue: number
-      ): void => {
+    ): void => {
         const value = e.target.value.replace(/[^0-9]/g, '');
         const trimmedValue = value.slice(0, maxLength);
-        
+
         if (trimmedValue && parseInt(trimmedValue) > maxValue) {
-          return;
+            return;
         }
 
         setFormData(prev => ({ ...prev, [e.target.name]: trimmedValue }));
@@ -146,31 +146,31 @@ export default function CourierForm() {
                 </select>
 
                 <div className="flex space-x-4">
-                    <input 
-                        type="text" 
-                        name="courierBirthYear" 
-                        placeholder="RRRR" 
-                        className="input-field w-1/3" 
+                    <input
+                        type="text"
+                        name="courierBirthYear"
+                        placeholder="RRRR"
+                        className="input-field w-1/3"
                         value={formData.courierBirthYear || ''}
                         onChange={(e) => validateNumberInput(e, 4, 9999)}
                         inputMode="numeric"
                         maxLength={4}
                     />
-                    <input 
-                        type="text" 
-                        name="courierBirthMonth" 
-                        placeholder="MM" 
-                        className="input-field w-1/3" 
+                    <input
+                        type="text"
+                        name="courierBirthMonth"
+                        placeholder="MM"
+                        className="input-field w-1/3"
                         value={formData.courierBirthMonth || ''}
                         onChange={(e) => validateNumberInput(e, 2, 12)}
                         inputMode="numeric"
                         maxLength={2}
                     />
-                    <input 
-                        type="text" 
-                        name="courierBirthDay" 
-                        placeholder="DD" 
-                        className="input-field w-1/3" 
+                    <input
+                        type="text"
+                        name="courierBirthDay"
+                        placeholder="DD"
+                        className="input-field w-1/3"
                         value={formData.courierBirthDay || ''}
                         onChange={(e) => validateNumberInput(e, 2, 31)}
                         inputMode="numeric"
@@ -204,9 +204,7 @@ export default function CourierForm() {
                 />
                 <label htmlFor="agreement" className="text-sm text-gray-600">
                     Souhlasím se{" "}
-                    <a href="#" className="text-[var(--primary)] underline">
-                        smluvními podmínkami
-                    </a>{" "}
+                    <Link href="/terms" className="text-[var(--primary)] underline">smluvními podmínkami</Link>{" "}
                     a beru na vědomí zpracování mých osobních údajů.
                 </label>
             </div>

@@ -165,9 +165,7 @@ export default function RestaurantForm() {
                 <input type="checkbox" id="agreement" className="w-5 h-5 text-[var(--primary)] border-gray-300 rounded cursor-pointer" onChange={(e) => setAgreement(e.target.checked)} checked={agreement} required />
                 <label htmlFor="agreement" className="text-sm text-gray-600">
                     Souhlasím se{" "}
-                    <a href="#" className="text-[var(--primary)] underline">
-                        smluvními podmínkami
-                    </a>{" "}
+                    <Link href="/terms" className="text-[var(--primary)] underline">smluvními podmínkami</Link>{" "}
                     a beru na vědomí zpracování mých osobních údajů.
                 </label>
             </div>
