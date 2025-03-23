@@ -93,7 +93,6 @@ const ItemForm = ({ item, onSave, onDelete }: ItemFormProps) => {
         imageUrl: imageUrl,
         available
       });
-      console.log(imageUrl)
     } catch (error) {
       console.error('Chyba při ukládání položky:', error);
     }
