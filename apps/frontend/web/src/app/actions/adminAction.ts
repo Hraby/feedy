@@ -43,8 +43,13 @@ export async function fetchOrders(accessToken: string) {
         throw new Error("Orders fetch failed");
     }
 
-    return await response.json();
+    const orders = await response.json();
+
+    const filteredOrders = orders.filter((order: { status: string }) => order.status !== "Cancelled");
+
+    return filteredOrders;
 }
+
 
 export async function fetchCouriers(accessToken: string){
     if (!accessToken) {

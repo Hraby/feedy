@@ -89,7 +89,7 @@ export class OrdersController {
 
     @Patch(":id/cancel")
     @ApiOperation({ summary: "Cancel order (customer before acceptance)" })
-    @Auth(Role.Customer)
+    @Auth(Role.Restaurant, Role.Admin)
     async cancelOrder(@Param("id") id: string) {
         return this.ordersService.updateOrderStatus(id, OrderStatus.Cancelled);
     }
