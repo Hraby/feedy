@@ -1,99 +1,149 @@
+# 🍔 Feedy API
+
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://i.imgur.com/BG7vGgK.png" alt="Feedy Logo" width="300">
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/version-1.0.0-blue?style=flat-square" alt="Version"></a>
+  <a href="#"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License"></a>
+  <a href="#"><img src="https://img.shields.io/badge/NestJS-10.0.0-E0234E?style=flat-square&logo=nestjs&logoColor=white" alt="NestJS"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Prisma-5.0.0-2D3748?style=flat-square&logo=prisma&logoColor=white" alt="Prisma"></a>
+  <a href="https://feedy-backend.vercel.app/api"><img src="https://img.shields.io/badge/API%20Docs-Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black" alt="API Docs"></a>
 </p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+<p align="center">
+  <b>✨ Deployed at <a href="https://feedy-backend.vercel.app/">https://feedy-backend.vercel.app/</a> ✨</b><br>
+  <b>📚 Documentation at <a href="https://feedy-backend.vercel.app/api">https://feedy-backend.vercel.app/api</a> 📚</b>
+</p>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🌟 Overview
 
-## Project setup
+Feedy API is the backend for a food delivery platform connecting restaurants, customers, and couriers. Built with NestJS and Prisma ORM for optimal performance and maintainability.
 
-```bash
-$ pnpm install
-```
+## 🚀 Key Features
 
-## Compile and run the project
+- **User Management** - Registration, authentication and profiles
+- **Restaurant System** - Profiles, menus and order management
+- **Order Processing** - Creation, tracking and status updates
+- **Delivery System** - Courier assignment and delivery tracking
+- **Role-Based Access** - Different permissions for users, restaurants, couriers and admins
 
-```bash
-# development
-$ pnpm run start
+## 🔧 Quick Start
 
-# watch mode
-$ pnpm run start:dev
+### Prerequisites
 
-# production mode
-$ pnpm run start:prod
-```
+- Node.js v18+
+- PostgreSQL v16+
+- pnpm v8+
 
-## Run tests
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Setup
 
 ```bash
-$ pnpm install -g mau
-$ mau deploy
+# Install dependencies
+pnpm install
+
+# Create .env file with:
+DATABASE_URL=""
+JWT_SECRET_KEY=""
+JWT_EXPIRES_IN=15m
+JWT_REFRESH_SECRET=""
+JWT_REFRESH_EXPIRES_IN=7d
+NODE_ENV="development"
+
+# Run development server
+pnpm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Prisma Setup
 
-## Resources
+```bash
+# Generate Prisma client
+pnpm prisma generate
 
-Check out a few resources that may come in handy when working with NestJS:
+# Create and apply migrations
+pnpm prisma migrate dev --name init
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Reset database (development only)
+pnpm prisma migrate reset
 
-## Support
+# Open Prisma Studio (database GUI)
+pnpm prisma studio
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+The data model includes entities for users, restaurants, menu items, orders, and couriers with appropriate relations. Prisma client is auto-generated and injected into the application using the PrismaService.
 
-## Stay in touch
+## 📚 API Reference
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+The API is organized into five main modules. Most endpoints require authentication with a Bearer token.
 
-## License
+### 🔐 Authentication
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+```
+POST /auth/register       # Create new user account
+POST /auth/login          # Get access & refresh tokens
+POST /auth/refresh-token  # Refresh access token
+```
+
+### 👤 Users
+
+```
+GET    /user              # Get all users (admin)
+POST   /user              # Create user (admin)
+GET    /user/{id}         # Get user profile
+PATCH  /user/{id}         # Update user profile
+DELETE /user/{id}         # Delete user (admin)
+```
+
+### 🍕 Restaurants
+
+```
+GET    /restaurant                         # List all restaurants
+GET    /restaurant/{id}                    # View restaurant details
+PATCH  /restaurant/{id}                    # Update restaurant (owner)
+POST   /restaurant/request                 # Request new restaurant
+GET    /restaurant/{id}/menu               # View restaurant menu
+POST   /restaurant/{id}/menu               # Add menu item (owner)
+PATCH  /restaurant/{id}/menu/{menuItemId}  # Update menu item (owner)
+```
+
+### 🛒 Orders
+
+```
+POST   /order                    # Create new order
+GET    /order/{id}               # View order details
+PATCH  /order/{id}/prepare       # Mark as preparing (restaurant)
+PATCH  /order/{id}/deliver       # Mark as delivered (courier)
+GET    /order/user/history       # View user order history
+GET    /order/restaurant/orders  # View restaurant orders
+```
+
+### 🚚 Couriers
+
+```
+GET    /courier                # List couriers
+POST   /courier/request        # Apply as courier
+PATCH  /courier/{id}/status    # Update status (available/busy/offline)
+```
+
+For complete API documentation, visit [https://feedy-backend.vercel.app/api](https://feedy-backend.vercel.app/api)
+
+## 📋 Project Structure
+
+```
+src/
+├── auth/            # Authentication
+├── common/          # Shared utilities
+├── courier/         # Courier management
+├── orders/          # Order processing
+├── prisma/          # Database service
+├── restaurants/     # Restaurant management
+├── users/           # User management
+└── main.ts          # Application entry
+```
+
+<div align="center">
+  
+<sub>Built by [@hraby](https://github.com/Hraby)</sub>
+
+</div>

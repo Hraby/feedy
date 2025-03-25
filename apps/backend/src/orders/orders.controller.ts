@@ -1,11 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { User } from 'src/users/entities/user.entity';
 import { OrdersService } from './orders.service';
 import { Auth, GetUser } from 'src/auth/decorators/';
 import { OrderStatus, Role } from "@prisma/client";
 import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order-dto';
 
+@ApiBearerAuth()
 @Controller('order')
 export class OrdersController {
     constructor(private readonly ordersService: OrdersService) {}
@@ -22,6 +24,13 @@ export class OrdersController {
     @Auth(Role.Customer, Role.Admin)
     async createOrder(@Body() dto: CreateOrderDto, @GetUser() user: User) {
         return this.ordersService.createOrder(dto, user);
+    }
+
+    @Patch()
+    @ApiOperation({ summary: "Update specific order" })
+    @Auth(Role.Admin)
+    async updateOrder(@Body() dto: UpdateOrderDto, @Param("id") id: string){
+        return this.ordersService.updateOrder(id, dto);
     }
 
     @Get(":id")

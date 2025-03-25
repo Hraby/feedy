@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCourierDto } from './dto/create-courier.dto';
 import { ApprovalStatus, CourierStatus, Role, User } from '@prisma/client';
+import { UpdateCourierDto } from './dto/update-courier.dto';
 
 @Injectable()
 export class CourierService {
@@ -95,7 +96,20 @@ export class CourierService {
             include: {
                 user: true,
             }
-        })
+        });
+    }
+
+    async updateCourier(dto: UpdateCourierDto, user: User){
+        return this.prisma.courierProfile.update({
+            where: { id: user.id },
+            data: { ...dto },
+        });
+    }
+
+    async deleteCourier(id: string){
+        return this.prisma.courierProfile.delete({
+            where: { id }
+        });
     }
 
     async updateStatus(id: string, status: CourierStatus){
@@ -106,6 +120,6 @@ export class CourierService {
             data: {
                 status: status,
             }
-        })
+        });
     }
 }

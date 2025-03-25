@@ -2,7 +2,6 @@ import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from "@n
 import { RegisterDto } from "./dto/register.dto";
 import { AuthService } from "./auth.service";
 import { ApiBearerAuth, ApiResponse } from "@nestjs/swagger";
-import { LoginResponse } from "./responses/login";
 import { LoginDto } from "src/users/dto/user.dto";
 import { Auth, GetUser } from "./decorators";
 import { User } from "src/users/entities/user.entity";
@@ -13,7 +12,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
     @Post("register")
-    @ApiResponse({status: 201, description: "Ok", type: LoginResponse})          
+    @ApiResponse({status: 201, description: "Ok"})          
     @ApiResponse({status: 400, description: "Bad request"})
     @ApiResponse({status: 500, description: "Server error"})
     async register(@Body() registerDto: RegisterDto) {
@@ -21,7 +20,7 @@ export class AuthController {
     }
 
     @Post("login")
-    @ApiResponse({status: 200, description: "Ok", type: LoginResponse})
+    @ApiResponse({status: 200, description: "Ok"})
     @ApiResponse({status: 400, description: "Bad request"})     
     @ApiResponse({status: 500, description: "Server error"})
     async login(@Res() response, @Body() loginDto: LoginDto) {
@@ -31,7 +30,7 @@ export class AuthController {
 
     @Post("refresh-token")
     @UseGuards(AuthGuard("jwt-refresh"))
-    @ApiResponse({status: 200, description: "Ok", type: LoginResponse})
+    @ApiResponse({status: 200, description: "Ok"})
     @ApiResponse({status: 401, description: "Unauthorized"})
     async refreshToken(@GetUser() user: User, @Req() req: Request){
         return this.authService.refreshToken(user.id);

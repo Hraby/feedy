@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { City, Country, OrderStatus } from '@prisma/client';
+import { UpdateOrderDto } from './dto/update-order-dto';
 
 @Injectable()
 export class OrdersService {
@@ -58,6 +59,13 @@ export class OrdersService {
         
         if (!order) throw new NotFoundException("Order not found");
         return order;
+    }
+
+    async updateOrder(id: string, dto: UpdateOrderDto){
+        return this.prisma.order.update({
+            where: {id},
+            data: {...dto}
+        })
     }
 
     async createOrder(dto: CreateOrderDto, user) {

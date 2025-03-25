@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
 import { RestaurantsService } from "./restaurants.service";
-import { ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
 import { Auth, GetUser } from "src/auth/decorators";
 import { RestaurantStatus, Role } from "@prisma/client";
 import { User } from "src/users/entities/user.entity";
@@ -9,6 +9,7 @@ import { UpdateRestaurantDto } from "./dto/update-restaurant.dto";
 import { CreateMenuItemDto } from "./dto/create-menu-item.dto";
 import { UpdateMenuItemDto } from "./dto/update-menu-item.dto";
 
+@ApiBearerAuth()
 @Controller("restaurant")
 export class RestaurantsController {
     constructor(private readonly restaurantsService: RestaurantsService) {}
