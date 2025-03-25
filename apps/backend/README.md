@@ -35,13 +35,13 @@ Feedy API is the backend for a food delivery platform connecting restaurants, cu
 
 - Node.js v18+
 - PostgreSQL v16+
-- pnpm v8+
+- npm v9+
 
 ### Setup
 
 ```bash
 # Install dependencies
-pnpm install
+npm install
 
 # Create .env file with:
 DATABASE_URL=""
@@ -52,23 +52,23 @@ JWT_REFRESH_EXPIRES_IN=7d
 NODE_ENV="development"
 
 # Run development server
-pnpm run start:dev
+npm run start:dev
 ```
 
 ### Prisma Setup
 
 ```bash
 # Generate Prisma client
-pnpm prisma generate
+npx prisma generate
 
 # Create and apply migrations
-pnpm prisma migrate dev --name init
+npx prisma migrate dev --name init
 
 # Reset database (development only)
-pnpm prisma migrate reset
+npx prisma migrate reset
 
 # Open Prisma Studio (database GUI)
-pnpm prisma studio
+npx prisma studio
 ```
 
 The data model includes entities for users, restaurants, menu items, orders, and couriers with appropriate relations. Prisma client is auto-generated and injected into the application using the PrismaService.
