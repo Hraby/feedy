@@ -16,7 +16,7 @@ type Address = {
   id: string;
   label: string;
   details: string;
-  type: 'home' | 'work';
+  type: string;
   active: boolean;
 };
 
@@ -70,7 +70,7 @@ const Checkout = () => {
     country: "Czechia"
   };
 
-  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [addresses, setAddresses] = useState<Address[]>([defaultAddress]);
 
   useState(() => {
     if (address) {
@@ -213,12 +213,13 @@ const Checkout = () => {
     <div className="flex flex-col min-h-screen">
       <NavbarSwitcher />
       <div className="w-full h-64 rounded-xl overflow-hidden mb-8">
-        <iframe
-          className="w-full h-full"
-          src="https://frame.mapy.cz/s/kuhopelogo"
-          title="Mapy.cz"
-          loading="lazy"
-        ></iframe>
+        {addresses[0]?.details?.includes("Praha") ? (
+          <iframe className="w-full h-full" src="https://frame.mapy.cz/s/duforevoto" title="Mapy.cz" loading="lazy"></iframe>
+          ) : addresses[0]?.details?.includes("Brno") ? (
+              <iframe className="w-full h-full" src="https://frame.mapy.cz/s/lanojojeno" title="Mapy.cz" loading="lazy"></iframe>
+          ) : (
+              <iframe className="w-full h-full" src="https://frame.mapy.cz/s/coveduzova" title="Mapy.cz" loading="lazy"></iframe>
+        )}
       </div>
 
       <div className="container mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-8 grid-flow-dense flex-grow mb-10">
