@@ -14,11 +14,21 @@ import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import FeedbackForm from "@/components/FeedbackForm";
 
+type Address = {
+    id: string;
+    label: string;
+    details: string;
+    type: string;
+    active: boolean;
+  };
+  
+
 const Order = () => {
     const { id } = useParams();
     const [orderStep, setOrderStep] = useState(1);
     const { orderStatus, setOrderStatus } = useShoppingCart();
-    const { accessToken } = useAuth();
+    const [activeAddress, setActiveAddress] = useState('');
+    const { accessToken, address } = useAuth();
     const [openModal, setOpenModal] = useState<"feedback" | null>(null);
 
     const router = useRouter();
@@ -54,6 +64,64 @@ const Order = () => {
         Delivered: 0,
         Cancelled: 0
     };
+
+    const defaultAddress = {
+        id: "home",
+        label: "Domov",
+        details: "náměstí Míru 12, 760 01, Zlín, Czechia",
+        type: "home",
+        active: true,
+        city: "Zlín",
+        zipCode: "760 01",
+        street: "náměstí Míru 12",
+        country: "Czechia"
+      };
+    
+      const [addresses, setAddresses] = useState<Address[]>([defaultAddress]);
+    
+      useState(() => {
+        if (address) {
+          setAddresses([{
+            id: "home",
+            label: "Domov",
+            details: `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`,
+            type: "home",
+            active: true
+          }]);
+        } else {
+          setAddresses([{
+            id: "home",
+            label: "Domov",
+            details: `náměstí Míru 12, 760 01, Zlín, Czechia`,
+            type: "home",
+            active: true
+          }]);
+        }
+      });
+      
+      useEffect(() => {
+        setAddresses([{
+          id: "home",
+          label: "Domov",
+          details: address 
+            ? `${address.street}, ${address.zipCode}, ${address.city}, ${address.country}`
+            : defaultAddress.details,
+          type: "home",
+          active: true
+        }]);
+      }, [address]);
+    
+      useState(() => {
+        const active = addresses.find((address) => address.active);
+        if (active) setActiveAddress(active.details);
+      });
+    
+      const handleSetActiveAddress = (id: string) => {
+        setAddresses(prev => prev.map(addr => ({
+          ...addr,
+          active: addr.id === id
+        })));
+      };
     
     useEffect(() => {
         if (!accessToken) return;
@@ -135,13 +203,15 @@ const Order = () => {
             <NavbarSwitcher />
 
             <div className="w-full h-64 rounded-xl overflow-hidden mb-8">
-                <iframe
-                    className="w-full h-full"
-                    src="https://frame.mapy.cz/s/kuhopelogo"
-                    title="Mapy.cz"
-                    loading="lazy"
-                ></iframe>
+                {addresses[0]?.details?.includes("Praha") ? (
+                <iframe className="w-full h-full" src="https://frame.mapy.cz/s/duforevoto" title="Mapy.cz" loading="lazy"></iframe>
+                ) : addresses[0]?.details?.includes("Brno") ? (
+                    <iframe className="w-full h-full" src="https://frame.mapy.cz/s/lanojojeno" title="Mapy.cz" loading="lazy"></iframe>
+                ) : (
+                    <iframe className="w-full h-full" src="https://frame.mapy.cz/s/coveduzova" title="Mapy.cz" loading="lazy"></iframe>
+                )}
             </div>
+
 
             <div className="container mx-auto px-4">
                 <div className="flex items-center mb-8 relative">
