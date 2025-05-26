@@ -32,7 +32,7 @@
 Feedy is a comprehensive, **full-stack food delivery platform** built from the ground up, connecting customers, restaurants, and couriers through intuitive web and mobile interfaces. This project showcases a modern technology stack, a robust multi-role system, and a focus on a seamless user experience, all managed within an efficient monorepo architecture.
 
 <p align="center">
-  <img src="https://i.imgur.com/seClqwK.gif" alt="Feedy Platform Demo" width="75%">
+  <img src="https://i.imgur.com/JX8i1Rr.gif" alt="Feedy Platform Demo" width="75%">
 </p>
 
 
@@ -72,11 +72,6 @@ Feedy is a comprehensive, **full-stack food delivery platform** built from the g
 ## 🏗️ Project Architecture
 
 Feedy utilizes a **monorepo** structure managed with `npm workspaces`, promoting code reusability and simplified dependency management across its three main applications: `backend`, `frontend/web`, and `frontend/mobile`. All frontends communicate with the central backend API.
-
-<!-- Optional: Add a simple architecture diagram if you have one -->
-<!-- <p align="center">
-  <img src="YOUR_ARCHITECTURE_DIAGRAM_URL" alt="Feedy Architecture" width="60%">
-</p> -->
 
 ## 🚀 Getting Started (For Developers)
 
