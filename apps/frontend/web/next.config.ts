@@ -7,10 +7,7 @@ const nextConfig: NextConfig = {
     MAPY_API_KEY: process.env.MAPY_API_KEY,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
+  }
 };
 
 export default nextConfig;
